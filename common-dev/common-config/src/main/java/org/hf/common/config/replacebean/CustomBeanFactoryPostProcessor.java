@@ -29,7 +29,7 @@ import java.util.Set;
 public class CustomBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
     @Value("${replaceBean.scannerPackages}")
-    private String address;
+    private String scannerPackages;
 
     /**
      * bean注册时处理  这种方式替换不需要将替换的实现交给spring管理
@@ -96,7 +96,7 @@ public class CustomBeanFactoryPostProcessor implements BeanDefinitionRegistryPos
      */
     private Set<Class<?>> getAnnotationClass() {
         // 需要优化, 通过解析配置文件获取要扫描的包
-        String scannerPackages = PropertiesUtil.init().getPropertiesValue("replaceBean.scannerPackages");
+//        String scannerPackages = PropertiesUtil.init().getPropertiesValue("replaceBean.scannerPackages");
         Reflections reflections;
         if (StringUtils.isNotBlank(scannerPackages) && !StringUtils.containsIgnoreCase(scannerPackages, ConfigCommonConstant.NULL_STRING)) {
             // 扫描指定路径下的包
