@@ -140,7 +140,7 @@ public class TestUserMapper {
     public void testSelectOne(){
         QueryWrapper<UserInfoEntity> wrapper = new QueryWrapper<>();
         //查询条件
-        wrapper.eq("password", "123456");
+        wrapper.eq("password", "1234567");
         // 查询的数据超过一条时，会抛出异常
         UserInfoEntity user = this.userInfoMapper.selectOne(wrapper);
         System.out.println(user);
