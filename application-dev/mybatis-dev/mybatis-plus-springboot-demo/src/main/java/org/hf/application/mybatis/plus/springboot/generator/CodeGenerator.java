@@ -51,6 +51,7 @@ public class CodeGenerator {
             DB_PASSWORD = scanner("数据库连接密码");
         }
         // 获取系统变量, 来获得项目路径
+        String projectPath = scanner("模块磁盘路径");
         FastAutoGenerator.create(
             // 配置数据源
             new DataSourceConfig.Builder(DB_URL, DB_USERNAME, DB_PASSWORD)
@@ -73,7 +74,7 @@ public class CodeGenerator {
             // 全局配置
             globalConfig
             // 文件输出路径
-            .outputDir(scanner("模块磁盘路径") + "/src/main/java")
+            .outputDir(projectPath + "/src/main/java")
             .author(scanner("author信息"))
             .dateType(DateType.TIME_PACK)
             .commentDate("yyyy-MM-dd")
@@ -81,8 +82,8 @@ public class CodeGenerator {
             .disableOpenDir();
         }).packageConfig(packageConfig -> {
             // 包配置
-            packageConfig.parent(scanner("项目包父路径"))
-            .moduleName(scanner("模块名"))
+            packageConfig.parent(scanner("项目父包名"))
+            .moduleName(scanner("当前模块包名"))
             .entity("pojo.entity")
             .service("service")
             .serviceImpl("service.impl")
@@ -90,20 +91,18 @@ public class CodeGenerator {
             .xml("mapper.xml")
             .controller("controller")
             // 存放mapper.xml路径
-            .pathInfo(Collections.singletonMap(OutputFile.xml, scanner("xml文件路径")));
+            .pathInfo(Collections.singletonMap(OutputFile.xml, projectPath + "/src/main/resources/mapper"));
         }).templateConfig(templateConfig -> {
             // 模板配置
             // 指定自定义模板路径，注意不要带上.ftl/.vm, 会根据使用的模板引擎自动识别, 如果不配置则按照默认模板文件生成
             // 设置为null时, 则不会生成xml文件, controller,service,mapper,entity等java类
-            templateConfig.disable(TemplateType.ENTITY)
-            .entity("/templates/entity.java")
+            templateConfig.entity("/templates/entity.java")
             .service("/templates/service.java")
             .serviceImpl("/templates/serviceImpl.java")
             .mapper("/templates/mapper.java")
-            // 如果上面focList配置了mapper.xml的自定义输出, 那么这里即使设置成null, 也会生成xml文件
             .xml("/templates/mapper.xml")
             .controller("/templates/controller.java");
-        }).injectionConfig(injectionConfig -> {
+        })/*.injectionConfig(injectionConfig -> {
             // 注入配置  https://baomidou.com/pages/981406/#%E6%B3%A8%E5%85%A5%E9%85%8D%E7%BD%AE-injectionconfig
             // 可以用来生成DTO
             injectionConfig.beforeOutputFile((tableInfo, objectMap) -> {
@@ -111,7 +110,7 @@ public class CodeGenerator {
             })
             .customMap(Collections.singletonMap("", ""))
             .customFile(Collections.singletonMap("", ""));
-        }).strategyConfig(strategyConfig -> {
+        })*/.strategyConfig(strategyConfig -> {
             // 表策略配置
             strategyConfig.enableCapitalMode()
             .enableSkipView()
@@ -119,7 +118,7 @@ public class CodeGenerator {
             .likeTable(new LikeTable("USER"))
             .addInclude(scanner("表名，多个英文逗号分割").split(","))
             .addTablePrefix(scanner("表前缀"))
-            .addFieldPrefix(scanner("字段前缀"))
+//            .addFieldPrefix(scanner("字段前缀"))
              // entity策略配置
             .entityBuilder()
             .superClass(BaseEntity.class)
