@@ -1,4 +1,4 @@
-package org.hf.common.publi.pojo.dto;
+package org.hf.common.publi.pojo.entity;
 
 import lombok.Data;
 
@@ -6,36 +6,34 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * <p> 基础传输数据类实体 </p>
+ * <p> 数据库表对应实体基类 </p>
  *
  * @author hufei
  * @version 1.0.0
- * @date 2022/7/30 15:42
+ * @date 2022/7/30 17:27
  */
 @Data
-public class BaseDataDTO implements Serializable {
+public class BaseEntity implements Serializable {
+    private static final long serialVersionUID = -385145670322881254L;
 
-    private static final long serialVersionUID = 6824954909587376078L;
     /**
      * 创建人
      */
     private String createdBy;
     /**
+     * 创建时间
+     */
+    private Date createdDate;
+    /**
      * 更新人
      */
     private String updatedBy;
     /**
-     * 创建日期
-     */
-    private Date createdDate;
-    /**
-     * 更新日期
+     * 更新时间
      */
     private Date updatedDate;
-
     /**
      * 删除状态:0-正常,1-删除
      */
     private Byte deleteState;
-
 }
