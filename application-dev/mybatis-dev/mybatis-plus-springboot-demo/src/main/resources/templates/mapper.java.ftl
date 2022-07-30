@@ -2,20 +2,25 @@ package ${package.Mapper};
 
 import ${package.Entity}.${entity};
 import ${superMapperClassPackage};
-import org.apache.ibatis.annotations.Mapper;
+<#if mapperAnnotationClass??>
+import ${mapperAnnotationClass.name};
+</#if>
+import org.springframework.stereotype.Repository;
+
 
 /**
- * <p>
- * ${table.comment!} Mapper 接口
- * </p>
+* <p> ${table.comment!} Mapper 接口 </p>
  *
  * @author ${author}
  * @since ${date}
- */
-@Mapper
+*/
+<#if mapperAnnotationClass??>
+@${mapperAnnotationClass.simpleName}
+</#if>
 <#if kotlin>
 interface ${table.mapperName} : ${superMapperClass}<${entity}>
 <#else>
+@Repository
 public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
 
 }

@@ -90,6 +90,8 @@ public class ServicePaginationAspect {
         } else {
             throw new RuntimeException("ServicePagination: pagination parameter type is abnormal");
         }
+        //清理 ThreadLocal 存储的分页参数,保证线程安全
+        PageHelper.clearPage();
         PageHelper.startPage(pageNo, pageSize);
     }
 

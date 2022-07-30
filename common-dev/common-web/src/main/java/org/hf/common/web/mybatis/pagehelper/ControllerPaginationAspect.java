@@ -102,6 +102,8 @@ public class ControllerPaginationAspect {
         } else {
             throw new RuntimeException("ControllerPagination: pagination parameter type is abnormal");
         }
+        //清理 ThreadLocal 存储的分页参数,保证线程安全
+        PageHelper.clearPage();
         PageHelper.startPage(pageNo, pageSize);
     }
 
