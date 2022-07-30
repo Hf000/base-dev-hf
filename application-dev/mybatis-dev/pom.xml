@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>mybatis-plus-demo</module>
+        <module>mybatis-plus-spring-demo</module>
     </modules>
 
     <!--指定依赖的版本信息-->

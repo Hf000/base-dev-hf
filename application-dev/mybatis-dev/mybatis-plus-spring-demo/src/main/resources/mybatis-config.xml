@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--注意， 这里设置对应的settings等标签是有顺序的：(properties -> settings -> typeAliases -> typeHandlers -> objectFactory -> objectWrapperFactory -> reflectorFactory -> plugins -> environments -> databaseIdProvider -> mappers。-->
+    <settings>
+        <!--设置映射字段命名可以是驼峰命名-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--设置插入数据后返回主键-->
+        <setting name="useGeneratedKeys" value="true"/>
+    </settings>
+
+    <!--设置对应实体的别名-->
+    <typeAliases>
+        <package name="org.hf.application.mybatis.plus.spring.pojo.entity"/>
+    </typeAliases>
+
+    <!--配置mapper文件夹路径-->
+    <!--<mappers>
+        <mapper resource="mapper/UserMapper.xml"/>
+    </mappers>-->
+</configuration>
