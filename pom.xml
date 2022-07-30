@@ -2,12 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!--工程pom模型版本-->
     <modelVersion>4.0.0</modelVersion>
 
+    <!--工程信息-->
     <groupId>org.hf</groupId>
     <artifactId>base-dev-hf</artifactId>
+    <!-- 工程类型 如果不配置默认是jar -->
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <!--子模块信息-->
     <modules>
         <module>application-dev</module>
         <module>boot-dev</module>
@@ -15,5 +19,35 @@
         <module>common-dev</module>
     </modules>
 
+    <!-- 聚合工程 -->
+    <!--依赖springboot父工程信息-->
+    <!--spring-boot-starter-parent是一个springboot项目的父工程，它定义了很多当前项目的规范
+    1.定义了 Java 编译版本为 1.8 。
+    2.使用 UTF-8 格式编码。
+    3.继承自 spring-boot-dependencies，这个里边定义了依赖的版本，也正是因为继承了这个依赖，所以我们在写依赖时才
+    不需要写版本号。
+    4.执行打包操作的配置。
+    5.自动化的资源过滤。
+    6.自动化的插件配置。
+    7.针对 application.properties 和 application.yml 的资源过滤，包括通过 profile 定义的不同环境的配置文件-->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.2</version>
+        <!--默认../pom.xml,maven首先从父工程的pom文件开始找->本地仓库->远程仓库，设置一个空值则始终从远程仓库获取-->
+        <relativePath/>
+    </parent>
+
+    <!-- 工程版本号 -->
+    <properties>
+        <!--指定项目编译字符集编码-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--指定项目输出字符集编码-->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!--指定jdk版本为1.8-->
+        <java.version>1.8</java.version>
+        <!-- 聚合工程版本 -->
+        <base-project.version>1.0-SNAPSHOT</base-project.version>
+    </properties>
 
 </project>
