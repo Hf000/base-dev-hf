@@ -8,7 +8,7 @@ personal study
        .vm为后缀的文件为VelocityTemplateEngine引擎类(默认支持)
        可在mybatis-plus-generator依赖包的templates文件夹拷对应模板进行修改
        使用方法:
-       1> 执行org.hf.application.mybatis.plus.springboot.generator.CodeGenerator类主方法
+       1> 执行org.hf.application.mybatis.plus.springboot.generator.CodeGenerator类main方法
        2> 根据提示输入以下信息
            请输入模块磁盘路径：
            D:\IdeaWorkSpace\base-dev-hf\application-dev\mybatis-dev\mybatis-plus-springboot-demo

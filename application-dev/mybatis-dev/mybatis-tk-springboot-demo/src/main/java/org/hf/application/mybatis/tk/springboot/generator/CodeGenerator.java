@@ -1,18 +1,22 @@
 package org.hf.application.mybatis.tk.springboot.generator;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.MyBatisGenerator;
+import org.mybatis.generator.api.Plugin;
 import org.mybatis.generator.api.dom.java.Field;
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.JavaElement;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
+import org.mybatis.generator.api.dom.xml.Attribute;
 import org.mybatis.generator.api.dom.xml.Document;
 import org.mybatis.generator.api.dom.xml.TextElement;
-import org.mybatis.generator.api.dom.xml.VisitableElement;
+import org.mybatis.generator.api.dom.xml.Element;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.xml.ConfigurationParser;
@@ -22,7 +26,6 @@ import tk.mybatis.mapper.generator.MapperPlugin;
 
 import java.io.File;
 import java.io.InputStream;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -112,6 +115,16 @@ public class CodeGenerator extends MapperPlugin {
     }
 
     /**
+     * 修改实体类生成字段注释和注解
+     */
+    @Override
+    public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable, Plugin.ModelClassType modelClassType) {
+        // 移除字段注释
+        // field.getJavaDocLines().clear();
+        return true;
+    }
+
+    /**
      * 生成Mapper接口
      */
     @Override
@@ -160,16 +173,47 @@ public class CodeGenerator extends MapperPlugin {
     @Override
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
         XmlElement rootElement = document.getRootElement();
-        List<VisitableElement> elements = rootElement.getElements();
+        List<Element> elements = rootElement.getElements();
         elements.forEach(element -> {
             XmlElement itemElement = (XmlElement)element;
-            List<VisitableElement> subElements = itemElement.getElements();
+            List<Element> subElements = itemElement.getElements();
             subElements.removeIf(subElement -> subElement instanceof TextElement && ("<!--".equals(((TextElement)subElement).getContent())
                 || "  WARNING - @mbg.generated".equals(((TextElement)subElement).getContent())
                 || "-->".equals(((TextElement)subElement).getContent()))
             );
             subElements.add(0, new TextElement("<!-- WARNING - @mbg.generated -->"));
         });
+        return true;
+    }
+
+    /**
+     * 修改mapper.xml通用列命名
+     */
+    @Override
+    public boolean sqlMapBaseColumnListElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+        updateXmlElementAttribute(element, "id", "BaseColumnList");
+        return true;
+    }
+
+    /**
+     * 修改mapper.xml文档的元素节点的属性名称
+     */
+    private void updateXmlElementAttribute(XmlElement element, String attributeName, String attributeValue) {
+        List<Attribute> attributes = element.getAttributes();
+        if (CollectionUtil.isNotEmpty(attributes)) {
+            for (int i = 0; i < attributes.size(); i++) {
+                Attribute attribute = attributes.get(i);
+                if (attributeName.equals(attribute.getName())) {
+                    attributes.set(i, new Attribute(attribute.getName(), attributeValue));
+                    return;
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean sqlMapBlobColumnListElementGenerated(XmlElement element, IntrospectedTable introspectedTable) {
+//        updateXmlElementAttribute(element, "id", "BlobColumnList");
         return true;
     }
 
