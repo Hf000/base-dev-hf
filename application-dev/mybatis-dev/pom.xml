@@ -15,6 +15,7 @@
         <module>mybatis-plus-demo</module>
         <module>mybatis-plus-spring-demo</module>
         <module>mybatis-plus-springboot-demo</module>
+        <module>mybatis-tk-springboot-demo</module>
     </modules>
 
     <!--指定依赖的版本信息-->
@@ -31,6 +32,8 @@
         <junit.version>4.13.2</junit.version>
         <mybatis-plus-boot-starter.version>3.5.2</mybatis-plus-boot-starter.version>
         <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
+        <mybatis-spring-boot-starter.version>2.2.2</mybatis-spring-boot-starter.version>
+        <mapper-spring-boot-starter.version>4.2.1</mapper-spring-boot-starter.version>
     </properties>
 
     <!--控制依赖版本，并没有真正引用依赖-->
@@ -89,6 +92,18 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
+            </dependency>
+            <!-- mybatis整合springboot依赖 -->
+            <dependency>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis-spring-boot-starter.version}</version>
+            </dependency>
+            <!-- tk-mybatis整合springboot依赖 -->
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-spring-boot-starter</artifactId>
+                <version>${mapper-spring-boot-starter.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

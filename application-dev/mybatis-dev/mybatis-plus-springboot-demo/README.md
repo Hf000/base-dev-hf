@@ -1,7 +1,7 @@
 # mybatis-plus-springboot-simple
 personal study
 
-# 1. SpringBoot整合MyBatis-Plus的简单应用
+# 1. SpringBoot整合MyBatis-Plus的简单应用,mybatis-plus文档:https://baomidou.com/pages/24112f/#%E7%89%B9%E6%80%A7
 # 2. mybatis-plus自动生成代码工具, 支持模板VelocityTemplateEngine(模板文件.vm), 也支持模板FreemarkerTemplateEngine(模板文件.ftl)、BeetlTemplateEngine(模板文件.btl)
        .btl为后缀的文件对应的是BeetlTemplateEngine引擎类
        .ftl为后缀的文件对应的是FreemarkerTemplateEngine引擎类

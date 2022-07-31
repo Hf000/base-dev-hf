@@ -10,8 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author hufei
  * @version 1.0.0
  * @date 2021/11/2 16:11
+ * 扫描mapper包, 如果Mapper类加了@Mapper注解就不需要这个扫描注解了
  */
-//扫描mapper包, 如果Mapper类加了@Mapper注解就不需要这个扫描注解了
 @MapperScan("org.hf.**.mapper")
 @SpringBootApplication
 public class MybatisPlusApplication {
