@@ -34,6 +34,8 @@
         <mybatis-plus-generator.version>3.5.3</mybatis-plus-generator.version>
         <mybatis-spring-boot-starter.version>2.2.2</mybatis-spring-boot-starter.version>
         <mapper-spring-boot-starter.version>4.2.1</mapper-spring-boot-starter.version>
+        <mybatis-generator-core.version>1.3.7</mybatis-generator-core.version>
+        <mapper-generator.version>4.2.1</mapper-generator.version>
     </properties>
 
     <!--控制依赖版本，并没有真正引用依赖-->
@@ -104,6 +106,17 @@
                 <groupId>tk.mybatis</groupId>
                 <artifactId>mapper-spring-boot-starter</artifactId>
                 <version>${mapper-spring-boot-starter.version}</version>
+            </dependency>
+            <!-- tk-mybatis代码生成依赖 -->
+            <dependency>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-core</artifactId>
+                <version>${mybatis-generator-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>tk.mybatis</groupId>
+                <artifactId>mapper-generator</artifactId>
+                <version>${mapper-generator.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

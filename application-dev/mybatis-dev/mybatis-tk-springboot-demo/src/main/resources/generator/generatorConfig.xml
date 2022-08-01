@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <!--导入属性配置-->
-    <properties resource="jdbc.properties"/>
+    <properties resource="generator/generator.properties"/>
     <!-- 在MBG工作的时候，需要额外加载的依赖包 location属性指明加载jar/zip包的全路径 -->
     <!--<classPathEntry location="filePath" />-->
     <!-- context 是逆向工程的主要配置信息 id=当前配置唯一标识；targetRuntime=生成基于MyBatis3.x以上版本的内容，包括XXXBySample；
@@ -81,25 +81,25 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!--生成数据库表对应实体的包路径-->
-        <javaModelGenerator targetPackage="org.hf.application.mybatis.tk.springboot.pojo.entity" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="${tkMapper.targetPackage}.pojo.entity" targetProject="${tkMapper.targetProject}/src/main/java">
             <!--如果包不存在创建一个 在targetPackage的基础上,根据数据库的schema再生成一层package,最终生成的类放在这个package下, 默认为false -->
             <property name="enableSubPackages" value="true"/>
             <!-- 设置是否在getter方法中,对String类型字段调用trim()方法 -->
             <property name="trimStrings" value="true"/>
             <!-- 生成的实体继承类 -->
-            <property name="rootClass" value="org.hf.common.publi.pojo.entity.BaseEntity"/>
+            <property name="rootClass" value="${tkMapper.entity.baseEntity}"/>
             <!-- MyBatis3/MyBatis3Simple 自动为每一个生成的类创建一个构造方法,构造方法包含了所有的field,而不是使用Setter方法 -->
             <property name="constructorBased" value="false"/>
             <!-- MyBatis3/MyBatis3Simple 是否创建一个不可以变的类,如果为true,就会创建一个没有Setter方法的类,取代的是类似constructorBased的类 -->
             <property name="immutable" value="false"/>
         </javaModelGenerator>
         <!--生成数据库表对应mapper.xml文件路径-->
-        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+        <sqlMapGenerator targetPackage="mapper" targetProject="${tkMapper.targetProject}/src/main/resources">
             <!--如果包不存在创建一个  -->
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
         <!--生成数据库表对应通用mapper文件包路径-->
-        <javaClientGenerator targetPackage="org.hf.application.mybatis.tk.springboot.mapper" targetProject="src/main/java" type="XMLMAPPER">
+        <javaClientGenerator targetPackage="${tkMapper.targetPackage}.mapper" targetProject="${tkMapper.targetProject}/src/main/java" type="XMLMAPPER">
             <!--如果包不存在创建一个  -->
             <property name="enableSubPackages" value="true"/>
             <!-- mapper接口继承的父接口 -->
@@ -113,7 +113,7 @@
             4.包含BLOB的类
             5.一个用户生成动态查询的条件类(selectByExample, deleteByExample), 可选
             6.Mapper接口(可选)
-        tableName(必要), 要生成对象的表名(多个表名用','分隔开):
+        tableName(必要)
         注意: 大小写敏感问题,正常情况下,会自动的去识别数据库标识符的大小写敏感度,在一般情况下,会根据设置的schema,catalog或者tablename去查询数据库表,按照下面的流程
             1.如果schema,catalog或tablename中有空格,那么设置的是什么格式,就精确的使用指定的大小写格式去查询
             2.否则,如果数据库的标识符使用大写,自动把表名变成大写再查询
@@ -138,7 +138,7 @@
             15.delimitAllColumns:设置是否所有生成的SQL中的列名都是用标识符引起来,默认为false,delimitIdentifiers参考context的属性
         注意: table里面很多参数都是对javaModelGenerator,context等元素的默认属性的一个复写
         -->
-        <table tableName="user_info" domainObjectName="UserInfo" sqlProviderName="selectById" enableSelectByPrimaryKey="true"
+        <table tableName="${tkMapper.tableName}" sqlProviderName="selectById" enableSelectByPrimaryKey="true"
                enableUpdateByPrimaryKey="false" enableDeleteByPrimaryKey="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" enableInsert="false" enableCountByExample="false">
             <!--生成的字段名称跟数据库字段名保持一致，不是用驼峰命名-->

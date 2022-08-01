@@ -13,8 +13,8 @@
     <packaging>jar</packaging>
 
     <properties>
-        <mybatis-generator-maven-plugin.version>1.4.1</mybatis-generator-maven-plugin.version>
-        <mapper-generator.version>4.2.1</mapper-generator.version>
+        <!-- 暂时用1.3.7版本, 1.4.1版本有问题暂时没解决 -->
+        <mybatis-generator-maven-plugin.version>1.3.7</mybatis-generator-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -56,13 +56,12 @@
         <dependency>
             <groupId>org.mybatis.generator</groupId>
             <artifactId>mybatis-generator-core</artifactId>
+            <!-- 暂时有问题 -->
             <!--<version>1.4.1</version>-->
-            <version>1.3.7</version>
         </dependency>
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-generator</artifactId>
-            <version>4.2.1</version>
         </dependency>
         <!-- mysql驱动依赖 -->
         <dependency>

@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.hf.common.publi.utils.PropertiesUtil;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.MyBatisGenerator;
@@ -59,6 +60,7 @@ public class CodeGenerator extends MapperPlugin {
         } catch (Exception e) {
             log.error("tk-mybatis生成代码失败", e);
         }
+        log.info("代码生成完成");
     }
 
     /**
@@ -87,7 +89,7 @@ public class CodeGenerator extends MapperPlugin {
         String entityPackageName = type.getPackageName();
         String dtoPackageName = entityPackageName.replace("entity", "dto");
         sbu.append("package ").append(dtoPackageName).append(";\n\n");
-        // 实现类import
+        // 实现类的import
         Set<FullyQualifiedJavaType> entityImportedTypes = topLevelClass.getImportedTypes();
         Set<FullyQualifiedJavaType> dtoImportType = entityImportedTypes.stream().filter(fullyQualifiedJavaType -> !"javax.persistence".equals(fullyQualifiedJavaType.getPackageName()) && !"io.swagger.annotations.ApiModel".equals(fullyQualifiedJavaType.getFullyQualifiedName())).collect(Collectors.toSet());
         dtoImportType.forEach(fullyQualifiedJavaType -> sbu.append("import ").append(fullyQualifiedJavaType.getFullyQualifiedName()).append(";\n"));
@@ -107,11 +109,14 @@ public class CodeGenerator extends MapperPlugin {
             sbu.append("    ").append("private ").append(field.getType().getShortName()).append(" ").append(field.getName()).append(";\n");
         });
         sbu.append("\n").append("}").append("\n");
+        // 替换一下基类的引入
+        String contentStr = sbu.toString().replace("import org.hf.common.publi.pojo.entity.BaseEntity;", "import org.hf.common.publi.pojo.dto.BaseDataDTO;");
         // 保存路径
-        String filePath = "src/main/java/" + dtoPackageName.replaceAll("\\.", "/") + "/" + type.getShortName() + "DTO.java";
+        String rootPath = new PropertiesUtil("generator/generator.properties").getPropertiesValue("tkMapper.targetProject");
+        String filePath = rootPath + "/src/main/java/" + dtoPackageName.replaceAll("\\.", "/") + "/" + type.getShortName() + "DTO.java";
         File dtoFile = new File(filePath);
         FileUtil.mkParentDirs(dtoFile);
-        FileUtil.writeUtf8String(sbu.toString(), dtoFile);
+        FileUtil.writeUtf8String(contentStr, dtoFile);
     }
 
     /**
