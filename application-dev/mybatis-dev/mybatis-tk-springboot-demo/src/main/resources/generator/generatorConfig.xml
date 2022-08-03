@@ -146,5 +146,8 @@
             <!-- 需要插入时返回自增主键值, column值为主键字段 -->
             <generatedKey column="id" sqlStatement="MySql" identity="false"/>
         </table>
+        <!--<table tableName="">
+
+        </table>-->
     </context>
 </generatorConfiguration>
