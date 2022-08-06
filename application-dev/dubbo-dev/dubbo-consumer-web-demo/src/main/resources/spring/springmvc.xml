@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+    <!--开启组件扫描-->
+    <context:component-scan base-package="org.hf.application.dubbo.consumer.web.controller"/>
+    <!--配置springmvc的注解驱动：注册默认处理请求-->
+    <mvc:annotation-driven >
+        <!-- 消息转换器,将response返回给页面的中文转换成指定字符集，这种转换器优先级低于直接在请求方法上设置produces属性，指定返回的contentType -->
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes" value="text/html;charset=UTF-8"/>
+            </bean>
+            <!--<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                <property name="objectMapper" ref="customObjectMapper"></property>
+            </bean>-->
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!--配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--放行静态资源-->
+    <mvc:resources mapping="/css/**" location="/css/"/>
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <!--<mvc:default-servlet-handler></mvc:default-servlet-handler>-->
+    <!--配置多媒体文件上传解析器 id一定要写,是根据id去找到这个解析器的-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--上传的最大文件大小限制-->
+        <property name="maxUploadSize" value="5242880"/>
+        <!--设置编码utf-8-->
+        <property name="defaultEncoding" value="utf-8"/>
+    </bean>
+    <!-- 引入dubbo服务 -->
+    <!-- 1.application指定服务的应用是谁-->
+    <dubbo:application name="dubbo-consumer-web-demo">
+        <dubbo:parameter key="qos.enable" value="false"/>
+        <dubbo:parameter key="qos.accept.foreign.ip" value="false"/>
+        <dubbo:parameter key="qos.port" value="33332"/>
+    </dubbo:application>
+    <!-- 2.配置连接注册中心的地址和端口以及使用的协议：zookeeper-->
+    <dubbo:registry address="192.168.0.109" protocol="zookeeper" port="2181"/>
+    <!-- 3.引入服务-->
+    <dubbo:reference interface="org.hf.application.dubbo.interfac.service.UserService"  id="userService" timeout="1000000"/>
+</beans>

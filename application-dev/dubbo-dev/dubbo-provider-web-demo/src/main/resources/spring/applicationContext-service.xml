@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+   http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <!--组件扫描-->
+    <context:component-scan base-package="org.hf.application.dubbo.provider.web.service"/>
+    <!--发布dubbo服务-->
+    <!-- 1.application指定服务的应用是谁-->
+    <dubbo:application name="dubbo-provider-web-demo">
+        <!--qos远程服务设置：是否启动QOS服务-->
+        <dubbo:parameter key="qos.enable" value="false"/>
+        <!--qos远程服务设置：是否允许远程访问-->
+        <dubbo:parameter key="qos.accept.foreign.ip" value="false"/>
+        <!--qos远程服务设置：绑定端口，每个服务提供者的此端口不能一样-->
+        <dubbo:parameter key="qos.port" value="33332"/>
+    </dubbo:application>
+    <!-- 2.配置连接注册中心的地址和端口以及使用的协议：zookeeper-->
+    <dubbo:registry address="192.168.0.109" protocol="zookeeper" port="2181"/>
+    <!-- 3.暴露本地服务的端口，每个服务提供者的此端口不能一样-->
+    <dubbo:protocol name="dubbo" port="20886"/>
+    <!-- 4.发布服务-->
+    <dubbo:service interface="org.hf.application.dubbo.interfac.service.UserService" ref="userServiceImpl" timeout="1000000" />
+
+</beans>

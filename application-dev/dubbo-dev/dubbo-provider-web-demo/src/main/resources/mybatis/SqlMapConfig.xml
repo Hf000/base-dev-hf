@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    
+    <!--指定映射实体别名-->
+    <typeAliases>
+        <package name="org.hf.application.dubbo.consumer.web.pojo.entity"/>
+    </typeAliases>
+    
+    <plugins>
+        <!--mybatis分页插件-->
+        <!--PageHelper5.0以上版本配置-->
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"/>
+        <!--PageHelper5.0以下版本配置-->
+        <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->
+            <!-- 设置数据库类型 Oracle,Mysql,MariaDB,SQLite,Hsqldb,PostgreSQL六种数据库；PageHelper4.0以上版本不需要设置这个，会自动识别-->
+            <!--<property name="dialect" value="mysql"/>-->
+        <!--</plugin>-->
+    </plugins>
+
+</configuration>
