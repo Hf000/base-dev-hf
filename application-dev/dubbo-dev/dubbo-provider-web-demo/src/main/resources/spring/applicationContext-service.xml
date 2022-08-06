@@ -10,6 +10,7 @@
     <!--发布dubbo服务-->
     <!-- 1.application指定服务的应用是谁-->
     <dubbo:application name="dubbo-provider-web-demo">
+        <!-- 因为此工程依赖的zookeeper版本是3.6.2,所以需要以下三个参数, 3.4.6版本不需要,  - (待验证)另外3.5.x以上版本需配置此三个参数 -->
         <!--qos远程服务设置：是否启动QOS服务-->
         <dubbo:parameter key="qos.enable" value="false"/>
         <!--qos远程服务设置：是否允许远程访问-->

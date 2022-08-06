@@ -9,14 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>dubbo-dev</artifactId>
+    <artifactId>netty-dev</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>dubbo-interface-demo</module>
-        <module>dubbo-provider-demo</module>
-        <module>dubbo-consumer-demo</module>
-        <module>dubbo-consumer-web-demo</module>
-        <module>dubbo-provider-web-demo</module>
+        <module>netty-demo</module>
     </modules>
 
 
