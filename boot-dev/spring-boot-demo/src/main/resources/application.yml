@@ -36,7 +36,7 @@ mybatis:      #mybatis配置
 mapper:     #通用mapper配置项
   identity: MYSQL     #取回主键的方式
   not-empty: false      #是否判断字符串类型!=''
-#  mappers: org.hf.boot.springboot.dao.BaseMapper      #基础mapper接口路径,在这里继承通用Mapper<T>
+  mappers: org.hf.boot.springboot.mapper.BaseMapper      #基础mapper接口路径,在这里继承通用Mapper<T>
 
 server:     #服务配置项
   port: 80      #tomcat配置：修改tomcat端口 默认端口是8080

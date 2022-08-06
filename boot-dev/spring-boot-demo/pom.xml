@@ -112,6 +112,7 @@
             <version>2.6.1</version>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <!--配置打jar包插件，打jar包时如果不配置该插件，打出来的jar包没有清单文件-->
@@ -119,32 +120,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!--添加mybatis generator maven插件-->
-            <plugin>
-                <groupId>org.mybatis.generator</groupId>
-                <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <version>1.3.7</version><!--注意版本兼容问题-->
-                <configuration>
-                    <!--配置mybatis-generator配置文件路径-->
-                    <configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
-                    <overwrite>true</overwrite>
-                    <verbose>true</verbose>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>mysql</groupId>
-                        <artifactId>mysql-connector-java</artifactId>
-                        <version>5.1.47</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>tk.mybatis</groupId>
-                        <artifactId>mapper-generator</artifactId>
-                        <version>1.1.5</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
     </build>
-
 
 </project>
