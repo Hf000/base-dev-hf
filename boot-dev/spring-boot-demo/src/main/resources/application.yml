@@ -1,0 +1,57 @@
+#yml(yaml)文件格式规范， 如果key后面有值，:后面必须空一格， 前缀和key换行并且空两格
+#jdbc:      #配置数据库连接池参数
+#  driverClassName: com.mysql.jdbc.Driver
+#  url: jdbc:mysql://127.0.0.1:3306/springboot1?useUnicode=true&characterEncoding=utf-8&autoReconnect=true
+#  username: root
+#  password: root
+
+spring:     #spring配置项
+#  profiles:      #多yaml文件配置项
+#    active: a,b      #激活多个yml配置文件, 其他配置文件的命名规则 application-*.yml
+#  datasource:     #配置hikari数据连接池参数
+#    driver-class-name: com.mysql.jdbc.Driver      #数据库驱动类地址
+#    url: jdbc:mysql://127.0.0.1:3306/springboot_test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false      #数据库连接地址
+#    username: root      #数据库账号
+#    password: 123456      #数据库密码
+  datasource:
+    master:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/springboot_test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+      username: root
+      password: root
+      driver-class-name: com.mysql.jdbc.Driver
+    slave1:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/springboot_test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+      username: root
+      password: root
+      driver-class-name: com.mysql.jdbc.Driver
+  redis:      #配置redis相关参数
+    host: localhost     #默认
+    port: 6379      #默认
+
+mybatis:      #mybatis配置
+  type-aliases-package: org.hf.boot.springboot.pojo.entity      #配置实体类别名包路径，配置这个配置项在mapper里面就不需要写全限定名了，只需要写对应实体类名即可
+  mapper-locations: classpath:mapper/*.xml      #配置mapper映射文件路径地址，如果没有则不写该项配置
+  configuration:      #配置mybati日志配置项
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl     #配置mybatis日志后台输出
+mapper:     #通用mapper配置项
+  identity: MYSQL     #取回主键的方式
+  not-empty: false      #是否判断字符串类型!=''
+#  mappers: org.hf.boot.springboot.dao.BaseMapper      #基础mapper接口路径,在这里继承通用Mapper<T>
+
+server:     #服务配置项
+  port: 80      #tomcat配置：修改tomcat端口 默认端口是8080
+  servlet:      #servlet配置项
+    context-path: /springboot     #配置项目的访问路径加上项目名称，默认不配置访问路径不需要加项目名称
+
+logging:      #配置日志的记录级别
+  level:      #日志等级配置项
+    org.hf: error      #表示以org.hf开头的类的日志记录级别是debug
+    org.springframework: error     #表示以org.springframework开头的类的日志记录级别是info
+
+elaticjob:      #elastic-job定时任务配置项
+  zookeeper:      #zookeeper配置项
+    server-lists: 127.0.0.1:2181      #zookeeper地址
+    namespace: myJob      #定时任务命名空间
+#配置动态任务案例的zk和namespace
+zk: 127.0.0.1:2181
+namesp: autoTask

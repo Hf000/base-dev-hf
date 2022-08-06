@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hf.boot.springboot.dao.UserMapper">
+  <resultMap id="BaseResultMap" type="org.hf.boot.springboot.pojo.entity.User">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="sex" jdbcType="BIT" property="sex" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="created" jdbcType="TIMESTAMP" property="created" />
+    <result column="updated" jdbcType="TIMESTAMP" property="updated" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, user_name, password, name, age, sex, birthday, note, created, updated
+  </sql>
+
+  <select id="getUser" parameterType="long" resultType="org.hf.boot.springboot.pojo.entity.User">
+        select * from tb_user where id = #{id}
+  </select>
+
+  <!--<select id="getUserAll" resultType="user">
+        select * from tb_user
+  </select>-->
+  <select id="getUserAll" resultMap="BaseResultMap">
+        select * from tb_user
+  </select>
+</mapper>
