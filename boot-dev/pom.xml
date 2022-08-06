@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>spring-boot-demo</module>
+        <module>spring-boot-web-dev</module>
     </modules>
 
     <properties>

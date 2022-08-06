@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>boot-dev</artifactId>
+        <groupId>org.hf</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>spring-boot-web-dev</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>spring-boot-web-demo</module>
+        <module>spring-boot-service-demo</module>
+    </modules>
+
+    <properties>
+        <!--指定项目编译字符集编码-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--指定项目输出字符集编码-->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!--指定jdk版本为1.8-->
+        <java.version>1.8</java.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <druid.version>1.2.8</druid.version>
+        <mysql.version>8.0.21</mysql.version>
+        <mybatis-plus-boot-starter.version>3.1.1</mybatis-plus-boot-starter.version>
+        <guava.version>18.0</guava.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- web公共配置 -->
+            <dependency>
+                <groupId>org.hf</groupId>
+                <artifactId>common-web</artifactId>
+                <version>${base-project.version}</version>
+            </dependency>
+            <!-- service服务 -->
+            <dependency>
+                <groupId>org.hf</groupId>
+                <artifactId>spring-boot-service-demo</artifactId>
+                <version>${base-project.version}</version>
+            </dependency>
+
+            <!-- 公共配置 -->
+            <dependency>
+                <groupId>org.hf</groupId>
+                <artifactId>common-config</artifactId>
+                <version>${base-project.version}</version>
+            </dependency>
+            <!-- 整合mapStruct -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <!-- druid数据源依赖 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <!-- mybatis-plus整合springBoot依赖 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus-boot-starter.version}</version>
+            </dependency>
+            <!-- 和public-config中冲突,这里控制一下版本 -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

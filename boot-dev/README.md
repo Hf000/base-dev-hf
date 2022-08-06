@@ -1,6 +1,7 @@
 # boot-dev SpringBoot相关项目聚合
     
 ## 1. spring-boot-demo SpringBoot项目的简单使用, 详见该工程目录下的README文件
+## 2. spring-boot-web-dev SpringBoot项目web和service分离的简单使用, 详见该工程目录下的README文件
 
 # idea快捷键整理
 ##文件搜索
