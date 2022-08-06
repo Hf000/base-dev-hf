@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>mybatis-dev</module>
+        <module>websocket-dev</module>
     </modules>
 
 

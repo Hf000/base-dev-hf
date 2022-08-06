@@ -10,6 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>websocket-dev</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>websocket-springboot-demo</module>
+    </modules>
 
 
 </project>
