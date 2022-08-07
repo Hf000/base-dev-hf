@@ -1,0 +1,50 @@
+server:
+  port: 18081
+logging:
+  level:
+    #root: debug开启dubug级别
+    com.seckill.goods.dao: error
+  pattern:
+    console: "%msg%n"
+
+#实例处理的文件类型映射
+upload:
+  filemap:
+    aliyunOSSFileUpload: mp4,avi
+    fastdfsFileUpoad: jpg,png
+
+#等级和策略实例的映射关系
+strategy:
+  strategyMap:
+    1: vipOne
+    2: vipTwo
+    3: vipThree
+    4: vipFour
+
+
+
+#FastDFS配置
+fastdfs:
+  url: http://192.168.211.137:28181/
+#aliyun
+aliyun:
+  oss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    accessKey: a7i6rVEjbtaJdYX2
+    accessKeySecret: MeSZPybPHfJtsYCRlEaUbfRtdH8gl4
+    bucketName: sklll
+    key: video/
+    backurl: https://sklll.oss-cn-beijing.aliyuncs.com/video/ #访问地址配置
+
+spring:
+  application:
+    name: seckill-goods
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/shop?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 100MB #上传文件大小配置
+
