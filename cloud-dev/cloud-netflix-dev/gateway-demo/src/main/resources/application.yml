@@ -1,0 +1,57 @@
+server:     #服务配置项
+  port: 10010     #修改服务启动端口
+
+spring:     #spring配置项
+  application:      #应用配置项
+    name: gateway-demo      #修改应用名称
+  cloud:      #springcloud配置项
+    gateway:      #gateway配置项
+      routes:       #配置路由
+        - id: service-demo-route      #路由id，根据个人习惯命名；配置多个路由id，换行重新配置- id相关的参数即可
+#          uri: http://127.0.0.1:8083      #代理服务器地址，这里的服务地址写死了，在实际编码中明显是不合理的
+          uri: lb://consumer-demo      #代理服务器地址；面向服务的路由：lb://service-demo；lb：表示LoadBalanced，基于Ribbon的负载均衡，从eureka中获取对应服务名称的地址；service-demo：必须是在eureka中已经注册了的程序服务应用名称
+          predicates:     #路由断言，可以匹配请求的路径
+            - Path=/userFeign/**     #表示请求路径中带user的都会执行该路由, 配置多个断言用","隔开
+#            - Path=/**     #尽量不要配置拦截所有路径，因为这样可能会导致全局拦截器对同一个路径拦截多次（请求网关服务，和调用服务时都会拦截）
+#            - Path=/api/user/**
+          filters:      #局部过滤器配置项，只针对当前路由有效
+#            - PrefixPath=/user      #添加请求路径的前缀：http://localhost:10010/8 --> http://localhost:10010/user/8
+#            - StripPrefix=1     #去除请求路径的前缀；1表示过滤第1层的路径：http://localhost:10010/api/user/8 --> http://localhost:10010/user/8，2表示过滤前两层的路径：http://localhost:10010/api/user/8 --> http://localhost:10010/8
+            - CustomLocal=name     #自定义局部过滤器，“=”后面跟需要拦截的参数名称，需要跟请求的参数名称一致，注意：自定义局部过滤器，过滤器名称有要求，这里配置的名称不需要GatewayFilterFactory，但是创建自定义过滤器类时需要CustomLocalGatewayFilterFactory
+#        - id: consumer-demo-route      #配置多个路由id
+#          uri: http://127.0.0.1:8080
+#          predicates:
+#            - Path=/user/**,/userFeign/**
+      default-filters:      #默认过滤器，对所有路由都生效，实现了GatewayFilterFactory接口的全局过滤器配置项
+        - AddResponseHeader=param, hufei      #配置过滤器，=后面是参数以及值，配置多个直接换行另外添加即可
+#        - AddResponseHeader=customize-param, hufei     #配置多个
+#      自定义全局过滤器不需要有配置，只需要实现GlobalFilter接口即可
+      globalcors:
+        cors-configurations:      #跨域请求配置项
+          '[/**]':      #表示对所有访问到网关服务的请求地址
+            #allowedOrigins: *      #这种写法或者下面的都可以，* 表示全部
+            allowedOrigins:       #表示允许的服务器地址
+              - "http://docs.spring.io"
+            allowedMethods:      #表示允许的方法
+              - GET
+
+eureka:     #eureka配置项
+  client:     #eureka客户端配置项
+    service-url:      #eureka服务路径配置项
+      defaultZone: http://127.0.0.1:10086/eureka      #eureka默认服务路径
+  instance:     #eureka实例配置项
+    prefer-ip-address: true     #更倾向使用ip地址而不是host名称
+
+hystrix:      #gateway默认集成了Hystrix，有些值需要配置，否则就会使用默认值
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000     #请求超时时间配置项，默认1000
+
+ribbon:     #gateway默认集成了Ribbon，有些值需要配置，否则就会使用默认值
+  ConnectTimeout: 1000      #连接超时时长，单位：毫秒
+  ReadTimeout: 2000     #数据通信超时时长，单位：毫秒
+  MaxAutoRetries: 0     #当前服务器的重试次数
+  MaxAutoRetriesNextServer: 0     #重试多少次服务

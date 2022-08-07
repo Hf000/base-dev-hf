@@ -3,17 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>base-dev-hf</artifactId>
+        <artifactId>cloud-netflix-dev</artifactId>
         <groupId>org.hf</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cloud-dev</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>cloud-netflix-dev</module>
-    </modules>
+    <artifactId>eureka-demo</artifactId>
 
+    <dependencies>
+        <!--引入Eureka服务端启动依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

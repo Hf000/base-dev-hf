@@ -1,0 +1,46 @@
+spring:     #spring配置项
+  application:      #应用配置项
+    name: consumer-demo     #配置当前应用名称
+
+eureka:     #eureka配置项
+  client:     #eureka客户端配置项
+    service-url:      #配置eureka服务地址
+#      defaultZone: http://127.0.0.1:10086/eureka,http://127.0.0.1:10087/eureka      #eureka集群环境配置eureka服务地址
+      defaultZone: http://127.0.0.1:10086/eureka      #配置eureka注册服务地址
+    registry-fetch-interval-seconds: 30     #客户端拉取eureka服务列表地址时间间隔，默认30秒
+
+#service-demo:     #配置eureka注册服务地址列表配置项，服务提供应用名称
+#  ribbon:     #ribbon配置项
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule      #配置ribbon负载均衡算法为随机，默认是轮询
+
+hystrix:      #hystrix配置项
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000     #请求超时时间配置项，默认1000
+      circuitBreaker:     #Hystrix熔断相关配置项
+        errorThresholdPercentage: 50 # 触发熔断错误比例阈值，默认值50%
+        sleepWindowInMilliseconds: 10000 # 熔断后休眠时长，默认值5秒，单位：毫秒
+        requestVolumeThreshold: 10 # 熔断触发最小请求次数，默认值是20次
+
+ribbon:     #Feign内置Ribbon相关配置项，这里的配置只对使用Feign的相关代码生效
+  ConnectTimeout: 1000      #连接超时时长，单位：毫秒
+  ReadTimeout: 5000     #数据通信超时时长，单位：毫秒
+  MaxAutoRetries: 0     #当前服务器的重试次数
+  MaxAutoRetriesNextServer: 0     #重试多少次服务
+  OkToRetryOnAllOperations: false     #是否对所有的请求方式都重试
+feign:      #Feign内置Hystrix配置项
+  hystrix:
+    enabled: true     #Feign开启服务熔断
+  compression:      #Feign中请求和响应压缩配置项
+    request:      #请求压缩配置项
+      enabled: true     #开启请求压缩
+      mime-types: text/html,application/xml,application/json      #设置压缩的数据类型
+      min-request-size: 2048      #设置触发压缩的大小下限
+    response:     #响应压缩配置项
+      enabled: true     #开启响应压缩
+logging:      #Feign中日志级别的配置项
+  level:
+    org.hf: debug      #指定相关包下的日志记录级别

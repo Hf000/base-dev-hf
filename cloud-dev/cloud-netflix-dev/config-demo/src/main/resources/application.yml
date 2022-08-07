@@ -1,0 +1,16 @@
+server:     #服务配置项
+  port: 12000     #修改服务启动端口
+
+spring:     #spring配置项
+  application:      #应用配置项
+    name: config-demo      #修改应用名称
+  cloud:      #cloud配置项
+    config:     #配置中心配置项
+      server:     #配置中心服务配置项
+        git:      #配置中心服务git仓库配置项
+          uri: https://gitee.com/hufei000/config-demo.git     #配置中心地址
+
+eureka:     #eureka配置项
+  client:     #eureka客户端配置项
+    service-url:      #eureka服务地址配置项
+      defaultZone: http://127.0.0.1:10086/eureka      #eureka注册中心地址

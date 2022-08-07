@@ -1,0 +1,18 @@
+server:     #服务配置项
+#  port: ${port:10086}     #当JVM虚拟机中获取到port有值则取port，否则取10086，这样还是方便idea编辑器配置多个副本启动
+  port: 10086     #配置tomcat端口为10086
+
+spring:     #spring配置项
+  application:      #应用配置项
+    name: eureka-server     #配置当前应用的名称
+
+eureka:     #eureka配置项
+  client:     #eureka客户端配置项
+    service-url:      #eureka服务地址
+#      defaultZone: ${defaultZone:http://127.0.0.1:10087/eureka}     #当JVM虚拟机中获取到defaultZone有值则取defaultZone，否则取http://127.0.0.1:10086/eureka, eureka集群环境路径之间用","分隔开
+      defaultZone: http://127.0.0.1:10086/eureka      #eureka服务地址，如果是集群的话，需要指定集群中其他eureka地址，eureka集群环境路径之间用","分隔开
+    register-with-eureka: false     #单机时配置；是否将此服务注册到eureka中，默认是true，这里设置为false，因为eureka自身不提供服务所以不将自己注册到eureka中；如果是集群就需要将自己注册到eureka中，因为其他的服务器也需要发现当前eureka
+    fetch-registry: false     #单机时配置；是否拉取服务，默认为true，这里设置为false，eureka本身不需要消费服务
+  server:     #eureka服务端配置项
+    eviction-interval-timer-in-ms: 60000     #eureka剔除失效服务时间间隔，默认60秒，单位毫秒
+    enable-self-preservation: false     #关闭自我保护机制，默认为true，一般都会设置成false，发现心跳续约超时则剔除eureka服务失效地址

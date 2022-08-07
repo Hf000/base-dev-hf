@@ -1,0 +1,26 @@
+server:     #服务配置项
+  port: 8084      #配置tomcat端口配置项
+#  port: ${port:8083}      #当JVM虚拟机中获取到port有值则取port，否则取8083，这样还是方便idea编辑器配置多个副本启动
+
+spring:     #spring配置项
+  datasource:     #数据源配置项设置
+    driver-class-name: com.mysql.jdbc.Driver      #数据库驱动类地址
+    url: jdbc:mysql://127.0.0.1:3306/springboot_test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false      #数据库连接地址
+    username: root      #数据库账号
+    password: 123456      #数据库密码
+  application:      #应用配置项
+    name: service-demo      #配置当前应用名称
+
+mybatis:      #mybatis配置
+  type-aliases-package: org.hf.springcloud.netflix.provider.two.pojo.entity      #配置实体类别名包路径，配置这个配置项在mapper里面就不需要写全限定名了，只需要写对应实体类名即可
+
+eureka:     #eureka配置项
+  client:     #eureka客户端配置项
+    service-url:      #配置eureka服务地址
+      #      defaultZone: http://127.0.0.1:10086/eureka,http://127.0.0.1:10087/eureka      #eureka集群环境配置eureka服务地址
+      defaultZone: http://127.0.0.1:10086/eureka      #配置eureka注册服务地址
+  instance:     #配置eureka注册服务实例配置项
+    prefer-ip-address: true     #更倾向使用ip地址而不是host名称
+    ip-address: 127.0.0.1     #指定具体的ip地址
+    lease-renewal-interval-in-seconds: 30      #服务续约时间，默认30秒，也就是多长时间向eureka服务端发送一次健康状态，一般默认值即可
+    lease-expiration-duration-in-seconds: 90     #服务续约超时时间，默认90秒，也就是如果超过该时间没有向eureka服务发送健康状态则会被eureka剔除出服务列表，一般默认值即可

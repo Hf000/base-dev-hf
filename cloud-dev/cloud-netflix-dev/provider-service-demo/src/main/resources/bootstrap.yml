@@ -1,0 +1,14 @@
+spring:     #spring配置项
+  cloud:      #springCloud配置项
+    config:     #配置中心配置项
+      name: serviceDemo      #配置中心配置仓库的配置文件的application保持一致，配置文件名称格式{application}-{profile}.yml
+      profile: dev      #配置中心配置仓库的配置文件的profile保持一致，配置文件名称格式{application}-{profile}.yml
+      label: master     #配置中心配置仓库的配置文件所属版本(分支)一致
+      discovery:      #配置中心是否开始设置
+        enabled: true     #开启配置中心，默认是false
+        service-id: config-demo     #配置中心在注册中心注册的服务名称
+
+eureka:     #eureka注册中心配置项
+  client:     #eureka注册中心客户端配置项
+    service-url:      #eureka注册中心地址配置项
+      defaultZone: http://127.0.0.1:10086/eureka      #eureka注册中心地址
