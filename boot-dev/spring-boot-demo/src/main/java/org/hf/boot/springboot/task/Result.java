@@ -3,11 +3,11 @@ package org.hf.boot.springboot.task;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
-/****
- * @Author:www.itheima.com
- * @Description:返回实体Bean
- * @Date  15:55
- *****/
+/**
+ * <p> 返回实体Bean </p>
+ * @author hufei
+ * @date 2022/8/7 17:14
+*/
 @ApiModel(description = "Result",value = "Result")
 public class Result<T> {
 

@@ -1,12 +1,5 @@
 package org.hf.boot.springboot.task;
 
-/*****
- * @Author: http://www.itheima.com
- * @Project: seckill
- * @Description: com.seckill.util.TimeUtil
-
-
- ****/
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -19,6 +12,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+/**
+ * <p>  </p>
+ * @author hufei
+ * @date 2022/8/7 17:14
+*/
 public class TimeUtil {
 
     //============================借助Calendar类获取今天、昨天、本周、上周、本年及特定时间的开始时间和结束时间（返回类型为date类型）========================
