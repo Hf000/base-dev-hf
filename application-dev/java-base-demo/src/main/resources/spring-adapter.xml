@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--配置文件中配置-->
+    <bean id="userCard" class="org.hf.application.javabase.design.patterns.structural.adapter.UserCard"/>
+    <bean id="userInfoBefore" class="org.hf.application.javabase.design.patterns.structural.adapter.UserInfoBefore"/>
+
+    <!--创建代理-->
+    <bean id="proxyBean" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <!--指定给谁创建代理-->
+        <property name="target" ref="userCard" />
+        <!--被代理的对象实现了哪些接口-->
+        <property name="interfaces" value="org.hf.application.javabase.design.patterns.structural.adapter.UserCardService" />
+        <!--指定增强的类-->
+        <property name="interceptorNames">
+            <list>
+                <value>userInfoBefore</value>
+            </list>
+        </property>
+    </bean>
+
+</beans>

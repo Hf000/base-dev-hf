@@ -1,0 +1,23 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--userService-->
+    <bean id="userService" class="org.hf.application.javabase.spring.aop.service.UserServiceImpl"/>
+    <!--注册增强(切面)类-->
+    <bean id="log" class="org.hf.application.javabase.spring.aop.Log"/>
+
+    <!--AOP配置-->
+    <aop:config proxy-target-class="false">
+        <!--配置切面(切入点和通知的结合)-->
+        <aop:aspect ref="log">
+            <!--前置通知-->
+            <aop:before method="before" pointcut="execution(* org.hf.application.javabase.spring.aop.service.*.*(..))"/>
+        </aop:aspect>
+    </aop:config>
+</beans>

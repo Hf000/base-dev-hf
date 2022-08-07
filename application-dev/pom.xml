@@ -17,6 +17,7 @@
         <module>dubbo-dev</module>
         <module>netty-dev</module>
         <module>mongodb-dev</module>
+        <module>java-base-demo</module>
     </modules>
 
 
