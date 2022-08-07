@@ -22,13 +22,13 @@ public class RedisTest {
     @Test
     public void test() {
         //string字符串
-        //redisTemplate.opsForValue().set("str", "heima");
+        //redisTemplate.opsForValue().set("str", "zhangsan");
         //System.out.println("str = " + redisTemplate.opsForValue().get("str"));
-        redisTemplate.boundValueOps("str").set("heima");
+        redisTemplate.boundValueOps("str").set("zhangsan");
         System.out.println("str = " + redisTemplate.boundValueOps("str").get());
 
         //hash散列
-        redisTemplate.boundHashOps("h_key").put("name", "黑马");
+        redisTemplate.boundHashOps("h_key").put("name", "张三");
         redisTemplate.boundHashOps("h_key").put("age", 13);
         //获取所有域对应的值
         Set set = redisTemplate.boundHashOps("h_key").keys();
