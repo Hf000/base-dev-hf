@@ -11,6 +11,16 @@
 
     <artifactId>spring-boot-demo</artifactId>
 
+    <properties>
+        <mysql-connector-java.version>5.1.47</mysql-connector-java.version>
+        <druid.version>1.1.23</druid.version>
+        <mybatis-spring-boot-starter.version>2.1.3</mybatis-spring-boot-starter.version>
+        <mapper-spring-boot-starter.version>2.1.5</mapper-spring-boot-starter.version>
+        <elastic-job-lite-spring-boot-starter.version>2.1.5</elastic-job-lite-spring-boot-starter.version>
+        <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
+        <guava.version>18.0</guava.version>
+    </properties>
+
     <dependencies>
         <!--springboot项目启动依赖-->
         <dependency>
@@ -29,11 +39,11 @@
             <artifactId>lombok</artifactId>
         </dependency>
         <!--阿里巴巴druid数据连接池依赖，相比于hikari更安全-->
-        <dependency>
+        <!--<dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.1.23</version>
-        </dependency>
+            <version>${druid.version}</version>
+        </dependency>-->
         <!--添加springboot默认的数据库连接池启动依赖，相比于druid更高效-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -43,20 +53,26 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.47</version>
+            <version>${mysql-connector-java.version}</version>
             <scope>runtime</scope>
         </dependency>
         <!--添加mybatis启动依赖-->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.1.3</version>
+            <version>${mybatis-spring-boot-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!--mybatis整合通用mapper启动依赖-->
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
-            <version>2.1.5</version>
+            <version>${mapper-spring-boot-starter.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>mybatis</artifactId>
@@ -66,12 +82,11 @@
                     <artifactId>mybatis-spring</artifactId>
                     <groupId>org.mybatis</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper</artifactId>
-            <version>4.1.5</version>
         </dependency>
         <!--添加junit测试启动依赖-->
         <dependency>
@@ -92,7 +107,7 @@
         <dependency>
             <groupId>com.github.kuhn-he</groupId>
             <artifactId>elastic-job-lite-spring-boot-starter</artifactId>
-            <version>2.1.5</version>
+            <version>${elastic-job-lite-spring-boot-starter.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>guava</artifactId>
@@ -100,16 +115,16 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
         <!--swagger文档-->
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.6.1</version>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>${springfox-boot-starter.version}</version>
         </dependency>
     </dependencies>
 

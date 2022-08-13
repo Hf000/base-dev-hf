@@ -30,7 +30,7 @@ public class ResponseUtil {
      * @return 返回信息
      */
     public static ResponseVO<Void> success(StatusCode statusCode) {
-        ResponseVO<Void> vo = new ResponseVO<>();
+        ResponseVO<Void> vo = success();
         if (Objects.nonNull(statusCode)) {
             vo.setResponseCode(statusCode.getCode());
             vo.setResponseMsg(statusCode.getMsg());
@@ -60,13 +60,10 @@ public class ResponseUtil {
      * @return 返回信息
      */
     public static <T> ResponseVO<T> success(StatusCode statusCode, T obj) {
-        ResponseVO<T> vo = new ResponseVO<>();
+        ResponseVO<T> vo = success(obj);
         if (Objects.nonNull(statusCode)) {
             vo.setResponseCode(statusCode.getCode());
             vo.setResponseMsg(statusCode.getMsg());
-        }
-        if (Objects.nonNull(obj)) {
-            vo.setData(obj);
         }
         return vo;
     }
@@ -79,12 +76,9 @@ public class ResponseUtil {
      * @return 返回信息
      */
     public static <T> ResponseVO<T> success(String responseMsg, T obj) {
-        ResponseVO<T> vo = new ResponseVO<>();
+        ResponseVO<T> vo = success(obj);
         if (StringUtils.isNotBlank(responseMsg)) {
             vo.setResponseMsg(responseMsg);
-        }
-        if (Objects.nonNull(obj)) {
-            vo.setData(obj);
         }
         return vo;
     }
@@ -97,6 +91,20 @@ public class ResponseUtil {
         ResponseVO<Void> vo = new ResponseVO<>();
         vo.setResponseCode(ResponseEnum.FAIL.getCode());
         vo.setResponseMsg(ResponseEnum.FAIL.getMsg());
+        return new ResponseVO<>();
+    }
+
+    /**
+     * 返回失败响应
+     * @param statusCode 提示信息
+     * @return 返回信息
+     */
+    public static ResponseVO<Void> fail(StatusCode statusCode) {
+        ResponseVO<Void> vo = fail();
+        if (Objects.nonNull(statusCode)) {
+            vo.setResponseCode(statusCode.getCode());
+            vo.setResponseMsg(statusCode.getMsg());
+        }
         return new ResponseVO<>();
     }
 
@@ -118,22 +126,45 @@ public class ResponseUtil {
 
     /**
      * 返回失败响应
+     * @param statusCode 提示信息
+     * @param obj 数据
+     * @param <T> 数据类型
+     * @return 返回信息
+     */
+    public static <T> ResponseVO<T> fail(StatusCode statusCode, T obj) {
+        ResponseVO<T> vo = fail(obj);
+        if (Objects.nonNull(statusCode)) {
+            vo.setResponseCode(statusCode.getCode());
+            vo.setResponseMsg(statusCode.getMsg());
+        }
+        return vo;
+    }
+
+    /**
+     * 返回失败响应
      * @param obj 返回数据
      * @param responseMsg 提示信息
      * @param <T> 数据类型
      * @return 返回信息
      */
-    public static <T> ResponseVO<T> fail(T obj, String responseMsg) {
-        ResponseVO<T> vo = new ResponseVO<>();
-        if (Objects.nonNull(obj)) {
-            vo.setData(obj);
-        }
-        vo.setResponseCode(ResponseEnum.FAIL.getCode());
+    public static <T> ResponseVO<T> fail(String responseMsg, T obj) {
+        ResponseVO<T> vo = fail(obj);
         if (StringUtils.isNotBlank(responseMsg)) {
             vo.setResponseMsg(responseMsg);
-        } else {
-            vo.setResponseMsg(ResponseEnum.FAIL.getMsg());
         }
+        return vo;
+    }
+
+    /**
+     * 返回异常响应
+     * @param code 异常码
+     * @param msg  异常信息
+     * @return 返回信息
+     */
+    public static ResponseVO<Void> error(String code, String msg) {
+        ResponseVO<Void> vo = new ResponseVO<>();
+        vo.setResponseCode(code);
+        vo.setResponseMsg(msg);
         return vo;
     }
 

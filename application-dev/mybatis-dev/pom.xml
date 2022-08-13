@@ -16,6 +16,7 @@
         <module>mybatis-plus-spring-demo</module>
         <module>mybatis-plus-springboot-demo</module>
         <module>mybatis-tk-springboot-demo</module>
+        <module>mybatis-custom-multiple-datasource</module>
     </modules>
 
     <!--指定依赖的版本信息-->

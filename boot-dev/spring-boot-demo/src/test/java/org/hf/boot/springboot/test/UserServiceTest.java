@@ -10,11 +10,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * @Author:hufei
- * @CreateTime:2020-09-11
- * @Description:
- */
-@SpringBootTest                     //开启springboot项目测试注解
+ * <p> 测试类 </p>
+ * //@SpringBootTest  //开启springboot项目测试注解
+ * @author hufei
+ * @date 2022/8/13 11:19
+*/
+@SpringBootTest
 public class UserServiceTest {
 
     @Autowired
@@ -42,13 +43,13 @@ public class UserServiceTest {
     @Test
     public void getUserAll() {
         List<User> users = userServiceImpl.getUserAll();
-        users.forEach(user -> System.out.println(user));
+        users.forEach(System.out::println);
     }
 
     @Test
     public void selectUserAll() {
         List<User> users = userServiceImpl.selectAll();
-        users.forEach(user -> System.out.println(user));
+        users.forEach(System.out::println);
     }
 
 }

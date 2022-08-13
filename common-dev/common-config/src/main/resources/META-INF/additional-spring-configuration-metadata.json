@@ -1,0 +1,48 @@
+{
+  "properties": [
+    {
+      "name": "ej.address",
+      "type": "java.lang.String",
+      "description": "Description for ej.address."
+    },
+    {
+      "name": "ej.namespace",
+      "type": "java.lang.String",
+      "description": "Description for ej.namespace."
+    },
+    {
+      "name": "ej.baseSleepTimeMilliseconds",
+      "type": "java.lang.String",
+      "description": "Description for ej.baseSleepTimeMilliseconds."
+    },
+    {
+      "name": "ej.maxSleepTimeMilliseconds",
+      "type": "java.lang.String",
+      "description": "Description for ej.maxSleepTimeMilliseconds."
+    },
+    {
+      "name": "ej.maxRetries",
+      "type": "java.lang.String",
+      "description": "Description for ej.maxRetries."
+    },
+    {
+      "name": "ej.flag",
+      "type": "java.lang.String",
+      "description": "Description for ej.flag."
+    },
+    {
+      "name": "ej.open",
+      "type": "java.lang.String",
+      "description": "Description for ej.open."
+    },
+    {
+      "name": "ej.cron",
+      "type": "java.lang.String",
+      "description": "Description for ej.cron."
+    },
+    {
+      "name": "replaceBean.scannerPackages",
+      "type": "java.lang.String",
+      "description": "Description for replaceBean.scannerPackages."
+    }
+  ] }

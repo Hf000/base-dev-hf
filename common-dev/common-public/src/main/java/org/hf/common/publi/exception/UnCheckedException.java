@@ -17,29 +17,50 @@ public class UnCheckedException extends RuntimeException {
     protected String code;
     protected String msg;
 
-    protected UnCheckedException(String code, String msg) {
+    public UnCheckedException(String code, String msg) {
+        super();
         this.code = code;
         this.msg = msg;
     }
 
-    protected UnCheckedException(StatusCode statusCode) {
+    public UnCheckedException(String code, Throwable cause) {
+        super(cause);
+        this.code = code;
+    }
+
+    public UnCheckedException(StatusCode statusCode) {
+        super();
         this.code = statusCode.getCode();
         this.msg = statusCode.getMsg();
     }
 
-    protected UnCheckedException(String msg) {
+    public UnCheckedException(StatusCode statusCode, Throwable cause) {
+        super(cause);
+        this.code = statusCode.getCode();
+        this.msg = statusCode.getMsg();
+    }
+
+    public UnCheckedException(String msg) {
+        super();
         this.code = ExceptionEnum.SYSTEMERROR.getCode();
         this.msg = msg;
     }
 
-    protected UnCheckedException(StatusCode statusCode, String msg) {
+    public UnCheckedException(StatusCode statusCode, String msg) {
+        super();
         this.code = statusCode.getCode();
         this.msg = msg;
     }
 
-    protected UnCheckedException() {
+    public UnCheckedException() {
+        super();
         this.code = ExceptionEnum.SYSTEMERROR.getCode();
         this.msg = ExceptionEnum.SYSTEMERROR.getMsg();
+    }
+
+    public UnCheckedException(Throwable cause) {
+        super(cause);
+        this.code = ExceptionEnum.SYSTEMERROR.getCode();
     }
 
     public String getCode() {

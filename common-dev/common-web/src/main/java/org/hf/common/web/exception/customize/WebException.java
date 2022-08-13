@@ -1,8 +1,10 @@
 package org.hf.common.web.exception.customize;
 
 import org.hf.common.publi.enums.ExceptionEnum;
+import org.hf.common.publi.exception.UnCheckedException;
 import org.hf.common.publi.interfac.StatusCode;
 
+import java.io.UncheckedIOException;
 import java.util.List;
 
 /**
@@ -12,58 +14,51 @@ import java.util.List;
  * @version 1.0.0
  * @date 2021/7/25 18:33
  */
-public class WebException extends RuntimeException  {
+public class WebException extends UnCheckedException {
 
     private static final long serialVersionUID = -5098852202248205572L;
-    protected String code;
-    protected String msg;
     protected List<?> dataList;
 
     protected WebException(String code, String msg, List<?> dataList) {
-        this.code = code;
-        this.msg = msg;
+        super(code, msg);
         this.dataList = dataList;
     }
 
     protected WebException(StatusCode statusCode, List<?> dataList) {
-        this.code = statusCode.getCode();
-        this.msg = statusCode.getMsg();
+        super(statusCode);
+        this.dataList = dataList;
+    }
+
+    protected WebException(StatusCode statusCode, List<?> dataList, Throwable cause) {
+        super(statusCode, cause);
         this.dataList = dataList;
     }
 
     protected WebException(String msg, List<?> dataList) {
-        this.code = ExceptionEnum.SYSTEMERROR.getCode();
-        this.msg = msg;
+        super(msg);
+        this.dataList = dataList;
+    }
+
+    protected WebException(String msg, List<?> dataList, Throwable cause) {
+        super(msg, cause);
         this.dataList = dataList;
     }
 
     protected WebException(StatusCode statusCode, String msg, List<?> dataList) {
-        this.code = statusCode.getCode();
-        this.msg = msg;
+        super(statusCode, msg);
         this.dataList = dataList;
     }
 
     protected WebException() {
-        this.code = ExceptionEnum.SYSTEMERROR.getCode();
-        this.msg = ExceptionEnum.SYSTEMERROR.getMsg();
+        super();
     }
 
     protected WebException(StatusCode statusCode) {
-        this.code = statusCode.getCode();
-        this.msg = statusCode.getMsg();
+        super(statusCode);
     }
 
     protected WebException(String code, String msg) {
-        this.code = code;
-        this.msg = msg;
-    }
-
-    public String getCode() {
-        return this.code;
-    }
-
-    public String getMsg() {
-        return this.msg;
+        super(code, msg);
     }
 
     public List<?> getDataList() { return this.dataList; }

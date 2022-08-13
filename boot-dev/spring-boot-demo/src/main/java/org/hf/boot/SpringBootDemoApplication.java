@@ -7,6 +7,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 /**
  * <p> springboot启动类 </p>
  * //@SpringBootApplication //springboot启动类注解
+ * //@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})  // 在没有连接数据库的情况下进行测试
  * //@MapperScan("org.hf.**.dao") //开启扫描mybatis所有业务mapper接口的包路径, 整合通用mapper后需要将这个注解注释掉
  * //@MapperScan("org.hf.**.dao") //整合通用mapper需要注释掉mybatis官方的@MapperScan注解，开启通用mapper的@MapperScan注解
  * @author hufei

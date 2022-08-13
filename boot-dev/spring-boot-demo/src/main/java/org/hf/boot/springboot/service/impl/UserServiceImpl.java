@@ -1,6 +1,5 @@
 package org.hf.boot.springboot.service.impl;
 
-import org.hf.boot.springboot.config.Master;
 import org.hf.boot.springboot.dao.UserMapper;
 import org.hf.boot.springboot.pojo.entity.User;
 import org.hf.boot.springboot.service.UserService;
@@ -51,7 +50,6 @@ public class UserServiceImpl implements UserService {
         return userMapper.getUser(id);
     }
 
-    @Master
     @Override
     public List<User> getUserAll() {
         return userMapper.getUserAll();

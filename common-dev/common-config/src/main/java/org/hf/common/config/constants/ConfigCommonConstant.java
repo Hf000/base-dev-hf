@@ -10,5 +10,8 @@ package org.hf.common.config.constants;
 public interface ConfigCommonConstant {
 
     String NULL_STRING = "null";
+    String ASTERISK = "*";
+    String EN_PERIOD = ".";
+    String EN_COMMA = ",";
 
 }

@@ -33,6 +33,6 @@
     使用方法:
         1> 引入common-config依赖
         2> 创建需要替换接口的实现类, 添加@CustomBeanReplace(value="被替换bean的名称")
-        3> 在application.properties文件中配置replaceBean.scannerPackages替换扫描包配置项
+        3> 在application.properties文件中配置replaceBean.scannerPackages替换扫描包配置项, 支持org.hf.*.config的方式配置
 
 

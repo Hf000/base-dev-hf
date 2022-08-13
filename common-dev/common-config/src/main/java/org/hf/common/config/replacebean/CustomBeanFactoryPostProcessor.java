@@ -1,6 +1,7 @@
 package org.hf.common.config.replacebean;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.ClassScanner;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hf.common.config.constants.ConfigCommonConstant;
@@ -12,10 +13,18 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.hf.common.config.constants.ConfigCommonConstant.ASTERISK;
+import static org.hf.common.config.constants.ConfigCommonConstant.EN_COMMA;
+import static org.hf.common.config.constants.ConfigCommonConstant.EN_PERIOD;
 
 /**
  * <p> 实现spring容器中的bean替换处理 </p>
@@ -29,6 +38,7 @@ import java.util.Set;
 public class CustomBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
     @Value("${replaceBean.scannerPackages}")
+    @NestedConfigurationProperty
     private String scannerPackages;
 
     /**
@@ -37,7 +47,7 @@ public class CustomBeanFactoryPostProcessor implements BeanDefinitionRegistryPos
      * @throws BeansException 异常
      */
     @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
+    public void postProcessBeanDefinitionRegistry(@NonNull BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
         // 获取指定注解的类
         Set<Class<?>> annotationClass = getAnnotationClass();
         if (CollectionUtil.isNotEmpty(annotationClass)) {
@@ -95,19 +105,30 @@ public class CustomBeanFactoryPostProcessor implements BeanDefinitionRegistryPos
      * @return 返回类
      */
     private Set<Class<?>> getAnnotationClass() {
-        // 需要优化, 通过解析配置文件获取要扫描的包
-//        String scannerPackages = PropertiesUtil.init().getPropertiesValue("replaceBean.scannerPackages");
-        Reflections reflections;
-        if (StringUtils.isNotBlank(scannerPackages) && !StringUtils.containsIgnoreCase(scannerPackages, ConfigCommonConstant.NULL_STRING)) {
-            // 扫描指定路径下的包
-            String[] split = scannerPackages.split(",");
-            reflections = new Reflections((Object) split);
-        } else {
-            // 扫所有的包
-            reflections = new Reflections();
+        try {
+            Reflections reflections;
+            if (StringUtils.isNotBlank(scannerPackages) && !StringUtils.containsIgnoreCase(scannerPackages, ConfigCommonConstant.NULL_STRING)) {
+                // 扫描指定路径下的包
+                if (scannerPackages.contains(EN_PERIOD + ASTERISK) && scannerPackages.contains(ASTERISK + EN_PERIOD)) {
+                    // 带*号包路径处理
+                    String packageStart = StringUtils.substringBefore(scannerPackages, EN_PERIOD + ASTERISK);
+                    String packageLast = StringUtils.substringAfterLast(scannerPackages, ASTERISK + EN_PERIOD);
+                    Set<Class<?>> classes = ClassScanner.scanPackage(packageStart);
+                    return classes.stream().filter(clazz -> clazz.getName().startsWith(packageStart) && clazz.getName().contains(packageLast) && clazz.isAnnotationPresent(CustomBeanReplace.class)).collect(Collectors.toSet());
+                } else {
+                    String[] split = scannerPackages.split(EN_COMMA);
+                    reflections = new Reflections((Object) split);
+                }
+            } else {
+                // 扫所有的包
+                reflections = new Reflections();
+            }
+            // 返回指定注解的所有类对象
+            return reflections.getTypesAnnotatedWith(CustomBeanReplace.class);
+        } catch (Exception e) {
+            log.error("scannerPackages parse error!", e);
         }
-        // 返回指定注解的所有类对象
-        return reflections.getTypesAnnotatedWith(CustomBeanReplace.class);
+        return null;
     }
 
     /**
@@ -117,7 +138,7 @@ public class CustomBeanFactoryPostProcessor implements BeanDefinitionRegistryPos
      * @throws BeansException 异常
      */
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
+    public void postProcessBeanFactory(@NonNull ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
         /*DefaultListableBeanFactory defaultListableBeanFactory;
         if (configurableListableBeanFactory instanceof DefaultListableBeanFactory) {
             defaultListableBeanFactory = (DefaultListableBeanFactory) configurableListableBeanFactory;

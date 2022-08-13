@@ -1,13 +1,13 @@
-package org.hf.boot.springboot.config;
+package org.hf.application.mybatis.multiple.datasource.config;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @Author:hufei
- * @CreateTime:2020-11-16
- * @Description:将数据源设置到当前的线程中
+ * <p> 将数据源设置到当前的线程中 </p>
  * 自定义实现多数据源 - 4
- */
+ * @author hufei
+ * @date 2022/8/13 9:46
+*/
 public class DBContextHolder {
     private static final ThreadLocal<DBType> contextHolder = new ThreadLocal<>();
 

@@ -1,9 +1,9 @@
 package org.hf.common.web.pojo.vo;
 
 import cn.hutool.core.date.DateUtil;
+import org.hf.common.publi.interfac.ResponseResult;
 import org.hf.common.publi.interfac.StatusCode;
 import org.hf.common.web.enums.ResponseEnum;
-import org.hf.common.web.interfac.ResponseResult;
 import org.hf.common.web.utils.RequestParamUtil;
 
 import java.io.Serializable;

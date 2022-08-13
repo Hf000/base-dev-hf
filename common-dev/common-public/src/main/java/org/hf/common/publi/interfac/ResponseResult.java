@@ -1,4 +1,4 @@
-package org.hf.common.web.interfac;
+package org.hf.common.publi.interfac;
 
 /**
  * <p> 响应接口 </p>
