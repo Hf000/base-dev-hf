@@ -5,7 +5,7 @@ import org.hf.common.publi.interfac.StatusCode;
 
 /**
  * <p> 定时任务自定义异常 </p>
- * 自定义封装elastic-job实现 - 4
+ * 自定义封装elastic-job实现 - 3
  * @author hufei
  * @version 1.0.0
  * @date 2021/10/9 21:53

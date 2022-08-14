@@ -10,13 +10,17 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.hf.common.config.elasticjob.ElasticJobAutoConfiguration;
 import org.hf.common.config.elasticjob.ElasticJobProperties;
+import org.hf.common.config.enums.ConfigExceptionEnum;
 import org.hf.springboot.service.constants.ServiceConstant;
 import org.hf.springboot.service.enums.ExceptionEnum;
 import org.hf.springboot.service.exception.BusinessException;
 import org.hf.springboot.service.pojo.bo.ElasticJobBO;
 import org.hf.springboot.service.service.ElasticJobService;
 import org.quartz.impl.triggers.CronTriggerImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -40,13 +44,16 @@ public class ElasticJobServiceImpl implements ElasticJobService {
 
     private static final Map<String, ElasticJobBO> JOB_INFO = Maps.newConcurrentMap();
 
-    private final ZookeeperRegistryCenter zookeeperRegistryCenter;
+//    private final ZookeeperRegistryCenter zookeeperRegistryCenter;
+
+    @Autowired(required = false)
+    private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
     /**
      * 获取zookeeper的注册中心连接
      * @param elasticJobProperties zk连接配置项
      */
-    public ElasticJobServiceImpl(ElasticJobProperties elasticJobProperties) {
+    /*public ElasticJobServiceImpl(ElasticJobProperties elasticJobProperties) {
         // 初始化zookeeper配置
         ZookeeperConfiguration zookeeperConfiguration = new ZookeeperConfiguration(elasticJobProperties.getAddress(), elasticJobProperties.getNamespace());
         if (elasticJobProperties.isFlag()) {
@@ -57,7 +64,7 @@ public class ElasticJobServiceImpl implements ElasticJobService {
         // 初始注册中心,建立连接
         zookeeperRegistryCenter = new ZookeeperRegistryCenter(zookeeperConfiguration);
         zookeeperRegistryCenter.init();
-    }
+    }*/
 
     /**
      * 初始化获取注册中心的所有定时任务
@@ -65,6 +72,10 @@ public class ElasticJobServiceImpl implements ElasticJobService {
     @PostConstruct
     public void init() {
         JOB_INFO.clear();
+        if (zookeeperRegistryCenter == null) {
+            log.error("定时任务初始化失败, 定时任务配置初始化开关关闭, 请检查配置ej.open参数");
+            return;
+        }
         // 获取根目录下的所有定时任务名称
         List<String> jobNames = zookeeperRegistryCenter.getChildrenKeys("/");
         jobNames.forEach(jobName -> {
@@ -88,6 +99,9 @@ public class ElasticJobServiceImpl implements ElasticJobService {
             return null;
         }
         JobNodePath jobNodePath = new JobNodePath(jobName);
+        if (zookeeperRegistryCenter == null) {
+            throw new BusinessException(ConfigExceptionEnum.JOB_CONFIG_ERROR);
+        }
         String liteJobConfigJson = zookeeperRegistryCenter.get(jobNodePath.getConfigNodePath());
         if (Objects.isNull(liteJobConfigJson)) {
             return null;
@@ -106,6 +120,9 @@ public class ElasticJobServiceImpl implements ElasticJobService {
         if (Objects.isNull(elasticJobBO)) {
             throw new BusinessException(ExceptionEnum.EXECUTE_JOB_ERROR);
         }
+        if (zookeeperRegistryCenter == null) {
+            throw new BusinessException(ConfigExceptionEnum.JOB_CONFIG_ERROR);
+        }
         JobNodePath jobNodePath = new JobNodePath(jobName);
         for (String childrenKey : zookeeperRegistryCenter.getChildrenKeys(jobNodePath.getInstancesNodePath())) {
             zookeeperRegistryCenter.persist(jobNodePath.getInstanceNodePath(childrenKey), ServiceConstant.JOB_TRIGGER);
@@ -120,6 +137,9 @@ public class ElasticJobServiceImpl implements ElasticJobService {
         }
         if (!checkCronExpression(cron)) {
             throw new BusinessException(ExceptionEnum.JOB_CRON_ERROR);
+        }
+        if (zookeeperRegistryCenter == null) {
+            throw new BusinessException(ConfigExceptionEnum.JOB_CONFIG_ERROR);
         }
         LiteJobConfiguration liteJobConfiguration = getLiteJobConfiguration(jobName);
         Optional.ofNullable(liteJobConfiguration).ifPresent(jobConfig -> {

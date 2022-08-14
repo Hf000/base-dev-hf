@@ -92,7 +92,7 @@ public class OptionalDemo {
 
     @Test
     public void dtoTest() {
-        // 如果是controller接口参数, 没传就是null, 传了是empty空对象
+        // 如果是controller接口参数, 没传就是null, 传了是empty空对象    不推荐这种用法
         DemoDTO demoDTO = new DemoDTO().setArea("福田").setCity(Optional.of("深圳"));
         System.out.println("测试" + demoDTO.toString());
     }

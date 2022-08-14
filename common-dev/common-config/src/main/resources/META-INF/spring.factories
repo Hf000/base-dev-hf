@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   org.hf.common.config.elasticjob.ElasticJobProperties,\
+  org.hf.common.config.elasticjob.ElasticJobInitConfiguration,\
   org.hf.common.config.elasticjob.ElasticJobAutoConfiguration

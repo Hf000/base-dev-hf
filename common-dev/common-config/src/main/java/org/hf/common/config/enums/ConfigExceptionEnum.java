@@ -14,6 +14,8 @@ public enum ConfigExceptionEnum implements StatusCode {
      * 响应枚举类
      */
     CRON_ERROR("400001","cron表达式异常"),
+    JOB_INIT_ERROR("400002","定时任务初始化异常"),
+    JOB_CONFIG_ERROR("400003","定时任务初始化配置异常"),
     ;
 
     ConfigExceptionEnum(String code, String msg) {

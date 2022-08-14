@@ -11,9 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hf.common.config.enums.ConfigExceptionEnum;
 import org.hf.common.publi.utils.ElUtil;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.env.Environment;
 
 import javax.annotation.PostConstruct;
@@ -22,13 +26,14 @@ import java.util.Optional;
 
 /**
  * <p> elastic-job初始化处理 </p>
- * 自定义封装elastic-job实现 - 2
+ * 自定义封装elastic-job实现 - 5
  * @author hufei
  * @version 1.0.0
  * @date 2021/10/9 21:29
  */
 @Slf4j
 @Configuration
+@ConditionalOnClass(ElasticJobInitConfiguration.class)
 public class ElasticJobAutoConfiguration {
 
     @Autowired
@@ -40,24 +45,20 @@ public class ElasticJobAutoConfiguration {
     @Autowired
     private Environment environment;
 
+    @Autowired(required = false)
+    private ZookeeperRegistryCenter zookeeperRegistryCenter;
+
     /**
      * elastic-job初始化处理
      */
     @PostConstruct
     public void initElasticJob() {
-        log.info("定时任务初始化开始===> elasticJobProperties:{}", elasticJobProperties.toString());
-        // 判断是否开启了定时任务开关
-        if (elasticJobProperties.isOpen()) {
-            // 初始化zookeeper配置
-            ZookeeperConfiguration zookeeperConfiguration = new ZookeeperConfiguration(elasticJobProperties.getAddress(), elasticJobProperties.getNamespace());
-            if (elasticJobProperties.isFlag()) {
-                zookeeperConfiguration.setBaseSleepTimeMilliseconds(elasticJobProperties.getBaseSleepTimeMilliseconds());
-                zookeeperConfiguration.setMaxSleepTimeMilliseconds(elasticJobProperties.getMaxSleepTimeMilliseconds());
-                zookeeperConfiguration.setMaxRetries(elasticJobProperties.getMaxRetries());
+        try {
+            if (zookeeperRegistryCenter == null) {
+                log.error("定时任务初始化失败, 定时任务配置初始化开关:{}", elasticJobProperties.isOpen());
+                return;
             }
-            // 初始注册中心,建立连接
-            ZookeeperRegistryCenter zookeeperRegistryCenter = new ZookeeperRegistryCenter(zookeeperConfiguration);
-            zookeeperRegistryCenter.init();
+            log.info("定时任务初始化开始===> elasticJobProperties:{}", elasticJobProperties.toString());
             // 获取spring容器中的任务类
             Map<String, SimpleJob> beansOfType = applicationContext.getBeansOfType(SimpleJob.class);
             for (Map.Entry<String, SimpleJob> simpleJobEntry : beansOfType.entrySet()) {
@@ -90,8 +91,10 @@ public class ElasticJobAutoConfiguration {
                     springJobScheduler.init();
                 });
             }
+            log.info("定时任务初始化结束");
+        } catch (BeansException e) {
+            throw new ElasticJobException(ConfigExceptionEnum.JOB_INIT_ERROR);
         }
-        log.info("定时任务初始化结束");
     }
 
 }
