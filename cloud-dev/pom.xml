@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>cloud-netflix-dev</module>
+        <module>spring-cloud-alibaba-dev</module>
     </modules>
 
 
