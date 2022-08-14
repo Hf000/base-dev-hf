@@ -3,19 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>base-dev-hf</artifactId>
+        <artifactId>cloud-dev</artifactId>
         <groupId>org.hf</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>cloud-dev</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>cloud-netflix-dev</module>
-        <module>spring-cloud-alibaba-dev</module>
-        <module>spring-cloud-dev</module>
-    </modules>
+    <artifactId>spring-cloud-dev</artifactId>
 
 
 </project>
