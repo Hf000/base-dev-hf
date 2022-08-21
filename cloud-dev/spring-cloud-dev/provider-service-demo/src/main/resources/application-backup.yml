@@ -12,7 +12,7 @@ spring:     #spring配置项
     name: service-demo      #配置当前应用名称
 
 mybatis:      #mybatis配置
-  type-aliases-package: org.hf.springcloud.netflix.provider.pojo.entity      #配置实体类别名包路径，配置这个配置项在mapper里面就不需要写全限定名了，只需要写对应实体类名即可
+  type-aliases-package: org.hf.springcloud.provider.service.pojo.entity      #配置实体类别名包路径，配置这个配置项在mapper里面就不需要写全限定名了，只需要写对应实体类名即可
 
 eureka:     #eureka配置项
   client:     #eureka客户端配置项

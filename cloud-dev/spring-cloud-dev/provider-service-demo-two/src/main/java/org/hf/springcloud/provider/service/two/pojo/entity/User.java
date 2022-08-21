@@ -1,4 +1,4 @@
-package org.hf.springcloud.netflix.provider.pojo.entity;
+package org.hf.springcloud.provider.service.two.pojo.entity;
 
 import lombok.Data;
 import tk.mybatis.mapper.annotation.KeySql;
@@ -9,14 +9,16 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * @Author:hufei
- * @CreateTime:2020-09-09
- * @Description:用户表映射实体类
- */
-@Data        //在编译阶段会自动根据注解生成对应的方法，包括get/set/hashCode/toString/equals等方法；
-//@Setter      //自动生成set方法
-//@Getter      //自动生成get方法
-@Table(name = "tb_user")            //将实体映射到数据库中对应的表
+ * <p> 用户表映射实体类 </p>
+ * //@Data  //在编译阶段会自动根据注解生成对应的方法，包括get/set/hashCode/toString/equals等方法；
+ * //@Setter    //自动生成set方法
+ * //@Getter    //自动生成get方法
+ * //@Table(name = "tb_user")   //将实体映射到数据库中对应的表
+ * @author hufei
+ * @date 2022/8/21 17:49
+*/
+@Data
+@Table(name = "tb_user")
 public class User {
     // 主键id
     @Id                                 //设置主键id
