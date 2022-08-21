@@ -11,88 +11,114 @@
 
     <artifactId>java-base-demo</artifactId>
 
+    <properties>
+        <!--指定项目编译字符集编码-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--指定项目输出字符集编码-->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!--指定jdk版本为1.8-->
+        <java.version>1.8</java.version>
+        <java-sizeof.version>0.0.5</java-sizeof.version>
+        <aliyun-sdk-oss.version>3.8.0</aliyun-sdk-oss.version>
+        <fastdfs-client-java.version>1.27.0.0</fastdfs-client-java.version>
+        <jjwt.version>0.9.0</jjwt.version>
+    </properties>
+
     <dependencies>
+        <!-- 公共配置依赖 -->
         <dependency>
             <groupId>org.hf</groupId>
             <artifactId>common-config</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${base-project.version}</version>
         </dependency>
-
+        <!-- java中size计算 -->
         <dependency>
             <groupId>com.carrotsearch</groupId>
             <artifactId>java-sizeof</artifactId>
-            <version>0.0.5</version>
+            <version>${java-sizeof.version}</version>
         </dependency>
+        <!-- jdbc相关依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
+        <!-- springboot的web相关依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
+        <!-- springboot的部署相关依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-
+        <!-- lombok相关 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
+        <!-- springboot单元测试 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
+        <!--阿里云sdk-->
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
-            <version>3.8.0</version>
+            <version>${aliyun-sdk-oss.version}</version>
         </dependency>
-
+        <!-- fastdfs相关依赖 -->
         <dependency>
             <groupId>net.oschina.zcx7878</groupId>
             <artifactId>fastdfs-client-java</artifactId>
-            <version>1.27.0.0</version>
+            <version>${fastdfs-client-java.version}</version>
         </dependency>
-
         <!--jjwt-->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.9.0</version>
+            <version>${jjwt.version}</version>
         </dependency>
-
         <!--MySQL-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-
+        <!-- springboot的AOP依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
-            <version>2.1.5.RELEASE</version>
         </dependency>
-
         <!--配置文件注解提示包-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-
+        <!-- 单元测试 -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!--添加maven编译插件，指定jdk版本-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
