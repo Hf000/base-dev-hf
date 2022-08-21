@@ -1,4 +1,4 @@
-package org.hf.application.javabase.apply.jdk8.completableFuture;
+package org.hf.application.javabase.jdk8.completableFuture;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class SupplyAsyncDemo {
+public class HandleDemo {
 
     public static void main(String[] args) {
 
@@ -16,6 +16,7 @@ public class SupplyAsyncDemo {
 
             //子任务
             try {
+                int i =1/0;
                 TimeUnit.SECONDS.sleep(3);
                 System.out.println(Thread.currentThread().getName());
             } catch (InterruptedException e) {
@@ -23,7 +24,20 @@ public class SupplyAsyncDemo {
             }
 
             return 123;
-        }, executorService);
+        }, executorService).handleAsync((value,throwable)->{
+
+            int result  =1;
+            if (throwable == null){
+                //代表前置任务执行没有出现异常
+                result = value*10;
+                System.out.println(result);
+            }else {
+                //前置任务执行出现异常
+                System.out.println(throwable.getMessage());
+            }
+
+            return result;
+        },executorService);
 
         //主任务
         System.out.println("main end ");

@@ -1,4 +1,4 @@
-package org.hf.application.javabase.apply.jdk8.completableFuture;
+package org.hf.application.javabase.jdk8.completableFuture;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;

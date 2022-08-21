@@ -6,7 +6,7 @@ import org.hf.common.publi.interfac.StatusCode;
 
 /**
  * <p> 自定义运行时异常父类 </p>
- *
+ * RuntimeException 异常是unchecked异常,不会强制抛出, 否则就需要强制抛出
  * @author hufei
  * @version 1.0.0
  * @date 2021/7/25 18:33
