@@ -9,6 +9,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.expression.StandardBeanExpressionResolver;
 
+import static org.hf.common.publi.constants.CommonConstant.AFTER_BIG_BRACKETS;
+import static org.hf.common.publi.constants.CommonConstant.BEFORE_BIG_BRACKETS;
+
 /**
  * <p> EL表达式解析工具类 </p>
  *
@@ -37,7 +40,7 @@ public class ExpressionResolverUtil {
         if (null == resolveEmbeddedValue) {
             return null;
         }
-        if (!(StringUtils.startsWith(resolveEmbeddedValue, CommonConstant.DOLLAR_SIGN_BEFORE_BIG_PARANTHESES) && StringUtils.endsWith(resolveEmbeddedValue, CommonConstant.AFTER_BIG_PARANTHESES))) {
+        if (!(StringUtils.startsWith(resolveEmbeddedValue, CommonConstant.DOLLAR_SIGN + BEFORE_BIG_BRACKETS) && StringUtils.endsWith(resolveEmbeddedValue, AFTER_BIG_BRACKETS))) {
             return resolveEmbeddedValue;
         }
         return RESOLVER.evaluate(resolveEmbeddedValue, new BeanExpressionContext(configurableBeanFactory, null));

@@ -2,6 +2,7 @@ package org.hf.common.publi.utils;
 
 import cn.hutool.core.date.DateUtil;
 import org.hf.common.publi.constants.CommonConstant;
+import org.hf.common.publi.constants.NumberConstant;
 
 /**
  * <p> 计算时间工具类 </p>
@@ -33,7 +34,7 @@ public class TimeUtil {
     }
 
     public String getDeltaSecondText() {
-        return getDeltaTime() / CommonConstant.ONE_THOUSAND + "s";
+        return getDeltaTime() / (double)NumberConstant.INT_1000 + "s";
     }
 
 }

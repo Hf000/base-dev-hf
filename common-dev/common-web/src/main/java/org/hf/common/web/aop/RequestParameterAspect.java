@@ -7,8 +7,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.hf.common.publi.constants.CommonConstant;
 import org.hf.common.publi.utils.TimeUtil;
-import org.hf.common.web.contants.WebCommonConstant;
 import org.hf.common.web.utils.RequestParamUtil;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -50,7 +50,7 @@ public class RequestParameterAspect {
         String requestUri = request.getRequestURI();
         log.info("RequestParameterAspect===>开始处理【{}】的【{}】方法，请求地址【{}】", beanName, methodName, requestUri);
         // 获取当前请求的指定参数
-        String requestId = request.getParameter(WebCommonConstant.REQUEST_ID);
+        String requestId = request.getParameter(CommonConstant.REQUEST_ID);
         // 获取方法传参
         Object[] paramsArray = joinPoint.getArgs();
         if (StringUtils.equalsIgnoreCase(HttpMethod.GET.name(), request.getMethod())) {

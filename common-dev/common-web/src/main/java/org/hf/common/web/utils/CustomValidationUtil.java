@@ -1,7 +1,6 @@
 package org.hf.common.web.utils;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.validation.BindingResult;
@@ -14,7 +13,7 @@ import java.util.List;
 
 /**
  * <p> 自定义参数Validation工具类 </p>
- *
+ * 获取表单校验@Validated或@Valid错误信息
  * @author hufei
  * @version 1.0.0
  * @date 2022/8/13 12:14

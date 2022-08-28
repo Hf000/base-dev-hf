@@ -3,6 +3,11 @@ package org.hf.common.publi.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.hf.common.publi.constants.CommonConstant;
 
+import static org.hf.common.publi.constants.CommonConstant.AFTER_BIG_BRACKETS;
+import static org.hf.common.publi.constants.CommonConstant.BEFORE_BIG_BRACKETS;
+import static org.hf.common.publi.constants.CommonConstant.DOLLAR_SIGN;
+import static org.hf.common.publi.constants.CommonConstant.EMPTY_STR;
+
 /**
  * <p> el表达式工具类 </p>
  *
@@ -19,7 +24,7 @@ public class ElUtil {
      */
     public static boolean judgmentEl(String param) {
         if (StringUtils.isNotBlank(param)) {
-            return StringUtils.startsWith(param, CommonConstant.DOLLAR_SIGN_BEFORE_BIG_PARANTHESES) && StringUtils.endsWith(param, CommonConstant.AFTER_BIG_PARANTHESES);
+            return StringUtils.startsWith(param, DOLLAR_SIGN + BEFORE_BIG_BRACKETS) && StringUtils.endsWith(param, AFTER_BIG_BRACKETS);
         }
         return false;
     }
@@ -31,14 +36,14 @@ public class ElUtil {
      */
     public static String replaceEl(String param) {
         if (StringUtils.isNotBlank(param)) {
-            if (StringUtils.contains(param, CommonConstant.DOLLAR_SIGN) ) {
-                param = StringUtils.replace(param, CommonConstant.DOLLAR_SIGN, CommonConstant.EMPTY_STR);
+            if (StringUtils.contains(param, DOLLAR_SIGN) ) {
+                param = StringUtils.replace(param, DOLLAR_SIGN, EMPTY_STR);
             }
-            if (StringUtils.contains(param, CommonConstant.BEFORE_BIG_PARANTHESES) ) {
-                param = StringUtils.replace(param, CommonConstant.BEFORE_BIG_PARANTHESES, CommonConstant.EMPTY_STR);
+            if (StringUtils.contains(param, BEFORE_BIG_BRACKETS) ) {
+                param = StringUtils.replace(param, BEFORE_BIG_BRACKETS, EMPTY_STR);
             }
-            if (StringUtils.contains(param, CommonConstant.AFTER_BIG_PARANTHESES)) {
-                param = StringUtils.replace(param, CommonConstant.AFTER_BIG_PARANTHESES, CommonConstant.EMPTY_STR);
+            if (StringUtils.contains(param, AFTER_BIG_BRACKETS)) {
+                param = StringUtils.replace(param, AFTER_BIG_BRACKETS, EMPTY_STR);
             }
         }
         return param;

@@ -9,21 +9,24 @@ package org.hf.common.publi.constants;
  */
 public interface CommonConstant {
 
+    /**
+     * 固定成员变量
+     */
     String AES = "AES";
-
-    int NUMBER_128 = 128;
-
-    double ONE_THOUSAND = 1000.0;
-
     String REQUEST_ID = "requestId";
 
-    String BEFORE_BIG_PARANTHESES = "{";
-
-    String AFTER_BIG_PARANTHESES = "}";
-
+    /**
+     * 符号
+     */
+    String BEFORE_BIG_BRACKETS = "{";
+    String AFTER_BIG_BRACKETS = "}";
     String DOLLAR_SIGN = "$";
-
-    String DOLLAR_SIGN_BEFORE_BIG_PARANTHESES = DOLLAR_SIGN + BEFORE_BIG_PARANTHESES;
+    String ASTERISK = "*";
+    String EN_PERIOD = ".";
+    String EN_COMMA = ",";
+    String AT = "@";
 
     String EMPTY_STR = "";
+    String NULL_STRING = "null";
+
 }

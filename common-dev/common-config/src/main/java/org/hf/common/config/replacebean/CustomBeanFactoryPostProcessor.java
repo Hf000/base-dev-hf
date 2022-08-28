@@ -4,8 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.ClassScanner;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.hf.common.config.constants.ConfigCommonConstant;
-import org.hf.common.publi.utils.PropertiesUtil;
+import org.hf.common.publi.constants.CommonConstant;
 import org.reflections.Reflections;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,15 +15,15 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.hf.common.config.constants.ConfigCommonConstant.ASTERISK;
-import static org.hf.common.config.constants.ConfigCommonConstant.EN_COMMA;
-import static org.hf.common.config.constants.ConfigCommonConstant.EN_PERIOD;
+import static org.hf.common.publi.constants.CommonConstant.ASTERISK;
+import static org.hf.common.publi.constants.CommonConstant.EN_COMMA;
+import static org.hf.common.publi.constants.CommonConstant.EN_PERIOD;
+import static org.hf.common.publi.constants.CommonConstant.NULL_STRING;
 
 /**
  * <p> 实现spring容器中的bean替换处理 </p>
@@ -107,7 +106,7 @@ public class CustomBeanFactoryPostProcessor implements BeanDefinitionRegistryPos
     private Set<Class<?>> getAnnotationClass() {
         try {
             Reflections reflections;
-            if (StringUtils.isNotBlank(scannerPackages) && !StringUtils.containsIgnoreCase(scannerPackages, ConfigCommonConstant.NULL_STRING)) {
+            if (StringUtils.isNotBlank(scannerPackages) && !StringUtils.containsIgnoreCase(scannerPackages, NULL_STRING)) {
                 // 扫描指定路径下的包
                 if (scannerPackages.contains(EN_PERIOD + ASTERISK) && scannerPackages.contains(ASTERISK + EN_PERIOD)) {
                     // 带*号包路径处理

@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p> 异步任务执行完成后执行的回调方法demo </p>
+ * <p> 异步任务执行完成后执行的回调方法demo,有返回值 </p>
  * thenApply和thenApplyAsync区别
  * 1.thenApply方法是和被调异步任务共用同一个线程,thenApplyAsync是新起一个线程
  * 2.thenApplyAsync可以指定线程池入参,不指定则采用ForkJoinPool默认线程池
@@ -32,7 +32,7 @@ public class ThenApplyDemo {
             }
             return 123;
         }, executorService)
-        // 异步任务的回调方法并带有返回值,若背调异步任务有返回值则入参为被调返回结果,否则入参可以不传,此方法带有返回值
+        // 异步任务的回调方法并带有返回值,若被调异步任务有返回值则入参为被调任务返回结果,否则入参可以不传,此方法带有返回值
         /*.thenApply(result -> {
             // 和被调异步任务共用一个线程
             System.out.println(Thread.currentThread().getName());

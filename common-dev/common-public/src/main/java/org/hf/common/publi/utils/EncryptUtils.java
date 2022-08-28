@@ -3,6 +3,7 @@ package org.hf.common.publi.utils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hf.common.publi.constants.CommonConstant;
+import org.hf.common.publi.constants.NumberConstant;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -61,7 +62,7 @@ public class EncryptUtils {
         //1.构造密钥生成器，指定为AES算法,不区分大小写
         KeyGenerator keygen = KeyGenerator.getInstance(CommonConstant.AES);
         //2.根据ecnodeRules规则初始化密钥生成器    生成一个128位的随机源,根据传入的字节数组
-        keygen.init(CommonConstant.NUMBER_128, new SecureRandom(encodeRules.getBytes()));
+        keygen.init(NumberConstant.INT_128, new SecureRandom(encodeRules.getBytes()));
         //3.产生原始对称密钥
         SecretKey originalKey = keygen.generateKey();
         //4.获得原始对称密钥的字节数组

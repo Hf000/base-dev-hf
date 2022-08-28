@@ -20,8 +20,3 @@
 ### 13. 类型转换工具类: TypeConvertUtils
 
 # 3. 自定义业务异常: org.hf.common.publi.exception
-
-# 4. 自定义注解@ControllerPagination, 可以直接采用PageHelper分页
-    使用方法: 
-        1> 引入common-web依赖
-        2> 在Controller层方法上添加@ControllerPagination

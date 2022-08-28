@@ -16,6 +16,11 @@ import java.util.Enumeration;
 import java.util.Objects;
 import java.util.Properties;
 
+import static org.hf.common.publi.constants.CommonConstant.AFTER_BIG_BRACKETS;
+import static org.hf.common.publi.constants.CommonConstant.BEFORE_BIG_BRACKETS;
+import static org.hf.common.publi.constants.CommonConstant.DOLLAR_SIGN;
+import static org.hf.common.publi.constants.CommonConstant.EMPTY_STR;
+
 /**
  * <p> 获取properties配置文件信息工具类 </p>
  *
@@ -123,10 +128,10 @@ public class PropertiesUtil {
      * @return 返回属性值
      */
     public String getPropertiesValue(String key) {
-        if (StringUtils.startsWith(key, CommonConstant.DOLLAR_SIGN_BEFORE_BIG_PARANTHESES)
-                || StringUtils.endsWith(key, CommonConstant.AFTER_BIG_PARANTHESES)) {
-            key = StringUtils.replace(key, CommonConstant.DOLLAR_SIGN_BEFORE_BIG_PARANTHESES, CommonConstant.EMPTY_STR);
-            key = StringUtils.replace(key, CommonConstant.AFTER_BIG_PARANTHESES, CommonConstant.EMPTY_STR);
+        if (StringUtils.startsWith(key, DOLLAR_SIGN + BEFORE_BIG_BRACKETS)
+                || StringUtils.endsWith(key, AFTER_BIG_BRACKETS)) {
+            key = StringUtils.replace(key, DOLLAR_SIGN + BEFORE_BIG_BRACKETS, EMPTY_STR);
+            key = StringUtils.replace(key, AFTER_BIG_BRACKETS, EMPTY_STR);
         }
         return String.valueOf(properties.get(key));
     }
