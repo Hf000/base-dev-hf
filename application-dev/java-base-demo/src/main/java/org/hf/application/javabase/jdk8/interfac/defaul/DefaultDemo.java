@@ -10,6 +10,7 @@ package org.hf.application.javabase.jdk8.interfac.defaul;
 public class DefaultDemo implements DefaultMethodInterfac {
 
     public static void main(String[] args) {
+        // 接口实例化对象调用默认方法
         DefaultDemo defaultDemo = new DefaultDemo();
         defaultDemo.method();
     }

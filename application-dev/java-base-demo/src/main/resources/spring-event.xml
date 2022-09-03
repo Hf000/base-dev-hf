@@ -4,8 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!--配置文件中配置-->
-    <!--<bean id="applicationEventListener" class="org.hf.application.javabase.spring.event.ApplicationEventListener"/>-->
+    <bean id="applicationEventListener" class="org.hf.application.javabase.spring.event.ApplicationEventListener"/>
     <bean id="messageEventListener" class="org.hf.application.javabase.spring.event.MessageEventListener"/>
-
 
 </beans>

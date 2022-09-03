@@ -2,25 +2,30 @@ package org.hf.application.javabase.jdk8.async;
 
 import java.util.Random;
 
+/**
+ * <p> API同步调用 </p>
+ *
+ * @author hufei
+ * @date 2022/9/3 18:20
+ */
 public class SyncDemo {
 
     static Random random = new Random();
 
-    //接收文章名称，计算出文章的分数
-    public static int getArticleScore(String aName){
-
+    /**
+     * 接收文章名称，计算出文章的分数
+     *
+     * @param aName 入参
+     * @return int
+     */
+    public static int getArticleScore(String aName) {
         int a = calculateArticleScore(aName);
-
         int b = calculateArticleScore(aName);
-
         int c = calculateArticleScore(aName);
-
         //其他业务处理
         doSomeThings();
-
         //返回文章分数
-        return a+b+c;
-
+        return a + b + c;
     }
 
     private static void doSomeThings() {

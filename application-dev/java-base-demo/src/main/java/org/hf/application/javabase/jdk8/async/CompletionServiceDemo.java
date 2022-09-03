@@ -10,10 +10,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p> 线程池完成服务 </p>
+ * <p> 采用线程池完成服务进行API异步调用 </p>
+ *
  * @author hufei
  * @date 2022/8/28 17:39
-*/
+ */
 public class CompletionServiceDemo {
 
     /**
@@ -34,7 +35,7 @@ public class CompletionServiceDemo {
         for (int i = 0; i < 3; i++) {
             try {
                 // 获取任务结果
-                result+=completionService.take().get();
+                result += completionService.take().get();
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
@@ -63,6 +64,7 @@ public class CompletionServiceDemo {
             return value;
         }
     }
+
     private static class CalculateArticleScoreB implements Callable<Integer> {
         @Override
         public Integer call() throws Exception {
@@ -75,6 +77,7 @@ public class CompletionServiceDemo {
             return value;
         }
     }
+
     private static class CalculateArticleScoreC implements Callable<Integer> {
         @Override
         public Integer call() throws Exception {

@@ -1,8 +1,11 @@
-package org.hf.application.javabase.jdk8.lambda;
+package org.hf.application.javabase.jdk8.functinalInterface;
 
 import java.util.Objects;
 
-public class Student{
+/**
+ * @author HF
+ */
+public class Student {
 
     private Integer id;
 

@@ -1,8 +1,8 @@
-package org.hf.application.javabase.jdk8.lambda;
+package org.hf.application.javabase.jdk8.stream;
 
 import java.util.Objects;
 
-public class Student{
+public class Student {
 
     private Integer id;
 

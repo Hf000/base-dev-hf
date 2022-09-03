@@ -13,12 +13,6 @@ public class Son extends Parent {
 
     private String variableThree = "variableThree-son";
 
-    public static void main(String[] args) {
-        Son son = new Son();
-        son.method();
-        son.methodTwo();
-    }
-
     @Override
     public void methodTwo() {
         // 子类调用父类的方法, 父类方法调用的成员变量都是父类的

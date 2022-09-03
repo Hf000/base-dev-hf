@@ -2,6 +2,7 @@ package org.hf.application.javabase.basic.polymorphism;
 
 /**
  * <p> 多态: 编译看左边, 运行看右边 </p>
+ * java三大特性:封装、继承、多态
  * 多态的三个必要条件: 1.继承, 2.重写, 3.父类引用指向子类对象
  * @author hufei
  * @version 1.0.0

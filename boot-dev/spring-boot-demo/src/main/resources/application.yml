@@ -53,6 +53,7 @@ namesp: autoTask
 #    swagger-ui:
 #      enabled: true # 开启swagger文档,也可在配置类中设置
 
+# 过滤器开关
 request:
   filter:
     enable: true
