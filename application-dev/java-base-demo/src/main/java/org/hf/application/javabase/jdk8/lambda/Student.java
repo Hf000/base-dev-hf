@@ -2,6 +2,9 @@ package org.hf.application.javabase.jdk8.lambda;
 
 import java.util.Objects;
 
+/**
+ * @author HF
+ */
 public class Student{
 
     private Integer id;

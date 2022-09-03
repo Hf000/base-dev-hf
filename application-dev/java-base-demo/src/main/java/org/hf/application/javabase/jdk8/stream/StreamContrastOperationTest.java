@@ -1,6 +1,5 @@
 package org.hf.application.javabase.jdk8.stream;
 
-import org.hf.application.javabase.jdk8.lambda.Student;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -23,14 +22,14 @@ public class StreamContrastOperationTest {
     @Test
     public void operateTest() {
         //java7  查询年龄小于20岁的学生,并且根据年龄进行排序，得到学生姓名，生成新集合
-        List<org.hf.application.javabase.jdk8.lambda.Student> studentList = new ArrayList<>();
-        studentList.add(new org.hf.application.javabase.jdk8.lambda.Student(1, "张三", "M", 19));
-        studentList.add(new org.hf.application.javabase.jdk8.lambda.Student(1, "李四", "M", 18));
-        studentList.add(new org.hf.application.javabase.jdk8.lambda.Student(1, "王五", "F", 21));
-        studentList.add(new org.hf.application.javabase.jdk8.lambda.Student(1, "赵六", "F", 20));
+        List<Student> studentList = new ArrayList<>();
+        studentList.add(new Student(1, "张三", "M", 19));
+        studentList.add(new Student(1, "李四", "M", 18));
+        studentList.add(new Student(1, "王五", "F", 21));
+        studentList.add(new Student(1, "赵六", "F", 20));
         //条件筛选
-        List<org.hf.application.javabase.jdk8.lambda.Student> result = new ArrayList<>();
-        for (org.hf.application.javabase.jdk8.lambda.Student student : studentList) {
+        List<Student> result = new ArrayList<>();
+        for (Student student : studentList) {
             if (student.getAge() < 20) {
                 result.add(student);
             }
@@ -38,7 +37,7 @@ public class StreamContrastOperationTest {
         //排序
         Collections.sort(result, new Comparator<Student>() {
             @Override
-            public int compare(org.hf.application.javabase.jdk8.lambda.Student o1, org.hf.application.javabase.jdk8.lambda.Student o2) {
+            public int compare(Student o1, Student o2) {
                 return Integer.compare(o1.getAge(), o2.getAge());
             }
         });

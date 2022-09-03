@@ -1,7 +1,5 @@
 package org.hf.application.javabase.jdk8.stream;
 
-import org.hf.application.javabase.jdk8.lambda.Student;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
