@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- scan: 当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。
+   scanPeriod: 设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟
+   debug: 当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false
+    -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 用来设置上下文名称，每个logger都关联到logger上下文，默认上下文名称为default -->
+    <contextName>logback</contextName>
+    <!-- 使用springboot配置中不存在的参数 -->
+    <!--<define name="ip" class="com.*.common.config.LogIpDefiner"/>-->
+    <!-- 用来定义变量值，它有两个属性name和value，通过<property>定义的值会被插入到logger上下文中，后面可以通过${name变量名称}使用 -->
+    <property name="app.shortName" value="springboot-demo"/>
+    <property name="console_log_pattern"
+              value="%d{HH:mm:ss.SSS} %clr(%5p) %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} [%4L]%clr(:){faint} %m%n%wEx"/>
+    <property name="file_log_pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${app.shortName},%X{X-B3-TraceId:-}] %5p [%15t] %-40.40logger{39} [%4L]: %m%n%wEx"/>
+    <property name="log.max.history" value="540"/>
+    <property name="log.max.file.size" value="300MB"/>
+
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <!-- 负责写日志的组件 -->
+    <!--ConsoleAppender 用于在屏幕上输出日志-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <!--定义了一个过滤器,在LEVEL之下的日志输出不会被打印出来-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <!-- encoder 默认配置为PatternLayoutEncoder -->
+        <encoder>
+            <!-- 定义控制台输出格式: 从property配置的属性中获取日志文件打印格式 -->
+            <pattern>${console_log_pattern}</pattern>
+        </encoder>
+    </appender>
+    <!-- 将日志文件输出到指定文件中 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 如果是 true，日志会被安全的写入文件，即使其他的FileAppender也在向此文件做写入操作，效率低，默认是 false -->
+        <Prudent>false</Prudent>
+        <!-- 定义了一个过滤器,在LEVEL之下的日志输出不会被打印出来 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <!-- 定义日志输出的路径
+        这里的scheduler.manager.server.home 没有在上面的配置中设定，所以会使用java启动时配置的值
+        比如通过 java -Dscheduler.manager.server.home=/path/to XXXX 配置该属性 -->
+        <File>${LOG_PATH}/${app.shortName}/all/all-${ip}.log</File>
+        <!-- 定义日志滚动的策略 SizeAndTimeBasedRollingPolicy:按日期对文件进行存档，同时限制日志文件的大小 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 定义文件滚动时的文件名的格式 -->
+            <FileNamePattern>${LOG_PATH}/${app.shortName}/archive/%d{yyMMdd}/all-${ip}-%i.log</FileNamePattern>
+            <!-- 日志文件的时间周期，单位:天 -->
+            <maxHistory>${log.max.history}</maxHistory>
+            <!-- 日志文件最大的大小, 该属性在 1.1.6版本后 才开始支持-->
+            <maxFileSize>${log.max.file.size}</maxFileSize>
+        </rollingPolicy>
+        <!-- 定义输出格式 -->
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${file_log_pattern}</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE-SQL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/${app.shortName}/sql/sql-${ip}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/${app.shortName}/archive/%d{yyMMdd}/sql-${ip}-%i.log
+            </FileNamePattern>
+            <!--日志文件最大的大小-->
+            <maxFileSize>${log.max.file.size}</maxFileSize>
+            <maxHistory>${log.max.history}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${file_log_pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 指定日志往哪个文件中写 root是默认的logger,这里设定输出级别是INFO,root节点是必选节点，
+         用来指定最基础的日志输出级别，只有一个level属性。level默认是DEBUG。 -->
+    <root level="INFO">
+        <!-- 定义了多个appender，日志会通过往这两个appender里面写-->
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <!-- 1. logger可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个logger;
+         2. logger如果没有指定appender时, logger本身不打印任何信息, 此时会继承root节点中定义的那些appender,会将打印信息传递给rootLogger打印;
+         3. 通过 LoggerFactory.getLogger("mytest")可以获取到这个logger, 由于这个logger自动继承了root的appender，root中已经有FILE的
+         appender了，自己这边又引入了FILE的appender, 如果没有设置 additivity="false", 就会导致一条日志在控制台输出两次的情况,
+         4. additivity表示要不要使用rootLogger配置的appender进行输出, 默认是true
+         5. name:用来指定受此loger约束的某一个包或者具体的某一个类。
+         6. level:用来设置打印级别，日志级别从高到低：TRACE < DEBUG < INFO < WARN < ERROR < FATAL, 大小写无关
+         代表强制执行上级的级别。如果未设置此属性，那么当前loger将会继承上级的级别
+          -->
+    <logger name="org.hf" additivity="false" level="DEBUG">
+        <!--定义了appender，日志会往这个appender里面写-->
+        <appender-ref ref="FILE"/>
+    </logger>
+    <!-- 打印SQL日志到sql文件, 由于这里设置了additivity="true", 那么会使用root中的appender, 如果设置additivity="false"那么日志就不
+        会输出到任何地方 -->
+    <!--<logger name="com.*.interceptor.SqlCostInterceptor" additivity="true" level="INFO">
+        &lt;!&ndash; 如果这里开启, 就会将日志输出到指定的文件 &ndash;&gt;
+        &lt;!&ndash;<appender-ref ref="FILE-SQL"/>&ndash;&gt;
+    </logger>-->
+    <!-- myibatis log configure, 这里没有指定appender,会继承root节点中定义的那些appender -->
+    <logger name="com.apache.ibatis" level="WARN"/>
+    <logger name="java.sql.Connection" level="WARN"/>
+    <logger name="java.sql.PreparedStatement" level="WARN"/>
+    <logger name="io.swagger.models.parameters.AbstractSerializableParameter" level="ERROR"/>
+
+</configuration>
