@@ -104,7 +104,7 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <!-- 引入elasticJob启动依赖 -->
-        <dependency>
+        <!--<dependency>
             <groupId>com.github.kuhn-he</groupId>
             <artifactId>elastic-job-lite-spring-boot-starter</artifactId>
             <version>${elastic-job-lite-spring-boot-starter.version}</version>
@@ -119,7 +119,7 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-        </dependency>
+        </dependency>-->
         <!--swagger文档-->
         <dependency>
             <groupId>io.springfox</groupId>

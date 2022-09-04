@@ -111,6 +111,8 @@ public class ElasticJobServiceImpl implements ElasticJobService {
 
     @Override
     public List<ElasticJobBO> findElasticJobList() {
+        // 重新刷新定时任务列表信息
+        init();
         return Lists.newArrayList(JOB_INFO.values());
     }
 

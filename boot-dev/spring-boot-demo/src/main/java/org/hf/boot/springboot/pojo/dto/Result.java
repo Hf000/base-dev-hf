@@ -1,7 +1,8 @@
-package org.hf.boot.springboot.task;
+package org.hf.boot.springboot.pojo.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hf.boot.springboot.constants.StatusCode;
 
 /**
  * <p> 返回实体Bean </p>
