@@ -1,7 +1,7 @@
 package org.hf.application.javabase.design.patterns.behavioral.observer;
 
 
-public class SleepInfo extends AbstrackInfo{
+public class SleepInfo extends AbstrackInfo {
 
     @Override
     public void message(){

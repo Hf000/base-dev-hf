@@ -1,11 +1,11 @@
 package org.hf.application.javabase.design.patterns.behavioral.strategy;
 
 /**
- * <p>  </p>
+ * <p> 策略模式 </p>
  * @author hufei
  * @date 2022/8/7 15:49
 */
-public class StrategyTest {
+public class StrategyDemo {
 
     public static void main(String[] args) {
         //创建对象实例

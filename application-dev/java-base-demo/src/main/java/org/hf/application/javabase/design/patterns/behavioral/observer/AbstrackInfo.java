@@ -1,7 +1,7 @@
 package org.hf.application.javabase.design.patterns.behavioral.observer;
 
 /**
-* <p> 观察者模式 </p>
+* <p>  </p>
 * @author hufei
 * @date 2022/7/13 21:24
 */
