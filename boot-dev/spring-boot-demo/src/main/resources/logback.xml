@@ -25,6 +25,7 @@
     <!-- 负责写日志的组件 -->
     <!--ConsoleAppender 用于在屏幕上输出日志-->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- withJansi 的默认值为 false。设置 withJansi 为 true 可以激活 Jansi 在 windows 使用 ANSI 彩色代码。在 windows 上如果设置为 true，你应该将 org.fusesource.jansi:jansi:1.9 这个 jar 包放到 classpath 下。基于 Unix 实现的操作系统，像 Linux、Max OS X 都默认支持 ANSI 才彩色代码。 -->
         <withJansi>true</withJansi>
         <!--定义了一个过滤器,在LEVEL之下的日志输出不会被打印出来-->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
@@ -42,7 +43,7 @@
         <Prudent>false</Prudent>
         <!-- 定义了一个过滤器,在LEVEL之下的日志输出不会被打印出来 -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>WARN</level>
+            <level>DEBUG</level>
         </filter>
         <!-- 定义日志输出的路径
         这里的scheduler.manager.server.home 没有在上面的配置中设定，所以会使用java启动时配置的值
@@ -84,6 +85,7 @@
         <!-- 定义了多个appender，日志会通过往这两个appender里面写-->
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
+        <appender-ref ref="FILE-SQL"/>
     </root>
 
     <!-- 1. logger可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个logger;
