@@ -1,4 +1,4 @@
-package org.hf.application.javabase.jdk8.threadLocal;
+package org.hf.application.javabase.thread.threadLocal;
 
 /**
  * <p> ThreadLocal的demo </p>

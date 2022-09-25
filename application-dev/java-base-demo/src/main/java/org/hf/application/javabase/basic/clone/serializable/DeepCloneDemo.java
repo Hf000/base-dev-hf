@@ -1,4 +1,4 @@
-package org.hf.application.javabase.jdk8.clone.serializable;
+package org.hf.application.javabase.basic.clone.serializable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

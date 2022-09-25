@@ -1,13 +1,15 @@
-package org.hf.application.javabase.jdk8.clone.cloneable;
+package org.hf.application.javabase.basic.clone.serializable;
+
+import java.io.Serializable;
 
 /**
- * <p> 需要clone的对象 </p>
- *
+ * <p> 需要序列化的对象 </p>
  * @author hufei
- * @date 2022/9/25 15:45
- */
-public class Person implements Cloneable {
+ * @date 2022/9/25 15:49
+*/
+public class Person implements Serializable {
 
+    private static final long serialVersionUID = 5947942062124112341L;
     private String name;
 
     private int age;
@@ -39,19 +41,9 @@ public class Person implements Cloneable {
     @Override
     public String toString() {
         return "Person{" +
-                this.hashCode() +
+                this.hashCode()+
                 "name='" + name + '\'' +
                 ", age=" + age +
                 '}';
-    }
-
-    @Override
-    protected Object clone() {
-        try {
-            return super.clone();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }

@@ -1,4 +1,4 @@
-package org.hf.application.javabase.jdk8.async;
+package org.hf.application.javabase.thread.async;
 
 import java.util.Random;
 

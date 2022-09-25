@@ -1,4 +1,4 @@
-package org.hf.application.javabase.jdk8.clone.cloneable;
+package org.hf.application.javabase.basic.clone.cloneable;
 
 /**
  * <p> 需要序clone的对象 </p>
