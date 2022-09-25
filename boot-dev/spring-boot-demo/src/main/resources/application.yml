@@ -10,7 +10,7 @@ spring:     #spring配置项
 #    active: a,b      #激活多个yml配置文件, 其他配置文件的命名规则 application-*.yml
   datasource:     #配置hikari数据库连接池参数
     driver-class-name: com.mysql.jdbc.Driver      #数据库驱动类地址
-    url: jdbc:mysql://127.0.0.1:3306/springboot_test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false      #数据库连接地址
+    url: jdbc:mysql://127.0.0.1:3306/base_dev?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false      #数据库连接地址
     username: root      #数据库账号
     password: root      #数据库密码
   redis:      #配置redis相关参数
@@ -39,14 +39,6 @@ logging:      #配置日志的记录级别
   level:      #日志等级配置项
     org.hf: info      #表示以org.hf开头的类的日志记录级别是debug
     org.springframework: error     #表示以org.springframework开头的类的日志记录级别是info
-
-elaticjob:      #elastic-job定时任务配置项
-  zookeeper:      #zookeeper配置项
-    server-lists: 127.0.0.1:2181      #zookeeper地址
-    namespace: myJob      #定时任务命名空间
-#配置动态任务案例的zk和namespace
-zk: 127.0.0.1:2181
-namesp: autoTask
 
 #springfox:
 #  documentation:

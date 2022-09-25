@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hf.common.config.enumerate.JavaEnumCacheManager;
 import org.hf.common.config.enumerate.NameValueEnum;
 import org.hf.common.publi.enums.ExceptionEnum;
-import org.hf.springboot.service.exception.BusinessException;
+import org.hf.common.publi.exception.BusinessException;
 import org.hf.springboot.service.pojo.bo.EnumInfoBO;
 import org.hf.springboot.service.pojo.bo.EnumQueryBO;
 import org.hf.springboot.service.pojo.entity.EnumInfo;

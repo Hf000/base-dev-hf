@@ -35,4 +35,12 @@
         2> 创建需要替换接口的实现类, 添加@CustomBeanReplace(value="被替换bean的名称")
         3> 在application.properties文件中配置replaceBean.scannerPackages替换扫描包配置项, 支持org.hf.*.config的方式配置
 
+# 6. 自定义事务注解实现手动提交事务
+    使用方法:
+        在对应的方法上添加@CustomTransactional(rollbackFor = Exception.class), 如果回滚异常类型是Exception.class则可以不传,此为默认值
+
+# 7. 比较两个对象是否相等
+    使用方法:
+        创建org.hf.common.config.comparator.ObjectComparator的任意一个实现类org.hf.common.config.comparator.FieldBaseObjectComparator(推荐)
+        或者org.hf.common.config.comparator.GetterBaseObjectComparator对象, 然后调用方法即可
 

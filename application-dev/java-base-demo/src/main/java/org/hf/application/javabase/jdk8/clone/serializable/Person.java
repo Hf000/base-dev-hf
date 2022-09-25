@@ -1,9 +1,15 @@
-package org.hf.application.javabase.jdk8.clone.serializableDeppCopy;
+package org.hf.application.javabase.jdk8.clone.serializable;
 
 import java.io.Serializable;
 
+/**
+ * <p> 需要序列化的对象 </p>
+ * @author hufei
+ * @date 2022/9/25 15:49
+*/
 public class Person implements Serializable {
 
+    private static final long serialVersionUID = 5947942062124112341L;
     private String name;
 
     private int age;

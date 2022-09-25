@@ -14,7 +14,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @date 2022/8/3 22:00
 */
 @SpringBootApplication
-@MapperScan("org.hf.**.dao")
+@MapperScan("org.hf.boot.**.dao")
 public class SpringBootDemoApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootDemoApplication.class, args);

@@ -1,25 +1,35 @@
 package org.hf.boot.springboot.service.impl;
 
+import org.hf.boot.springboot.config.CustomTransactional;
+import org.hf.boot.springboot.dao.UserInfoMapper;
 import org.hf.boot.springboot.dao.UserMapper;
+import org.hf.boot.springboot.pojo.dto.UserInfoReq;
 import org.hf.boot.springboot.pojo.entity.User;
+import org.hf.boot.springboot.pojo.entity.UserInfo;
 import org.hf.boot.springboot.service.UserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
- * @Author:hufei
- * @CreateTime:2020-09-09
- * @Description:用户信息处理业务实现类
- */
+ * <p> 用户信息处理业务实现类 </p>
+ * @author hufei
+ * @date 2022/9/25 16:23
+*/
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired(required = false)
     private UserMapper userMapper;
+
+    @Autowired
+    private UserInfoMapper userInfoMapper;
 
     @Override
     public User findUserInfo(Long id) {
@@ -58,6 +68,41 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> selectAll() {
         return userMapper.selectAll();
+    }
+
+    @Override
+    public List<UserInfo> findUserInfoNew() {
+        return userInfoMapper.selectAll();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void addUserInfo(UserInfoReq req) {
+        UserInfo userInfo = new UserInfo();
+        BeanUtils.copyProperties(req, userInfo);
+        userInfoMapper.insertSelective(userInfo);
+    }
+
+    @Override
+    @CustomTransactional(rollbackFor = Exception.class)
+    public void addUserInfoAysnc(UserInfoReq req) {
+        for (int i = 0; i < 3; i++) {
+            asynAddUserInfo(req, i);
+        }
+    }
+
+    @Async("customTaskExecutor")
+    public void asynAddUserInfo(UserInfoReq req, Integer count) {
+        if (count.equals(2)) {
+            try {
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e) {
+                throw new RuntimeException("测试报错");
+            }
+        }
+        req.setUserName(req.getUserName() + count);
+        addUserInfo(req);
+        System.out.println(Thread.currentThread().getName() + "线程测试" + count);
     }
 
 }

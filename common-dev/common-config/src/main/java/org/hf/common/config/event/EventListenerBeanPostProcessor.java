@@ -5,6 +5,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.beans.factory.config.DestructionAwareBeanPostProcessor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PreDestroy;
@@ -27,13 +28,13 @@ public class EventListenerBeanPostProcessor implements DestructionAwareBeanPostP
     }
 
     @Override
-    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessBeforeInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         // 改方法在bean实例化完毕(且已经注入完毕), 在afterPropertiesSet或自定义init方法执行之前
         return bean;
     }
 
     @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+    public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         // 在afterPropertiesSet或自定义init方法执行之后
         if (eventMulticaster != null && bean instanceof EventListener &&
                 AnnotatedElementUtils.hasAnnotation(bean.getClass(), EventListenerAnnotation.class)) {
@@ -43,13 +44,13 @@ public class EventListenerBeanPostProcessor implements DestructionAwareBeanPostP
     }
 
     @Override
-    public boolean requiresDestruction(Object bean) {
+    public boolean requiresDestruction(@NonNull Object bean) {
         // 对象销毁前的处理, 判断是否需要销毁
         return bean instanceof EventListener && AnnotatedElementUtils.hasAnnotation(bean.getClass(), EventListenerAnnotation.class);
     }
 
     @Override
-    public void postProcessBeforeDestruction(Object bean, String beanName) throws BeansException {
+    public void postProcessBeforeDestruction(@NonNull Object bean, @NonNull String beanName) throws BeansException {
         // 这里实现对象的销毁逻辑
         if (eventMulticaster != null && bean instanceof EventListener &&
                 AnnotatedElementUtils.hasAnnotation(bean.getClass(), EventListenerAnnotation.class)) {

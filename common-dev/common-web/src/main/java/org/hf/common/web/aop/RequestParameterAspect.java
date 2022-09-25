@@ -9,6 +9,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.hf.common.publi.constants.CommonConstant;
 import org.hf.common.publi.utils.TimeUtil;
+import org.hf.common.web.utils.HttpContextUtils;
 import org.hf.common.web.utils.RequestParamUtil;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
@@ -38,10 +39,8 @@ public class RequestParameterAspect {
 
     @Around("controllerMethodPointcut()")
     public Object handleControllerMethod(ProceedingJoinPoint joinPoint) throws Throwable {
-        // 获取当前请求域对象
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         // 获取当前请求对象
-        HttpServletRequest request = requestAttributes.getRequest();
+        HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         // 获取当前切面的类全名
         String beanName = joinPoint.getSignature().getDeclaringTypeName();
         // 获取切面方法名称

@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
  * //@SpringBootApplication          //springboot启动类注解
  * //@EnableDiscoveryClient          //开启eureka客户端发现功能
  * //@EnableCircuitBreaker           //开启Hystrix熔断器注解
- * //@SpringCloudApplication         //此注解为组合注解，包含以上三个注解
+ * //@SpringCloudApplication         //此注解为组合注解，包含以上三个注解 ,高版本中此注解已过时,去掉了开启Hystrix熔断器注解
  * //@EnableFeignClients             //开启Feign功能注解
  * @author hufei
  * @date 2022/8/21 16:23

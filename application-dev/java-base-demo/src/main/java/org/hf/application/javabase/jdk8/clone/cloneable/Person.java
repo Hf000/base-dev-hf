@@ -1,6 +1,12 @@
-package org.hf.application.javabase.jdk8.clone;
+package org.hf.application.javabase.jdk8.clone.cloneable;
 
-public class Person implements Cloneable{
+/**
+ * <p> 需要clone的对象 </p>
+ *
+ * @author hufei
+ * @date 2022/9/25 15:45
+ */
+public class Person implements Cloneable {
 
     private String name;
 
@@ -33,14 +39,14 @@ public class Person implements Cloneable{
     @Override
     public String toString() {
         return "Person{" +
-                this.hashCode()+
+                this.hashCode() +
                 "name='" + name + '\'' +
                 ", age=" + age +
                 '}';
     }
 
     @Override
-    protected Object clone(){
+    protected Object clone() {
         try {
             return super.clone();
         } catch (CloneNotSupportedException e) {

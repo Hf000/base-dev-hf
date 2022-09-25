@@ -25,9 +25,9 @@ public class EventPublisherImpl extends EventPublisherAbstract {
 
     @Override
     public void publish(EventBase event) {
-        log.info("EventPublisherImpl.publish event-key:[{}]", ((EventBase) event).getKey());
+        log.info("EventPublisherImpl.publish event-key:[{}]", event.getKey());
         // 进行事件分发
-        eventMulticaster.multicastEvent((EventBase) event);
+        eventMulticaster.multicastEvent(event);
     }
 
 }

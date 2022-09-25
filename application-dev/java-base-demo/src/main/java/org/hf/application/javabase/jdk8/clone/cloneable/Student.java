@@ -1,6 +1,12 @@
-package org.hf.application.javabase.jdk8.clone;
+package org.hf.application.javabase.jdk8.clone.cloneable;
 
-public class Student implements Cloneable{
+/**
+ * <p> 需要序clone的对象 </p>
+ *
+ * @author hufei
+ * @date 2022/9/25 15:46
+ */
+public class Student implements Cloneable {
 
     private String name;
 
@@ -35,7 +41,7 @@ public class Student implements Cloneable{
     @Override
     public String toString() {
         return "Student{" +
-                this.hashCode()+
+                this.hashCode() +
                 "name='" + name + '\'' +
                 ", age=" + age +
                 ", person=" + person +
@@ -43,11 +49,11 @@ public class Student implements Cloneable{
     }
 
     @Override
-    protected Object clone(){
+    protected Object clone() {
         try {
-          Student student = (Student) super.clone();
-          student.person= (Person) person.clone();
-          return student;
+            Student student = (Student) super.clone();
+            student.person = (Person) person.clone();
+            return student;
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
             return null;

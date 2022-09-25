@@ -1,6 +1,8 @@
 package org.hf.boot.springboot.service;
 
+import org.hf.boot.springboot.pojo.dto.UserInfoReq;
 import org.hf.boot.springboot.pojo.entity.User;
+import org.hf.boot.springboot.pojo.entity.UserInfo;
 
 import java.util.Date;
 import java.util.List;
@@ -23,4 +25,9 @@ public interface UserService {
 
     List<User> selectAll();
 
+    List<UserInfo> findUserInfoNew();
+
+    void addUserInfo(UserInfoReq req);
+
+    void addUserInfoAysnc(UserInfoReq req);
 }

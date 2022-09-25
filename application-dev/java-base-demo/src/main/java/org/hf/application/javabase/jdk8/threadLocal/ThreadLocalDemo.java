@@ -1,12 +1,18 @@
 package org.hf.application.javabase.jdk8.threadLocal;
 
 /**
+ * <p> ThreadLocal的demo </p>
  * 保证每一个线程有自己的副本
+ *
+ * @author hufei
+ * @date 2022/9/25 18:53
  */
-public class ThreadLocalCase {
+public class ThreadLocalDemo {
 
-    //初始化threadlocal
-    public static ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>(){
+    /**
+     * 初始化threadlocal
+     */
+    public static ThreadLocal<Integer> threadLocal = new ThreadLocal<Integer>() {
         @Override
         protected Integer initialValue() {
             return 1;
@@ -14,7 +20,7 @@ public class ThreadLocalCase {
     };
 
     public static void main(String[] args) {
-        ThreadLocalCase threadLocalCase = new ThreadLocalCase();
+        ThreadLocalDemo threadLocalCase = new ThreadLocalDemo();
         threadLocalCase.startThreads();
     }
 
@@ -24,7 +30,6 @@ public class ThreadLocalCase {
             //给每一个线程的threadlocal赋值
             threads[i] = new Thread(new TestRun(i));
         }
-
         //启动线程
         for (int i = 0; i < threads.length; i++) {
             threads[i].start();
@@ -33,17 +38,18 @@ public class ThreadLocalCase {
 
     private class TestRun implements Runnable {
         int id;
+
         public TestRun(int i) {
-            this.id=i;
+            this.id = i;
         }
 
         @Override
         public void run() {
-            System.out.println(Thread.currentThread().getName()+": start");
+            System.out.println(Thread.currentThread().getName() + ": start");
             Integer value = threadLocal.get();
-            value+=id;
+            value += id;
             threadLocal.set(value);
-            System.out.println(Thread.currentThread().getName()+": "+threadLocal.get());
+            System.out.println(Thread.currentThread().getName() + ": " + threadLocal.get());
         }
     }
 }

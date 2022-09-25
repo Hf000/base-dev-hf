@@ -6,27 +6,27 @@ import org.hf.boot.springboot.constants.StatusCode;
 
 /**
  * <p> 返回实体Bean </p>
+ *
  * @author hufei
  * @date 2022/8/7 17:14
-*/
-@ApiModel(description = "Result",value = "Result")
+ */
+@ApiModel(description = "Result", value = "Result")
 public class Result<T> {
 
-    @ApiModelProperty(value="执行是否成功,true:成功,false:失败",required = true)
-    private boolean flag;//是否成功
-    @ApiModelProperty(value="返回状态码,20000:成功,20001:失败,20002:用户名或密码错误,20003:权限不足,20004:远程调用失败,20005:重复操作,20006:没有对应的数据",required = true)
-    private Integer code;//返回码
+    @ApiModelProperty(value = "执行是否成功,true:成功,false:失败", required = true)
+    private boolean flag;
+    @ApiModelProperty(value = "返回状态码,20000:成功,20001:失败,20002:用户名或密码错误,20003:权限不足,20004:远程调用失败,20005:重复操作,20006:没有对应的数据", required = true)
+    private Integer code;
+    @ApiModelProperty(value = "提示信息", required = true)
+    private String message;
+    @ApiModelProperty(value = "逻辑数据", required = true)
+    private T data;
 
-    @ApiModelProperty(value="提示信息",required = true)
-    private String message;//返回消息
-    @ApiModelProperty(value="逻辑数据",required = true)
-    private T data;//返回数据
-
-    public Result(boolean flag, Integer code, String message, Object data) {
+    public Result(boolean flag, Integer code, String message, T data) {
         this.flag = flag;
         this.code = code;
         this.message = message;
-        this.data = (T) data;
+        this.data = data;
     }
 
     public Result(boolean flag, Integer code, String message) {
@@ -72,4 +72,17 @@ public class Result<T> {
     public void setData(T data) {
         this.data = data;
     }
+
+    public static <T> Result<T> success(T t) {
+        Result<T> result = new Result<>();
+        result.setData(t);
+        return result;
+    }
+
+    public static <T> Result<?> fail(T t) {
+        Result<T> result = new Result<>(false, StatusCode.ERROR, "系统错误");
+        result.setData(t);
+        return result;
+    }
+
 }

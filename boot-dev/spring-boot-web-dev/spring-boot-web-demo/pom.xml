@@ -73,10 +73,27 @@
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <!-- 配置maven打包时过滤编译指定问卷类型 -->
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>xls</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>zip</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>doc</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>docx</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
+                <!-- 包含资源 -->
                 <includes>
                     <include>**/*.xml</include>
                     <include>**/*.properties</include>
@@ -84,22 +101,26 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
+                <!-- 包含资源 -->
                 <includes>
                     <include>**/*.xml</include>
                     <include>**/*.properties</include>
                     <include>**/*.png</include>
                     <include>**/*.Filter</include>
                 </includes>
+                <!-- 替换属性 -->
                 <filtering>true</filtering>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
+                <!-- 包含资源 -->
                 <includes>
                     <include>**/*.TTF</include>
                     <include>**/*.ttf</include>
                     <include>**/*.TTC</include>
                     <include>**/*.ttc</include>
                 </includes>
+                <!-- 不替换属性 -->
                 <filtering>false</filtering>
             </resource>
         </resources>

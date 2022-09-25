@@ -1,6 +1,7 @@
 package org.hf.common.publi.utils;
 
 import cn.hutool.core.date.DateUtil;
+import org.hf.common.publi.constants.DateFormatConstant;
 import org.hf.common.publi.constants.NumberConstant;
 
 import java.sql.Timestamp;
@@ -47,11 +48,11 @@ public class TimeUtil {
     }
 
     public String getDeltaTimeText() {
-        return getDeltaTime() + "ms";
+        return getDeltaTime() + DateFormatConstant.TIME_UNIT_MS;
     }
 
     public String getDeltaSecondText() {
-        return getDeltaTime() / (double) NumberConstant.INT_1000 + "s";
+        return getDeltaTime() / (double) NumberConstant.INT_1000 + DateFormatConstant.TIME_UNIT_S;
     }
 
     //============================借助Calendar类获取今天、昨天、本周、上周、本年及特定时间的开始时间和结束时间（返回类型为date类型）========================

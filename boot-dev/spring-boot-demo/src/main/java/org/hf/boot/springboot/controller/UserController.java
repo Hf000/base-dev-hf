@@ -2,8 +2,11 @@ package org.hf.boot.springboot.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.hf.boot.springboot.pojo.dto.Result;
+import org.hf.boot.springboot.pojo.dto.UserInfoReq;
 import org.hf.boot.springboot.pojo.dto.UserReq;
 import org.hf.boot.springboot.pojo.entity.User;
+import org.hf.boot.springboot.pojo.entity.UserInfo;
 import org.hf.boot.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,6 +65,25 @@ public class UserController {
     @PostMapping("/findUserAllByCondition")
     public List<User> findUserAllByCondition(@RequestBody UserReq req) {
         return userServiceImpl.getUserAll();
+    }
+
+    @GetMapping("/findUserInfoNew")
+    public Result<List<UserInfo>> findUserInfoNew() {
+        Result<List<UserInfo>> result = new Result<>();
+        result.setData(userServiceImpl.findUserInfoNew());
+        return result;
+    }
+
+    @PostMapping("addUserInfo")
+    public Result<Void> addUserInfo(@RequestBody UserInfoReq req) {
+        userServiceImpl.addUserInfo(req);
+        return new Result<>();
+    }
+
+    @PostMapping("addUserInfoAysnc")
+    public Result<Void> addUserInfoAysnc(@RequestBody UserInfoReq req) {
+        userServiceImpl.addUserInfoAysnc(req);
+        return new Result<>();
     }
 
 }
