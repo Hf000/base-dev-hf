@@ -42,6 +42,7 @@ eureka:     #eureka配置项
   instance:     #eureka实例配置项
     prefer-ip-address: true     #更倾向使用ip地址而不是host名称
 
+# hystrix在新版本中如何配置需要重新看下
 hystrix:      #gateway默认集成了Hystrix，有些值需要配置，否则就会使用默认值
   command:
     default:
@@ -50,6 +51,7 @@ hystrix:      #gateway默认集成了Hystrix，有些值需要配置，否则就
           thread:
             timeoutInMilliseconds: 6000     #请求超时时间配置项，默认1000
 
+# ribbon在新版本中如何配置需要重新看下
 ribbon:     #gateway默认集成了Ribbon，有些值需要配置，否则就会使用默认值
   ConnectTimeout: 1000      #连接超时时长，单位：毫秒
   ReadTimeout: 2000     #数据通信超时时长，单位：毫秒

@@ -11,6 +11,10 @@
 
     <artifactId>consumer-service-demo</artifactId>
 
+    <properties>
+        <spring-cloud-starter-netflix-hystrix.version>2.2.10.RELEASE</spring-cloud-starter-netflix-hystrix.version>
+    </properties>
+
     <dependencies>
         <!--引入springBoot的web启动依赖-->
         <dependency>
@@ -22,11 +26,11 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-        <!--引入Hystrix依赖启动器-->
+        <!--引入Hystrix依赖启动器 springcloud 2020.0.1版本组件移除了hystrix依赖,得手动依赖和配置-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-            <version>2.2.10.RELEASE</version>
+            <version>${spring-cloud-starter-netflix-hystrix.version}</version>
         </dependency>
         <!--引入Feign启动依赖-->
         <dependency>

@@ -14,7 +14,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @date 2022/8/21 17:36
 */
 @SpringBootApplication
-@MapperScan("org.hf.**.mapper")
+@MapperScan("org.hf.springcloud.provider.service.**.mapper")
 @EnableDiscoveryClient
 public class ProviderApplication {
 

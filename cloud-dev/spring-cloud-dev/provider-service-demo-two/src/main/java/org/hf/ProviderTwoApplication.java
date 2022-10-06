@@ -15,7 +15,7 @@ import tk.mybatis.spring.annotation.MapperScan;
 */
 @SpringBootApplication
 @EnableDiscoveryClient
-@MapperScan("org.hf.**.mapper")
+@MapperScan("org.hf.springcloud.provider.service.**.mapper")
 public class ProviderTwoApplication {
     public static void main(String[] args) {
         SpringApplication.run(ProviderTwoApplication.class,args);

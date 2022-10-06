@@ -13,6 +13,7 @@ eureka:     #eureka配置项
 #  ribbon:     #ribbon配置项
 #    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule      #配置ribbon负载均衡算法为随机，默认是轮询
 
+# hystrix在新版本中如何配置需要重新看下
 hystrix:      #hystrix配置项
   command:
     default:
@@ -25,6 +26,7 @@ hystrix:      #hystrix配置项
         sleepWindowInMilliseconds: 10000 # 熔断后休眠时长，默认值5秒，单位：毫秒
         requestVolumeThreshold: 10 # 熔断触发最小请求次数，默认值是20次
 
+# ribbon在新版本中如何配置需要重新看下
 ribbon:     #Feign内置Ribbon相关配置项，这里的配置只对使用Feign的相关代码生效
   ConnectTimeout: 1000      #连接超时时长，单位：毫秒
   ReadTimeout: 5000     #数据通信超时时长，单位：毫秒

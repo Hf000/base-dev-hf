@@ -2,7 +2,13 @@
 spring cloud的分布式解决方案
 
 ##1. SpringCloud项目搭建
+    1> 启动netflix-eureka-server-demo服务
+    2> 启动config-server-demo服务
+    3> 启动gateway-demo服务
+    4> 启动提供者服务provider-service-demo或者provider-service-demo-two
+    5> 启动消费者服务consumer-service-demo
 ##2. EUreka服务注册中心
+    netflix-eureka-server-demo 本地查看注册了哪些服务http://127.0.0.1:10086/eureka/apps或者http://127.0.0.1:10086
 ##3. Ribbon客户端负载均衡器（只是用于负载均衡，不能进行通信，单独使用时实际是基于restTemplate进行服务调用（http协议）），默认算法：轮询
 ##4. Hystrix,服务熔断器：线程隔离，服务降级（如果开启了，那么采用feign进行服务间通信时，是需要重新设置请求头参数的，因为此时所有的请求头参数都会置为空，
     如果需要请求参数，需要将线程池隔离改成信号量隔离）
