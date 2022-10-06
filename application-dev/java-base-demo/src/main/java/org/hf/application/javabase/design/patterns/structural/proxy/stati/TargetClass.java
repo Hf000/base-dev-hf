@@ -1,10 +1,10 @@
 package org.hf.application.javabase.design.patterns.structural.proxy.stati;
 
 /**
- * @Author:hufei
- * @CreateTime:2020-06-30
- * @Description:目标类
- */
+ * <p> 目标类 </p>
+ * @author hufei
+ * @date 2022/10/6 11:00
+*/
 public class TargetClass implements ProxyInterface {
 
     @Override

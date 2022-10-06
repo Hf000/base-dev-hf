@@ -9,6 +9,9 @@ package org.hf.application.javabase.design.patterns.creational.factory.simple;
  */
 public interface IKeyboard {
 
+    /**
+     * 接口方法
+     */
     void input();
 
 }

@@ -9,11 +9,11 @@ import lombok.ToString;
 @ToString
 @Getter
 public class Computer {
-    private final String cpu;//必须
-    private final String ram;//必须
-    private int usbCount;//可选
-    private String keyboard;//可选
-    private String display;//可选
+    private final String cpu;
+    private final String ram;
+    private int usbCount;
+    private String keyboard;
+    private String display;
 
     public Computer(String cup,String ram){
         this.cpu=cup;

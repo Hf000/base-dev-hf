@@ -12,10 +12,12 @@ public class SingleStaticModel {
     /**
      * 私有化构造
      */
-    private SingleStaticModel() {}
+    private SingleStaticModel() {
+    }
 
     /**
      * 获取单例对象实例
+     *
      * @return 单例对象
      */
     public static SingleStaticModel getInstance() {

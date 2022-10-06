@@ -4,14 +4,15 @@ import lombok.ToString;
 
 /**
  * 自定义实体bean
+ * @author HF
  */
 @ToString
 public class Computer {
-    private final String cpu;//必须
-    private final String ram;//必须
-    private final int usbCount;//可选
-    private final String keyboard;//可选
-    private final String display;//可选
+    private final String cpu;
+    private final String ram;
+    private final int usbCount;
+    private final String keyboard;
+    private final String display;
 
     public Computer(ComputerSimpleBuilder computerSimpleBuilder){
         this.cpu = computerSimpleBuilder.getCpu();

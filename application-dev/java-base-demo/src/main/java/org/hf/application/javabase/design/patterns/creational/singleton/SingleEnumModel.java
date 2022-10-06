@@ -9,10 +9,12 @@ package org.hf.application.javabase.design.patterns.creational.singleton;
  */
 public class SingleEnumModel {
 
-    private SingleEnumModel(){}
+    private SingleEnumModel() {
+    }
 
     /**
      * 获取单例对象
+     *
      * @return 单例对象实例
      */
     public static SingleEnumModel getInstance() {
@@ -22,15 +24,17 @@ public class SingleEnumModel {
     /**
      * 枚举
      */
-    enum SingleEnum{
+    enum SingleEnum {
         /**
          * 枚举单例
          */
         SINGLE_INSTANCE;
         private final SingleEnumModel singleEnumModel;
+
         SingleEnum() {
             singleEnumModel = new SingleEnumModel();
         }
+
         public SingleEnumModel getInstance() {
             return SINGLE_INSTANCE.singleEnumModel;
         }

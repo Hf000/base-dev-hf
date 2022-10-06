@@ -2,6 +2,7 @@ package org.hf.application.javabase.design.patterns.creational.builder.classic;
 
 /**
  * ComputerBuilder的实现类
+ * @author HF
  */
 public class LenovoComputerBuilder extends ComputerBuilder {
     private final Computer computer;

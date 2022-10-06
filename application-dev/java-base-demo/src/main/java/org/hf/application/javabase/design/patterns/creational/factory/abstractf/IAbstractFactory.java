@@ -9,8 +9,16 @@ package org.hf.application.javabase.design.patterns.creational.factory.abstractf
  */
 public interface IAbstractFactory {
 
+    /**
+     * 接口方法
+     * @return IKeyboard
+     */
     IKeyboard createKeyboard();
 
+    /**
+     * 接口方法
+     * @return IMonitor
+     */
     IMonitor createMonitor();
 
 }

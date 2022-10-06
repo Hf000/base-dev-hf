@@ -11,5 +11,70 @@
 
     <artifactId>dubbo-consumer-demo</artifactId>
 
+    <properties>
+        <curator.version>4.2.0</curator.version>
+        <dubbo-spring-boot-starter.version>3.1.0</dubbo-spring-boot-starter.version>
+        <zookeeper.version>3.4.14</zookeeper.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.hf</groupId>
+            <artifactId>dubbo-interface-demo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- dubbo整合springboot -->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>${dubbo-spring-boot-starter.version}</version>
+        </dependency>
+        <!-- Zookeeper典型应用场景的实现，这些实现是基于Curator Framework。 -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <!-- 为了兼容zk版本3.4.x -->
+            <version>${curator.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- 服务发现 -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-x-discovery</artifactId>
+            <version>${curator.version}</version>
+        </dependency>
+        <!-- 解决版本兼容问题 -->
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>${zookeeper.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>slf4j-reload4j</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- springboot依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--配置打jar包插件，打jar包时如果不配置该插件，打出来的jar包没有清单文件-->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

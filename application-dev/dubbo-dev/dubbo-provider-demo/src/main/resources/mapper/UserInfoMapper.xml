@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hf.application.mybatis.tk.springboot.mapper.UserInfoMapper">
+    <resultMap id="BaseResultMap" type="org.hf.application.dubbo.provider.boot.pojo.entity.UserInfo">
+        <!-- WARNING - @mbg.generated -->
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="user_name" jdbcType="VARCHAR" property="userName" />
+        <result column="password" jdbcType="VARCHAR" property="password" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="age" jdbcType="TINYINT" property="age" />
+        <result column="sex" jdbcType="CHAR" property="sex" />
+        <result column="birthday" jdbcType="DATE" property="birthday" />
+        <result column="delete_state" jdbcType="TINYINT" property="deleteState" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    </resultMap>
+    <sql id="BaseColumnList">
+        <!-- WARNING - @mbg.generated -->
+        id, user_name, password, name, age, sex, birthday, delete_state, created_by, created_date,
+        updated_by, updated_date
+    </sql>
+</mapper>

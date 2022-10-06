@@ -9,5 +9,8 @@ package org.hf.application.javabase.design.patterns.creational.factory.abstractf
  */
 public interface IMonitor {
 
+    /**
+     * 接口方法
+     */
     void output();
 }

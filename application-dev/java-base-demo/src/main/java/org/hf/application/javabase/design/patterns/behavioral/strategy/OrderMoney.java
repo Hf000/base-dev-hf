@@ -1,10 +1,11 @@
 package org.hf.application.javabase.design.patterns.behavioral.strategy;
 
 /**
-* <p> 策略模式 </p>
-* @author hufei
-* @date 2022/7/13 21:30
-*/
+ * <p> 策略模式 </p>
+ *
+ * @author hufei
+ * @date 2022/7/13 21:30
+ */
 public class OrderMoney {
 
     /**
@@ -19,7 +20,7 @@ public class OrderMoney {
     /**
      * 价格计算
      */
-    public Integer moneySum(Integer money){
+    public Integer moneySum(Integer money) {
         return strategy.money(money);
     }
 }

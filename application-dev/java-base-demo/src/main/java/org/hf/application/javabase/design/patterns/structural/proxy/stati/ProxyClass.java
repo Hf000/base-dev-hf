@@ -1,13 +1,16 @@
 package org.hf.application.javabase.design.patterns.structural.proxy.stati;
 
 /**
- * @Author:hufei
- * @CreateTime:2020-06-30
- * @Description:代理类
- */
+ * <p> 代理类 </p>
+ * @author hufei
+ * @date 2022/10/6 10:59
+*/
 public class ProxyClass implements ProxyInterface {
 
-    private TargetClass target;//声明目标类成员变量
+    /**
+     * 声明目标类成员变量
+     */
+    private final TargetClass target;
 
     public ProxyClass(TargetClass targetParam) {  //重写代理类构造, 创建代理类对象时, 对目标类进行赋值
         this.target = targetParam;

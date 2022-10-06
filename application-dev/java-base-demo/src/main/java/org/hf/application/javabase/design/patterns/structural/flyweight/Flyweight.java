@@ -1,19 +1,34 @@
 package org.hf.application.javabase.design.patterns.structural.flyweight;
 
-
+/**
+ * <p> 享元对象 </p>
+ * @author hufei
+ * @date 2022/10/6 12:24
+*/
 public abstract class Flyweight {
 
-    //内部状态
+    /**
+     * 内部状态
+     */
     public String intrinsic;
-    //外部状态
+
+    /**
+     * 外部状态
+     */
     protected final String extrinsic;
 
-    //要求享元角色必须接受外部状态
+    /**
+     * 要求享元角色必须接受外部状态
+     * @param extrinsic 入参
+     */
     public Flyweight(String extrinsic) {
         this.extrinsic = extrinsic;
     }
 
-    //定义业务操作
+    /**
+     * 定义业务操作
+     * @param extrinsic 入参
+     */
     public abstract void operate(int extrinsic);
 
     public String getIntrinsic() {

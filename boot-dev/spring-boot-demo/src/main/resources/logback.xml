@@ -6,8 +6,8 @@
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <!-- 用来设置上下文名称，每个logger都关联到logger上下文，默认上下文名称为default -->
     <contextName>logback</contextName>
-    <!-- 使用springboot配置中不存在的参数 -->
-    <!--<define name="ip" class="com.*.common.config.LogIpDefiner"/>-->
+    <!-- 获取自定义参数的值, 使用springboot配置中不存在的参数 -->
+    <define name="ip" class="org.hf.boot.springboot.config.LogbackPropertyConfig"/>
     <!-- 用来定义变量值，它有两个属性name和value，通过<property>定义的值会被插入到logger上下文中，后面可以通过${name变量名称}使用 -->
     <property name="app.shortName" value="springboot-demo"/>
     <property name="console_log_pattern"
@@ -103,7 +103,7 @@
     </logger>
     <!-- 打印SQL日志到sql文件, 由于这里设置了additivity="true", 那么会使用root中的appender, 如果设置additivity="false"那么日志就不
         会输出到任何地方 -->
-    <!--<logger name="com.*.interceptor.SqlCostInterceptor" additivity="true" level="INFO">
+    <!--<logger name="org.hf.springboot.service.config.SqlCostInterceptor" additivity="true" level="INFO">
         &lt;!&ndash; 如果这里开启, 就会将日志输出到指定的文件 &ndash;&gt;
         &lt;!&ndash;<appender-ref ref="FILE-SQL"/>&ndash;&gt;
     </logger>-->

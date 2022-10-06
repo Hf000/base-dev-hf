@@ -1,10 +1,12 @@
 package org.hf.application.javabase.design.patterns.behavioral.state;
 
 /**
-* <p> 状态模式 </p>
-* @author hufei
-* @date 2022/7/13 21:29
-*/
+ * <p> 状态模式 </p>
+ * 状态模式: 允许一个对象在其对象内部状态改变时改变它的行为
+ *
+ * @author hufei
+ * @date 2022/7/13 21:29
+ */
 public class StateDemo {
 
     public static void main(String[] args) {

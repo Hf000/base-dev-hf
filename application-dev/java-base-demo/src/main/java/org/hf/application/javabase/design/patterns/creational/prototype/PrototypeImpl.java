@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * 原型实现
+ * @author HF
  */
 public class PrototypeImpl implements IPrototype {
 

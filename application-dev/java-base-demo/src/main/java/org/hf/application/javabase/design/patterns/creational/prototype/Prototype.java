@@ -6,6 +6,7 @@ import java.util.List;
 
 /**
  * 设计模式-原型模式
+ * @author HF
  */
 @Slf4j
 public class Prototype {

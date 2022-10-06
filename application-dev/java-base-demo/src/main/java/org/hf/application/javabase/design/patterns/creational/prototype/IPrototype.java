@@ -2,6 +2,7 @@ package org.hf.application.javabase.design.patterns.creational.prototype;
 
 /**
  * 原型接口
+ * @author HF
  */
 public interface IPrototype {
     /**

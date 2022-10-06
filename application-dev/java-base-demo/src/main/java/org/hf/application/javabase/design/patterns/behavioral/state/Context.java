@@ -1,6 +1,11 @@
 package org.hf.application.javabase.design.patterns.behavioral.state;
 
-
+/**
+ * <p> 设置对象 </p>
+ *
+ * @author hufei
+ * @date 2022/10/6 12:08
+ */
 public class Context {
 
     /**

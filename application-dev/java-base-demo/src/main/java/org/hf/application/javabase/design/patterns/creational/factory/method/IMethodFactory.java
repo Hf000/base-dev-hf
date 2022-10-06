@@ -9,5 +9,9 @@ package org.hf.application.javabase.design.patterns.creational.factory.method;
  */
 public interface IMethodFactory {
 
+    /**
+     * 接口方法
+     * @return IKeyboard
+     */
     IKeyboard createKeyboard();
 }

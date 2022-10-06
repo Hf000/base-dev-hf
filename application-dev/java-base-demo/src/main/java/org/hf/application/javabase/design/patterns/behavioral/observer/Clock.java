@@ -10,8 +10,10 @@ import java.util.List;
 */
 public class Clock {
 
-    //一对多，需要接到通知的对象
-    private List<AbstrackInfo> infos = new ArrayList<AbstrackInfo>();
+    /**
+     * 一对多，需要接到通知的对象
+     */
+    private List<AbstractInfo> INFO_LIST = new ArrayList<AbstractInfo>();
 
     public void say(){
         System.out.println("上班了！");
@@ -19,14 +21,19 @@ public class Clock {
         update();
     }
 
-    //添加要得到通知的对象
-    public void addInfo(AbstrackInfo info){
-        infos.add(info);
+    /**
+     * 添加要得到通知的对象
+     * @param info 入参
+     */
+    public void addInfo(AbstractInfo info){
+        INFO_LIST.add(info);
     }
 
-    //通知
+    /**
+     * 通知
+     */
     public void update(){
-        for (AbstrackInfo info : infos) {
+        for (AbstractInfo info : INFO_LIST) {
             info.message();
         }
     }

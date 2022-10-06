@@ -1,7 +1,11 @@
 package org.hf.application.javabase.design.patterns.behavioral.observer;
 
-
-public class SleepInfo extends AbstrackInfo {
+/**
+ * <p> 抽象实现 </p>
+ * @author hufei
+ * @date 2022/10/6 10:40
+*/
+public class SleepInfo extends AbstractInfo {
 
     @Override
     public void message(){
