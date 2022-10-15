@@ -1,6 +1,41 @@
 spring:     #spring配置项
   application:      #应用配置项
     name: consumer-demo     #配置当前应用名称
+  cloud:
+    circuitbreaker:
+      # hystrix配置项
+      hystrix:
+        # 开启熔断器,默认true
+        enabled: true
+    # loadbalancer配置项
+    loadbalancer:
+      cache:
+        # 启动本地缓存
+        enabled: true
+        # 缓存空间大小
+        capacity: 100
+        # 缓存存活时间,单位s
+        ttl: 30
+        # caffeine缓存的配置, 需引入caffeine依赖
+#        caffeine:
+          # initialCapacity初始的缓存空间大小,expireAfterWrite最后一次写入后经过固定时间过期
+#          spec: initialCapacity=500,expireAfterWrite=5s
+      health-check:
+        #重新运行运行状况检查计划程序的时间间隔。
+        interval: 25s
+        #运行状况检查计划程序的初始延迟值
+        initial-delay: 30
+      # 重试,需要依赖spring-retry
+      retry:
+        enabled: true
+        #切换实例的重试次数
+        max-retries-on-next-service-instance: 2
+        #对当前实例重试的次数
+        max-retries-on-same-service-instance: 1
+        #对所有的操作请求都进行重试
+        retry-on-all-operations: true
+        #Http响应码进行重试
+        retryable-status-codes: 500,404,502
 
 eureka:     #eureka配置项
   client:     #eureka客户端配置项
@@ -9,12 +44,8 @@ eureka:     #eureka配置项
       defaultZone: http://127.0.0.1:10086/eureka      #配置eureka注册服务地址
     registry-fetch-interval-seconds: 30     #客户端拉取eureka服务列表地址时间间隔，默认30秒
 
-#service-demo:     #配置eureka注册服务地址列表配置项，服务提供应用名称
-#  ribbon:     #ribbon配置项
-#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule      #配置ribbon负载均衡算法为随机，默认是轮询
-
-# hystrix在新版本中如何配置需要重新看下
-hystrix:      #hystrix配置项
+# hystrix配置项 该项目的spring cloud版本已经移除Hystrix相关依赖,如果需要得手动依赖
+hystrix:
   command:
     default:
       execution:
@@ -25,17 +56,30 @@ hystrix:      #hystrix配置项
         errorThresholdPercentage: 50 # 触发熔断错误比例阈值，默认值50%
         sleepWindowInMilliseconds: 10000 # 熔断后休眠时长，默认值5秒，单位：毫秒
         requestVolumeThreshold: 10 # 熔断触发最小请求次数，默认值是20次
+  # hystrix并发策略
+#  shareSecurityContext: true
+#  metrics:
+    # 启动hystrix指标轮询
+#    enabled: false
+    # 轮询度量之间的时间间隔
+#    polling-interval-ms: 5000
 
-# ribbon在新版本中如何配置需要重新看下
-ribbon:     #Feign内置Ribbon相关配置项，这里的配置只对使用Feign的相关代码生效
-  ConnectTimeout: 1000      #连接超时时长，单位：毫秒
-  ReadTimeout: 5000     #数据通信超时时长，单位：毫秒
-  MaxAutoRetries: 0     #当前服务器的重试次数
-  MaxAutoRetriesNextServer: 0     #重试多少次服务
-  OkToRetryOnAllOperations: false     #是否对所有的请求方式都重试
-feign:      #Feign内置Hystrix配置项
-  hystrix:
-    enabled: true     #Feign开启服务熔断
+# ribbon配置项,该项目的spring cloud版本已经移除了ribbon相关依赖,已经被spring-cloud-loadbalancer替代,不推荐ribbon
+#ribbon:     #Feign内置Ribbon相关配置项，这里的配置只对使用Feign的相关代码生效
+#  ConnectTimeout: 1000      #连接超时时长，单位：毫秒
+#  ReadTimeout: 5000     #数据通信超时时长，单位：毫秒
+#  MaxAutoRetries: 0     #当前服务器的重试次数
+#  MaxAutoRetriesNextServer: 0     #重试多少次服务
+#  OkToRetryOnAllOperations: false     #是否对所有的请求方式都重试
+# 指定具体服务的ribbon配置
+#service-demo:     #配置eureka注册服务地址列表配置项，服务提供应用名称
+#  ribbon:     #ribbon配置项
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule      #配置ribbon负载均衡算法为随机，默认是轮询
+
+# feign配置项
+feign:
+  circuitbreaker:
+    enabled: true     # 在feign开启熔断器开关,这里采用的是hystrix,在低版本中是feign.hystrix.enabled=true
   compression:      #Feign中请求和响应压缩配置项
     request:      #请求压缩配置项
       enabled: true     #开启请求压缩
@@ -43,6 +87,13 @@ feign:      #Feign内置Hystrix配置项
       min-request-size: 2048      #设置触发压缩的大小下限
     response:     #响应压缩配置项
       enabled: true     #开启响应压缩
-logging:      #Feign中日志级别的配置项
+#  client:
+#    config:
+#      default: # 这里就是指所有被加载的默认FeignClient实现的服务配置都生效,default默认是全局的，将 default 换成某个服务的名称可以设置单个服务的超时时间, openfeign的超时时间优先于ribbon的超时时间
+#        connectTimeout: 3000
+#        readTimeout: 5000
+
+# 日志配置
+logging:
   level:
     org.hf: debug      #指定相关包下的日志记录级别

@@ -18,6 +18,7 @@
         <module>consumer-service-demo</module>
         <module>provider-service-demo</module>
         <module>provider-service-demo-two</module>
+        <module>cloud-api</module>
     </modules>
 
     <!--依赖版本信息-->
@@ -50,16 +51,22 @@
                 <artifactId>mapper-spring-boot-starter</artifactId>
                 <version>${mapper.starter.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.hf</groupId>
+                <artifactId>cloud-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+    <!-- 在父pom中引入该配置,那么任何一个子模块都必须有一个springboot启动类 -->
     <!--配置打jar包插件，打jar包时如果不配置该插件，打出来的jar包没有清单文件-->
-    <build>
+<!--    <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 
 </project>

@@ -5,6 +5,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +21,7 @@ import org.springframework.web.client.RestTemplate;
  * @date 2022/8/21 17:13
 */
 @RestController
-@RequestMapping("/user")
+@RequestMapping
 @Slf4j
 @DefaultProperties(defaultFallback = "defaultMethodFailBack")
 public class UserController {
@@ -43,7 +44,7 @@ public class UserController {
      * @param id 入参
      * @return String   //方法的返回类型和回调方法的返回类型要保持一致
      */
-    @RequestMapping("/{id}")
+    @GetMapping("/{id}")
     @HystrixCommand
     public String queryUserById(@PathVariable Long id){
         //服务熔断测试，服务请求失败达到一定的阀值时，会自动开启熔断器，默认请求不低于20次的情况下，失败率达到50%，休眠5秒后会处于半开状态

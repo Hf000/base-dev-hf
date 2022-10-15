@@ -16,12 +16,17 @@
     </properties>
 
     <dependencies>
+        <!-- 依赖api -->
+        <dependency>
+            <groupId>org.hf</groupId>
+            <artifactId>cloud-api</artifactId>
+        </dependency>
         <!--引入springBoot的web启动依赖-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!--引入eureka客户端依赖，这里也集成了ribbon-->
+        <!--引入eureka客户端依赖，这里的版本去掉了ribbon,使用spring-cloud-loadbalancer替代ribbon-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -31,16 +36,29 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
             <version>${spring-cloud-starter-netflix-hystrix.version}</version>
+            <exclusions>
+                <!-- spring-cloud-loadbalancer会和ribbon造成冲突,所以排除ribbon相关依赖,虽然这里不影响 -->
+                <exclusion>
+                    <artifactId>spring-cloud-netflix-ribbon</artifactId>
+                    <groupId>org.springframework.cloud</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <!--引入Feign启动依赖-->
+        <!-- 重试依赖 -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>org.springframework.retry</groupId>
+            <artifactId>spring-retry</artifactId>
         </dependency>
     </dependencies>
+
+    <!--配置打jar包插件，打jar包时如果不配置该插件，打出来的jar包没有清单文件-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -5,11 +5,11 @@ server:     #服务配置项
 spring:     #spring配置项
   datasource:     #数据源配置项设置
     driver-class-name: com.mysql.cj.jdbc.Driver      #数据库驱动类地址
-    url: jdbc:mysql://127.0.0.1:3306/springboot_test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false      #数据库连接地址
+    url: jdbc:mysql://127.0.0.1:3306/base_dev?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false      #数据库连接地址
     username: root      #数据库账号
     password: root      #数据库密码
   application:      #应用配置项
-    name: service-demo-two      #配置当前应用名称
+    name: service-demo      #配置当前应用名称
 
 mybatis:      #mybatis配置
   type-aliases-package: org.hf.springcloud.provider.service.two.pojo.entity      #配置实体类别名包路径，配置这个配置项在mapper里面就不需要写全限定名了，只需要写对应实体类名即可

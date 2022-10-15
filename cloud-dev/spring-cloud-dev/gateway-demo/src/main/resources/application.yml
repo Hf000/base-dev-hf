@@ -9,9 +9,9 @@ spring:     #spring配置项
       routes:       #配置路由
         - id: service-demo-route      #路由id，根据个人习惯命名；配置多个路由id，换行重新配置- id相关的参数即可
 #          uri: http://127.0.0.1:8083      #代理服务器地址，这里的服务地址写死了，在实际编码中明显是不合理的
-          uri: lb://consumer-demo      #代理服务器地址；面向服务的路由：lb://service-demo；lb：表示LoadBalanced，基于Ribbon的负载均衡，从eureka中获取对应服务名称的地址；service-demo：必须是在eureka中已经注册了的程序服务应用名称
+          uri: lb://consumer-demo      #代理服务器地址；面向服务的路由：lb://service-demo；lb：表示LoadBalanced，基于Ribbon(该项目spring cloud版本已经移除了ribbon,采用spring-cloud-loadbalancer替代)的负载均衡，从eureka中获取对应服务名称的地址；service-demo：必须是在eureka中已经注册了的程序服务应用名称
           predicates:     #路由断言，可以匹配请求的路径
-            - Path=/userFeign/**     #表示请求路径中带user的都会执行该路由, 配置多个断言用","隔开
+            - Path=/user/**     #表示请求路径中带user的都会执行该路由, 配置多个断言用","隔开
 #            - Path=/**     #尽量不要配置拦截所有路径，因为这样可能会导致全局拦截器对同一个路径拦截多次（请求网关服务，和调用服务时都会拦截）
 #            - Path=/api/user/**
           filters:      #局部过滤器配置项，只针对当前路由有效
@@ -41,19 +41,3 @@ eureka:     #eureka配置项
       defaultZone: http://127.0.0.1:10086/eureka      #eureka默认服务路径
   instance:     #eureka实例配置项
     prefer-ip-address: true     #更倾向使用ip地址而不是host名称
-
-# hystrix在新版本中如何配置需要重新看下
-hystrix:      #gateway默认集成了Hystrix，有些值需要配置，否则就会使用默认值
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 6000     #请求超时时间配置项，默认1000
-
-# ribbon在新版本中如何配置需要重新看下
-ribbon:     #gateway默认集成了Ribbon，有些值需要配置，否则就会使用默认值
-  ConnectTimeout: 1000      #连接超时时长，单位：毫秒
-  ReadTimeout: 2000     #数据通信超时时长，单位：毫秒
-  MaxAutoRetries: 0     #当前服务器的重试次数
-  MaxAutoRetriesNextServer: 0     #重试多少次服务

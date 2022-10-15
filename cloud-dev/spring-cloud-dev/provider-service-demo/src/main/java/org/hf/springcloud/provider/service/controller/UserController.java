@@ -1,11 +1,18 @@
 package org.hf.springcloud.provider.service.controller;
 
+import lombok.extern.slf4j.Slf4j;
+import org.hf.springcloud.api.provider.client.UserFeignClient;
+import org.hf.springcloud.api.provider.pojo.dto.UserDto;
 import org.hf.springcloud.provider.service.pojo.entity.User;
 import org.hf.springcloud.provider.service.service.IUserService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p> 用户controller </p>
@@ -14,9 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hufei
  * @date 2022/8/21 17:37
 */
+@Slf4j
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController implements UserFeignClient {
 
     @Autowired
     private IUserService userServiceImpl;
@@ -31,6 +39,22 @@ public class UserController {
         }*/
         System.out.println("这里是8083的调用");
         return userServiceImpl.queryUserById(id);
+    }
+
+    @Override
+    @GetMapping("/{id}")
+    public UserDto queryById(@PathVariable Long id) {
+//        log.info("测试超时是否重试");
+//        try {
+//            TimeUnit.SECONDS.sleep(2);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        log.info("这里是走feign接口");
+        User user = userServiceImpl.queryUserById(id);
+        UserDto dto = new UserDto();
+        BeanUtils.copyProperties(user, dto);
+        return dto;
     }
 
 }
