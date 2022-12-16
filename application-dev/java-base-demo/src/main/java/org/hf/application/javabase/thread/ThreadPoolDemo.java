@@ -1,7 +1,6 @@
 package org.hf.application.javabase.thread;
 
 import cn.hutool.core.thread.ThreadFactoryBuilder;
-import com.sun.istack.internal.NotNull;
 import lombok.SneakyThrows;
 import org.hf.application.javabase.utils.ThreadPoolUtil;
 import org.springframework.lang.NonNull;
@@ -203,7 +202,6 @@ class PoolFactoryDemo {
      * 创建线程池
      * @return ThreadPoolExecutor
      */
-    @NotNull
     private static ThreadPoolExecutor getThreadPoolExecutor() {
         return new ThreadPoolExecutor(10, 10, 20,
                 TimeUnit.SECONDS, new ArrayBlockingQueue<>(5), new ThreadFactory() {
