@@ -27,6 +27,7 @@ public class XmlBean {
     /***
      * 解析before节点
      */
+    @SuppressWarnings({"unchecked"})
     public static Map<String, String> before() throws Exception {
         List<Element> packageList = document.selectNodes("//before");
         if(packageList!=null && packageList.size()>0){
@@ -43,6 +44,7 @@ public class XmlBean {
     /***
      * 解析base-package节点
      */
+    @SuppressWarnings({"unchecked"})
     public static String scanner() throws Exception {
         if(document==null){
             return "org.hf.application.custom.framework.controller";
@@ -89,6 +91,7 @@ public class XmlBean {
     /***
      * 解析所有MapNode节点
      */
+    @SuppressWarnings({"unchecked"})
     public static List<MapNode> getMapNodeList(){
         //如果此时XmlBean.mapNodeList不为空，则直接返回
         if(XmlBean.mapNodeList!=null && XmlBean.mapNodeList.size()>0){

@@ -1,45 +1,34 @@
 package org.hf.application.javabase.thread.lock;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * <p> 独享锁 </p >
+ * <p> 共享锁 </p >
  *
  * @author HF
  * @date 2022-10-24
  **/
-@SuppressWarnings({"all"})
-public class PrivateLock {
+public class SharedLock {
 
-    /**
-     * 方式一: ReentrantLock
-     */
-    Lock lock = new ReentrantLock();
-    /**
-     * 方式二: ReentrantReadWriteLock.WriteLock
-     */
     ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-    ReentrantReadWriteLock.WriteLock writeLock = readWriteLock.writeLock();
+    ReentrantReadWriteLock.ReadLock readLock = readWriteLock.readLock();
     long start = System.currentTimeMillis();
 
     void read() {
-//        lock.lock();
-        writeLock.lock();
+        readLock.lock();
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-//            lock.unlock();
-            writeLock.unlock();
+            readLock.unlock();
         }
         System.out.println("read time = " + (System.currentTimeMillis() - start));
     }
 
+    @SuppressWarnings({"all"})
     public static void main(String[] args) {
-        final PrivateLock lock = new PrivateLock();
+        final SharedLock lock = new SharedLock();
         for (int i = 0; i < 10; i++) {
             new Thread(() -> {
                 lock.read();

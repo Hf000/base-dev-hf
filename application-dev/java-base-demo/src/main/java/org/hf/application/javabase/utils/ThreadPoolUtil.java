@@ -11,12 +11,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <p> 线程池工具类 </p>
+ * <p> 线程池工具类 </p >
  *
  * @author hufei
  * @version 1.0.0
  * @date 2022/8/21 13:24
  */
+@SuppressWarnings("all")
 public class ThreadPoolUtil {
 
     private static final int CORE_POOL_SIZE = 5;
@@ -30,6 +31,12 @@ public class ThreadPoolUtil {
      */
     public static ExecutorService getJdkThreadPool() {
         ExecutorService executor = null;
+        /* Executors工具创建线程池的四种方式
+            1）newCachedThreadPool(): 弹性线程数
+            2）newFixedThreadPool(int nThreads): 固定线程数
+            3）newSingleThreadExecutor(): 单一线程数
+            4）newScheduledThreadPool(int corePoolSize): 可调度，常用于定时
+        */
         // 创建jdk线程池 阿里规范手册不推荐使用Executor工具类创建,容易造成OOM问题; 参数:线程数
 //        executor = Executors.newFixedThreadPool(MAX_POOL_SIZE);
         // 手动创建jdk线程池; 参数: 1.核心线程数,2.最大线程数,3.线程存活时间,4.时间单位,5.提交任务队列,6.线程工厂:格式化线程名称,
@@ -107,5 +114,4 @@ public class ThreadPoolUtil {
             e.printStackTrace();
         }
     }
-
 }

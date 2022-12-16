@@ -57,9 +57,9 @@ public class ParseAnnotation {
     private static Map<String, Method> parseMapping(List<Class<?>> clazzes){
         //存储对应的映射关系
         Map<String,Method> handlers = new HashMap<String,Method>();
-        for (Class clazz : clazzes) {
+        for (Class<?> clazz : clazzes) {
             //获取类上的注解
-            RequestMapping typeAnnotation = (RequestMapping) clazz.getAnnotation(RequestMapping.class);
+            RequestMapping typeAnnotation = clazz.getAnnotation(RequestMapping.class);
 
             //类上注解的值
             String typeAnnotationName="";

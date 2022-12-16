@@ -1,11 +1,15 @@
 package org.hf.application.javabase.utils;
 
-
+/**
+ * <p> 内存大小计算 </p >
+ * @author HF
+ * @date 2022-11-28
+ **/
 public abstract class SizeOf {
+
     private final Runtime s_runtime = Runtime.getRuntime();
 
     /**
-     *
      * 子类负责覆盖该方法以提供被测试类的实例
      *
      * @return 被测试类的实例
@@ -13,47 +17,39 @@ public abstract class SizeOf {
     protected abstract Object newInstance();
 
     /**
-     *
      * 计算实例的大小（字节数）
      *
      * @return 实例所占内存的字节数
-     * @throws Exception
+     * @throws Exception 异常
      */
     public int size() throws Exception {
-
         // 垃圾回收
-        runGC();
-
+        runMemoryGc();
         // 提供尽可能多（10万）的实例以使计算结果更精确
         final int count = 100000;
         Object[] objects = new Object[count];
-
         // 实例化前堆已使用大小
         long heap1 = usedMemory();
         // 多实例化一个对象
         for (int i = -1; i < count; ++i) {
             Object object = null;
-
             // 实例化对象
             object = newInstance();
-
             if (i >= 0) {
                 objects[i] = object;
             } else {
                 // 释放第一个对象
                 object = null;
                 // 垃圾收集
-                runGC();
+                runMemoryGc();
                 // 实例化之前堆已使用大小
                 heap1 = usedMemory();
             }
         }
-
-        runGC();
+        runMemoryGc();
         // 实例化之后堆已使用大小
         long heap2 = usedMemory();
         final int size = Math.round(((float) (heap2 - heap1)) / count);
-
         // 释放内存
         for (int i = 0; i < count; ++i) {
             objects[i] = null;
@@ -62,14 +58,14 @@ public abstract class SizeOf {
         return size;
     }
 
-    private void runGC() throws Exception {
+    private void runMemoryGc() {
         // 执行多次以使内存收集更有效
         for (int r = 0; r < 4; ++r) {
-            _runGC();
+            runGc();
         }
     }
 
-    private void _runGC() throws Exception {
+    private void runGc() {
         long usedMem1 = usedMemory();
         long usedMem2 = Long.MAX_VALUE;
         for (int i = 0; (usedMem1 < usedMem2) && (i < 500); ++i) {
@@ -82,7 +78,6 @@ public abstract class SizeOf {
     }
 
     /**
-     *
      * 堆中已使用内存
      *
      * @return 堆中已使用内存

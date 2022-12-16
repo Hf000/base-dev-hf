@@ -5,11 +5,12 @@ import org.hf.application.javabase.utils.ThreadPoolUtil;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * <p> 线程demo </p>
+ * <p> 线程demo </p >
  *
  * @author hufei
  * @date 2022/9/25 16:59
  */
+@SuppressWarnings("all")
 public class ThreadDemo {
 
     public static void main(String[] args) throws Exception {
@@ -27,11 +28,11 @@ public class ThreadDemo {
     /**
      * 测试线程调用run()和start()方法的区别
      * 1.调run()方法:
-     * 1>会阻塞主线程, 因为run()方法只是一个普通方法
+     * 1>会阻塞主线程, 因为run()方法只是一个普通方法,在当前线程中执行run()方法逻辑
      * 2>是我们自己现实的方法
      * 2.调start()方法:
      * 1>不会阻塞主线程, 因为start()方法是内置方法
-     * 2>是java线程约定的内置方法,能够让run()在新的线程上下文中运行
+     * 2>是java线程约定的内置方法,能够让run()在新的线程上下文中运行,新创建一个线程执行run()方法逻辑
      */
     private static void runOrStartMethod() {
         new Thread(() -> {

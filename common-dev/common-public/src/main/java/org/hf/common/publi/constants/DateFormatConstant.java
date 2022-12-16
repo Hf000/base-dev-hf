@@ -20,13 +20,16 @@ public interface DateFormatConstant {
     String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
     String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
 
-    String MMDD = "MMdd";
-    String YYYYMM = "yyyyMM";
-    String YYYYMMDD = "yyyyMMdd";
-    String MMDDHHMM = "MMddHHmm";
-    String MMDDHHMMSS = "MMddHHmmss";
-    String YYYYMMDDHHMM = "yyyyMMddHHmm";
-    String YYYYMMDDHHMMSS = "yyyyMMddHHmmss";
+    String MM_DD_FORMAT = "MMdd";
+    String YYYY_MM_FORMAT = "yyyyMM";
+    String YYYY_MM_DD_FORMAT = "yyyyMMdd";
+    String YY_MM_DD_FORMAT = "yyMMdd";
+    String MM_DD_HH_MM_FORMAT = "MMddHHmm";
+    String MM_DD_HH_MM_SS_FORMAT = "MMddHHmmss";
+    String YYYY_MM_DD_HH_MM_FORMAT = "yyyyMMddHHmm";
+    String YY_MM_DD_HH_FORMAT = "yyMMddHH";
+    String YYYY_MM_DD_HH_MM_SS_FORMAT = "yyyyMMddHHmmss";
+    String YY_MM_DD_HH_MM_FORMAT = "yyMMddHHmm";
 
     String MM_DD_EN = "MM/dd";
     String YYYY_MM_EN = "yyyy/MM";

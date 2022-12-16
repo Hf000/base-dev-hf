@@ -11,7 +11,7 @@ import org.springframework.core.env.Environment;
 /**
  * <p> loadbalancer负载均衡配置 </p >
  *  默认是轮询, 这里配置成随机
- * @author HUFEI781
+ * @author HF
  * @date 2022-10-14
  **/
 public class LoadbalancerConfig {
