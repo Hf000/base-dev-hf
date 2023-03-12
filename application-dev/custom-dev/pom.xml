@@ -15,6 +15,7 @@
         <module>custom-shop-demo</module>
         <module>custom-framework-demo</module>
         <module>custom-order-demo</module>
+        <module>custom-rpc-demo</module>
     </modules>
 
     <properties>
