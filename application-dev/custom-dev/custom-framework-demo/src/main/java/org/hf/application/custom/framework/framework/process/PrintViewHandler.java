@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * <p>  </p>
+ * <p> 视图渲染处理实现2 -- json输出 </p>
+ *
  * @author hufei
  * @date 2022/7/17 19:26
-*/
+ */
 public class PrintViewHandler implements ViewHandler {
 
-    //输出json
     @Override
     public void print(HttpServletResponse response, Object result) {
         try {
@@ -24,6 +24,5 @@ public class PrintViewHandler implements ViewHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * <p>  </p>
+ * <p> 会话对象 </p>
+ *
  * @author hufei
  * @date 2022/7/17 20:04
-*/
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +22,8 @@ public abstract class Session {
     private String role;
     private Integer level;
 
-    //额外操作
+    /**
+     * 额外操作
+     */
     public abstract void handler();
 }

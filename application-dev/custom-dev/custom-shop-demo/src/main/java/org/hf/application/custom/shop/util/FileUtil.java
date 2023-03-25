@@ -1,53 +1,54 @@
 package org.hf.application.custom.shop.util;
 
 /**
- * <p>  </p>
+ * <p> 文件处理工具类 </p>
+ *
  * @author hufei
  * @date 2022/7/17 20:04
-*/
+ */
 public class FileUtil {
 
-    /***
+    /**
      * 获取文件类型
-     * @param FilenameExtension
-     * @return
+     * @param fileNameExtension 文件后缀名称
+     * @return 文件类型
      */
-    public static String getContentType(String FilenameExtension) {
-        if (FilenameExtension.equalsIgnoreCase(".bmp")) {
+    public static String getContentType(String fileNameExtension) {
+        if (".bmp".equalsIgnoreCase(fileNameExtension)) {
             return "image/bmp";
         }
-        if (FilenameExtension.equalsIgnoreCase(".gif")) {
+        if (".gif".equalsIgnoreCase(fileNameExtension)) {
             return "image/gif";
         }
-        if (FilenameExtension.equalsIgnoreCase(".jpeg") ||
-                FilenameExtension.equalsIgnoreCase(".jpg") ||
-                FilenameExtension.equalsIgnoreCase(".png")) {
+        if (".jpeg".equalsIgnoreCase(fileNameExtension) ||
+                ".jpg".equalsIgnoreCase(fileNameExtension) ||
+                ".png".equalsIgnoreCase(fileNameExtension)) {
             return "image/jpg";
         }
-        if (FilenameExtension.equalsIgnoreCase(".html")) {
+        if (".html".equalsIgnoreCase(fileNameExtension)) {
             return "text/html";
         }
-        if (FilenameExtension.equalsIgnoreCase(".txt")) {
+        if (".txt".equalsIgnoreCase(fileNameExtension)) {
             return "text/plain";
         }
-        if (FilenameExtension.equalsIgnoreCase(".vsd")) {
+        if (".vsd".equalsIgnoreCase(fileNameExtension)) {
             return "application/vnd.visio";
         }
-        if (FilenameExtension.equalsIgnoreCase(".pptx") ||
-                FilenameExtension.equalsIgnoreCase(".ppt")) {
+        if (".pptx".equalsIgnoreCase(fileNameExtension) ||
+                ".ppt".equalsIgnoreCase(fileNameExtension)) {
             return "application/vnd.ms-powerpoint";
         }
-        if (FilenameExtension.equalsIgnoreCase(".docx") ||
-                FilenameExtension.equalsIgnoreCase(".doc")) {
+        if (".docx".equalsIgnoreCase(fileNameExtension) ||
+                ".doc".equalsIgnoreCase(fileNameExtension)) {
             return "application/msword";
         }
-        if (FilenameExtension.equalsIgnoreCase(".xml")) {
+        if (".xml".equalsIgnoreCase(fileNameExtension)) {
             return "text/xml";
         }
-        if (FilenameExtension.equalsIgnoreCase(".mp4")) {
+        if (".mp4".equalsIgnoreCase(fileNameExtension)) {
             return "video/mp4";
         }
-        if (FilenameExtension.equalsIgnoreCase(".avi")) {
+        if (".avi".equalsIgnoreCase(fileNameExtension)) {
             return "video/x-msvideo";
         }
         return "image/jpg";

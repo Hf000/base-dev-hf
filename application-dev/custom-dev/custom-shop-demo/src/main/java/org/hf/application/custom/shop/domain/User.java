@@ -8,15 +8,17 @@ import lombok.ToString;
 import java.io.Serializable;
 
 /**
- * <p>  </p>
+ * <p> 用户信息实体 </p>
+ *
  * @author hufei
  * @date 2022/7/17 20:02
-*/
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class User implements Serializable {
+    private static final long serialVersionUID = -7509589271610325605L;
     private String username;
     private String password;
     private String sex;

@@ -4,10 +4,11 @@ import org.hf.application.custom.framework.dao.AccountDao;
 import org.hf.application.custom.framework.service.AccountService;
 
 /**
- * <p>  </p>
+ * <p> Service业务接口实现 </p>
+ *
  * @author hufei
  * @date 2022/7/17 19:26
-*/
+ */
 public class AccountServiceImpl implements AccountService {
 
     private AccountDao accountDao;

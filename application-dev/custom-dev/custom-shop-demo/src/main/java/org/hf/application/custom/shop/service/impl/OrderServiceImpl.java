@@ -11,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * <p>  </p>
+ * <p> 订单业务接口实现 </p>
+ *
  * @author hufei
  * @date 2022/7/17 19:56
-*/
+ */
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -27,54 +28,47 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private SessionThreadLocal sessionThreadLocal;
 
-    //①原始价格计算
+    /**
+     * ①原始价格计算
+     */
     @Autowired
     private MoneySum orderMoneySum;
-    //②满减计算
+
+    /**
+     * ②满减计算
+     */
     @Autowired
     private DecoratorMoneySum fullMoneySum;
-    //③Vip价格计算
+
+    /**
+     * ③Vip价格计算
+     */
     @Autowired
     private DecoratorMoneySum vipOrderMoney;
 
-    /***
-     * 取消订单
-     * @param id
-     */
+    @Override
+    public void add(Order order) {
+        //通过享元模式共享获取线程中的对象
+        order.setUsername(sessionThreadLocal.get().getUsername());
+        //结算价格嵌套运算 1.对orderMoneySum进行增强【计算基础价格】,执行满减操作增强
+        fullMoneySum.setMoneySum(orderMoneySum);
+        //2.对fullMoneySum进行增强【满减操作】，执行的增强是Vip价格计算
+        vipOrderMoney.setMoneySum(fullMoneySum);
+        vipOrderMoney.money(order);
+        //修改库存
+        itemService.modify(order.getNum(), order.getItemId());
+        //添加订单
+        orderDao.add(order);
+    }
+
     @Override
     public void cancelOrder(String id) {
         //修改订单状态
         Order order = orderDao.findById(id);
-        orderDao.modifyStatus(id,2);
-
+        if (order == null) {
+            throw new RuntimeException("订单信息异常");
+        }
         //改变订单状态
+        orderDao.modifyStatus(id, 2);
     }
-
-
-    /***
-     * 添加订单
-     * @param order
-     */
-    @Override
-    public int add(Order order) {
-        //order.setUsername("wangwu");
-        //order.setPaymoney(100); //结算价格
-        //order.setMoney(100);  //订单价格
-
-        //通过享元模式共享获取线程中的对象
-        order.setUsername(sessionThreadLocal.get().getUsername());
-
-        //结算价格嵌套运算
-        fullMoneySum.setMoneySum(orderMoneySum);  //对orderMoneySum进行增强【计算基础价格】,执行满减操作增强
-        vipOrderMoney.setMoneySum(fullMoneySum);  //对fullMoneySum进行增强【满减操作】，执行的增强是Vip价格计算
-        vipOrderMoney.money(order);
-
-        //修改库存
-        int mCount = itemService.modify(order.getNum(), order.getItemId());
-        //添加订单
-        int addCount = orderDao.add(order);
-        return addCount;
-    }
-
-
 }

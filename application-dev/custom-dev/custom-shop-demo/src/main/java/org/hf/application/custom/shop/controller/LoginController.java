@@ -13,10 +13,11 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * <p>  </p>
+ * <p> 用户 </p>
+ *
  * @author hufei
  * @date 2022/7/17 19:57
-*/
+ */
 @RestController
 @RequestMapping(value = "/user")
 public class LoginController {
@@ -24,29 +25,27 @@ public class LoginController {
     @Autowired
     private UserService userService;
 
-    /***
+    /**
      * 登录
-     * @param username
-     * @param password
-     * @return
+     * @param username 用户名称
+     * @param password 密码
+     * @return token
      */
     @PostMapping(value = "/login")
-    public String login(String username,String password) throws Exception {
+    public String login(String username, String password) {
         //根据用户名查询(不做密码测试)
         User user = userService.findByUserName(username);
-        if(user==null){
+        if (user == null) {
             return "登录失败！";
         }
         //模拟登录
-        Map<String,Object> userMap = new HashMap<String,Object>();
-        userMap.put("username",user.getUsername());
-        userMap.put("name","王五");
-        userMap.put("sex",user.getSex());
-        userMap.put("role",user.getRole());
-        userMap.put("level",user.getLevel());
-
+        Map<String, Object> userMap = new HashMap<String, Object>();
+        userMap.put("username", user.getUsername());
+        userMap.put("name", "王五");
+        userMap.put("sex", user.getSex());
+        userMap.put("role", user.getRole());
+        userMap.put("level", user.getLevel());
         //生成JWT令牌
-        String token = JwtTokenUtil.generateTokenUser(UUID.randomUUID().toString(), userMap, 36000000L);
-        return token;
+        return JwtTokenUtil.generateTokenUser(UUID.randomUUID().toString(), userMap, 36000000L);
     }
 }

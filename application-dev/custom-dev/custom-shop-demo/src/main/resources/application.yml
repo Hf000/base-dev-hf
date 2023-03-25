@@ -9,7 +9,7 @@ logging:
 
 #实例处理的文件类型映射
 upload:
-  filemap:
+  fileMap:
     aliyunOSSFileUpload: mp4,avi
     fastdfsFileUpoad: jpg,png
 
@@ -21,11 +21,10 @@ strategy:
     3: vipThree
     4: vipFour
 
-
-
 #FastDFS配置
 fastdfs:
   url: http://192.168.211.137:28181/
+
 #aliyun
 aliyun:
   oss:
@@ -47,4 +46,3 @@ spring:
   servlet:
     multipart:
       max-file-size: 100MB #上传文件大小配置
-

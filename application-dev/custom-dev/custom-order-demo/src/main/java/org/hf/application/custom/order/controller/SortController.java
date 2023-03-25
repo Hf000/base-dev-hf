@@ -14,17 +14,23 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 
+/**
+ * <p> 商品 </p>
+ *
+ * @author hufei
+ * @date 2023/3/25 17:50
+ */
+@Api(value = "多线程排序测试demo")
 @RestController
 @RequestMapping("/sort")
-@Api(value = "多线程排序测试demo")
 public class SortController {
     @Autowired
-    ProductMapper mapper;
+    private ProductMapper productMapper;
 
     @GetMapping("/list")
-    List<Product> sort() throws ExecutionException, InterruptedException {
+    public List<Product> sort() throws ExecutionException, InterruptedException {
         //查商品列表
-        List<Product> list = mapper.selectByExample(null);
+        List<Product> list = productMapper.selectByExample(null);
         //线程池
         ForkJoinPool pool = new ForkJoinPool(2);
         //开始运算，拆分与合并

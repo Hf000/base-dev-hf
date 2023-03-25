@@ -16,31 +16,38 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 import java.util.Random;
 
+/**
+ * <p> 订单 </p>
+ *
+ * @author hufei
+ * @date 2023/3/25 17:40
+ */
+@Api(value = "多线程取消超时订单demo")
 @RestController
 @RequestMapping("/order")
-@Api(value = "多线程取消超时订单demo")
 public class OrderController {
     @Autowired
-    OrdersMapper mapper;
-    @Autowired
-    OrderMonitor monitor;
+    private OrdersMapper ordersMapper;
 
-    @PostMapping("/add")
-    @Transactional
+    @Autowired
+    private OrderMonitor orderMonitor;
+
     @ApiOperation("下订单")
-    public int add(@RequestParam String name){
+    @PostMapping("/add")
+    @Transactional(rollbackFor = Exception.class)
+    public int add(@RequestParam String name) {
         Orders order = new Orders();
         order.setName(name);
         order.setCreatetime(new Date());
         order.setUpdatetime(new Date());
         //超时时间，取10-20之间的随机数（秒）
-        order.setInvalid(new Random().nextInt(10)+10);
+        order.setInvalid(new Random().nextInt(10) + 10);
         order.setStatus(0);
-        mapper.insert(order);
+        ordersMapper.insert(order);
         //事务性验证
 //        int i = 1/0;
-        monitor.put(new OrderDto(order));
+        // 在下单业务中, 同时扔到同一个队列, 注意事务性
+        orderMonitor.put(new OrderDto(order));
         return order.getId();
     }
-
 }

@@ -12,13 +12,17 @@ import java.io.ByteArrayInputStream;
 import java.util.UUID;
 
 /**
- * <p>  </p>
+ * <p> 文件上传 -- 阿里云实现 </p>
+ *
  * @author hufei
  * @date 2022/7/17 20:00
-*/
+ */
 @Component(value = "aliyunOSSFileUpload")
-public class AliyunOSSFileUpload implements FileUpload{
+public class AliyunOSSFileUpload implements FileUpload {
 
+    /**
+     * 阿里云存储配置
+     */
     @Value("${aliyun.oss.endpoint}")
     private String endpoint;
     @Value("${aliyun.oss.accessKey}")
@@ -32,26 +36,26 @@ public class AliyunOSSFileUpload implements FileUpload{
     @Value("${aliyun.oss.backurl}")
     private String backurl;
 
-    /****
-     * 文件上传
-     *  文件类型如果是图片，则上传到本地FastDFS
-     *  文件类型如果是视频，则上传到aliyun OSS
+    /**
+     * 文件上传: 文件类型如果是图片，则上传到本地FastDFS; 文件类型如果是视频，则上传到aliyun OSS
+     * @param buffers 文件二进制
+     * @param extName 文件上传后缀名称
+     * @return String 上传后的文件名称
      */
     @Override
-    public String upload(byte[] buffers,String extName) {
-        String realName = UUID.randomUUID().toString()+"."+extName ;
+    public String upload(byte[] buffers, String extName) {
+        String realName = UUID.randomUUID().toString() + "." + extName;
         // 创建OSSClient实例。
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKey, accessKeySecret);
         // <yourObjectName>表示上传文件到OSS时需要指定包含文件后缀在内的完整路径，例如abc/efg/123.jpg。
-        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key+realName, new ByteArrayInputStream(buffers));
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, key + realName, new ByteArrayInputStream(buffers));
         // 上传字符串。
         ObjectMetadata objectMetadata = new ObjectMetadata();
-        objectMetadata.setContentType(FileUtil.getContentType("."+extName));
+        objectMetadata.setContentType(FileUtil.getContentType("." + extName));
         putObjectRequest.setMetadata(objectMetadata);
         ossClient.putObject(putObjectRequest);
-
         // 关闭OSSClient。
         ossClient.shutdown();
-        return backurl+realName;
+        return backurl + realName;
     }
 }

@@ -1,10 +1,10 @@
 <beans>
     <!--id就是接口的名字, class实现类的全限定名-->
-    <bean id="accountController" class="com.hfuei.controller.AccountController">
+    <bean id="accountController" class="org.hf.application.custom.framework.controller.AccountController">
         <property name="accountService" ref="accountService" />
     </bean>
-    <bean id="accountService" class="com.hfuei.service.impl.AccountServiceImpl">
+    <bean id="accountService" class="org.hf.application.custom.framework.service.impl.AccountServiceImpl">
         <property name="accountDao" ref="accountDao" />
     </bean>
-    <bean id="accountDao" class="com.hfuei.dao.impl.AccountDaoImpl"></bean>
+    <bean id="accountDao" class="org.hf.application.custom.framework.dao.impl.AccountDaoImpl"/>
 </beans>

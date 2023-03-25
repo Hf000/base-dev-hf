@@ -10,10 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 /**
- * <p>  </p>
+ * <p> 文件上传 </p>
+ *
  * @author hufei
  * @date 2022/7/17 19:56
-*/
+ */
 @RestController
 @RequestMapping(value = "/file")
 public class FileController {
@@ -21,11 +22,11 @@ public class FileController {
     @Autowired
     private FileUploadProxy fileUploadProxy;
 
-    /***
+    /**
      * 文件上传
-     * @param file
-     * @return
-     * @throws IOException
+     * @param file 上传文件
+     * @return 上传后的文件名称
+     * @throws Exception 异常
      */
     @PostMapping(value = "/upload")
     public String upload(MultipartFile file) throws Exception {

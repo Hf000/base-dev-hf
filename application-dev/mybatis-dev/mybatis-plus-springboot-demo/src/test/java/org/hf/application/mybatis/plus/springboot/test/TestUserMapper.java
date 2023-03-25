@@ -25,7 +25,7 @@ public class TestUserMapper {
     @Test
     public void testInsert() {
         UserInfoEntity user = new UserInfoEntity();
-        user.setEmail("2@itcast.cn");
+        user.setEmail("2@.cn");
         user.setAge(301);
         user.setUserName("caocao1");
         user.setName("曹操1");
@@ -161,7 +161,7 @@ public class TestUserMapper {
     public void testSelectList(){
         QueryWrapper<UserInfoEntity> wrapper = new QueryWrapper<>();
         //设置查询条件
-        wrapper.like("email", "itcast");
+        wrapper.like("email", "2@.cn");
 
         List<UserInfoEntity> users = this.userInfoMapper.selectList(wrapper);
         for (UserInfoEntity user : users) {
@@ -177,7 +177,7 @@ public class TestUserMapper {
 
         QueryWrapper<UserInfoEntity> wrapper = new QueryWrapper<>();
         //设置查询条件
-        wrapper.like("email", "itcast");
+        wrapper.like("email", "2@.cn");
 
         IPage<UserInfoEntity> iPage = this.userInfoMapper.selectPage(page, wrapper);
         System.out.println("数据总条数： " + iPage.getTotal());

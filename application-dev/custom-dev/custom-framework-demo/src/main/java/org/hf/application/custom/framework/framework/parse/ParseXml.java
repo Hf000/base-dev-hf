@@ -5,11 +5,13 @@ import org.hf.application.custom.framework.framework.util.XmlBean;
 import java.io.InputStream;
 
 /**
- * <p>  </p>
+ * <p> 解析xml文件实现 </p>
+ *
  * @author hufei
  * @date 2022/7/17 19:23
-*/
-public class ParseXml extends ParseFile{
+ */
+public class ParseXml extends ParseFile {
+
     @Override
     public void load(InputStream is) throws Exception {
         System.out.println("加载XML文件");

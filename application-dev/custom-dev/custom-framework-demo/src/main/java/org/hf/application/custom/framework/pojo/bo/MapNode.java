@@ -1,22 +1,30 @@
-package org.hf.application.custom.framework.framework.util;
+package org.hf.application.custom.framework.pojo.bo;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>  </p>
+ * <p> 节点构造对象实体 </p>
+ *
  * @author hufei
  * @date 2022/7/17 19:27
-*/
+ */
 public class MapNode {
 
-    //唯一ID
+    /**
+     * 唯一ID
+     */
     private String id;
-    //classname
+
+    /**
+     * 类名称
+     */
     private String classname;
 
-    //节点
-    private Map<String,String> propertyMap;
+    /**
+     * 节点
+     */
+    private Map<String, String> propertyMap;
 
     public String getClassname() {
         return classname;
@@ -39,8 +47,8 @@ public class MapNode {
     }
 
     public void setPropertyMap(Map<String, String> propertyMap) {
-        if(this.propertyMap==null){
-            this.propertyMap=new HashMap<String,String>();
+        if (this.propertyMap == null) {
+            this.propertyMap = new HashMap<String, String>();
         }
         this.propertyMap.putAll(propertyMap);
     }

@@ -8,37 +8,24 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 /**
- * <p>  </p>
+ * <p> 优惠券数据接口实现 </p>
+ *
  * @author hufei
  * @date 2022/7/17 19:58
-*/
+ */
 @Repository
 public class CouponsDaoImpl implements CouponsDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    /***
-     * 查询用户有效的优惠券
-     * @param id
-     * @param username
-     * @return
-     */
     @Override
     public Coupons findByIdAndUserName(String id, String username) {
-        try {
-            return jdbcTemplate.queryForObject("SELECT * FROM coupons WHERE username=? AND id=?  AND `status`=1",new BeanPropertyRowMapper<Coupons>(Coupons.class),username,id);
-        } catch (Exception e) {
-        }
-        return null;
+        return jdbcTemplate.queryForObject("SELECT * FROM coupons WHERE username=? AND id=?  AND `status`=1", new BeanPropertyRowMapper<Coupons>(Coupons.class), username, id);
     }
 
-    /****
-     * 修改指定优惠券状态
-     * @param id
-     */
     @Override
     public void modifyCouponsStatus(String id) {
-        jdbcTemplate.update("UPDATE coupons SET `status`=2 , usetime=now() WHERE id=?",id);
+        jdbcTemplate.update("UPDATE coupons SET `status`=2 , usetime=now() WHERE id=?", id);
     }
 }

@@ -6,17 +6,18 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
- * <p>  </p>
- * //@EnableAspectJAutoProxy	//开启代理支持 AopContext.currentProxy()
+ * <p> 服务启动类 </p>
+ * //@EnableAspectJAutoProxy 开启代理支持 AopContext.currentProxy()
+ *
  * @author hufei
  * @date 2022/8/7 16:57
-*/
+ */
 @SpringBootApplication
 @EnableAspectJAutoProxy
 public class ShopApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ShopApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ShopApplication.class, args);
+    }
 
 }

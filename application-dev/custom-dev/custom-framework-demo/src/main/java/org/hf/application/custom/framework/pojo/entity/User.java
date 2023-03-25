@@ -1,10 +1,11 @@
-package org.hf.application.custom.framework.domain;
+package org.hf.application.custom.framework.pojo.entity;
 
 /**
- * <p>  </p>
+ * <p> 用户信息实体 </p>
+ *
  * @author hufei
  * @date 2022/7/17 19:24
-*/
+ */
 public class User {
 
     private String name;
