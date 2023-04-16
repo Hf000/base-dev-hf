@@ -2,6 +2,7 @@ package org.hf.springboot.web.exception;
 
 import org.hf.common.publi.interfac.StatusCode;
 import org.hf.common.web.exception.customize.WebException;
+import org.hf.springboot.web.enums.ExceptionEnum;
 
 /**
  * <p> 自定义异常 </p>
@@ -21,4 +22,7 @@ public class CustomWebException extends WebException {
         super(code, msg);
     }
 
+    public CustomWebException(String msg) {
+        super(ExceptionEnum.CRON_ERROR.getCode(), msg);
+    }
 }
