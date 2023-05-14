@@ -9,6 +9,7 @@ package org.hf.application.javabase.basic.generics;
  * N - Number,数字
  * T - Type,类型,如String,Integer等对象类型
  * ? - 通用泛型
+ * ? 和 T 的区别: 如果泛型为 ? ,表示可以是不同类型的对象; 如果泛型为 T ,表示只能是同一类型的对象;
  * @author hufei
  * @version 1.0.0
  * @date 2022/9/3 15:27
@@ -51,10 +52,10 @@ class Generics<T> implements GenericsInterface<T> {
     }
 }
 
-abstract class Animal{
+abstract class Animal {
 
 }
 
-class Cat extends Animal{
+class Cat extends Animal {
 
 }

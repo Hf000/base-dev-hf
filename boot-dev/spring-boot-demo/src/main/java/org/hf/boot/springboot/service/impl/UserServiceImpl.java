@@ -9,6 +9,7 @@ import org.hf.boot.springboot.pojo.entity.UserInfo;
 import org.hf.boot.springboot.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private UserInfoMapper userInfoMapper;
 
     @Override
+    @Cacheable(cacheNames = "ONE_MIN_CACHE")
     public User findUserInfo(Long id) {
         System.out.println("find success");
         return userMapper.selectByPrimaryKey(id);

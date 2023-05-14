@@ -33,4 +33,5 @@ spring cloud的分布式解决方案
         依赖spring-retry,集成失败重试功能,具体配置参考properties.yml文件
 ##7. provider-service-demo、provider-service-demo-two工程
     提供这服务集成了tk-mapper和config配置中心
- 
+ ##8. 注意点:
+     1> feign接口的所有接口参数都要加上注解, 否则默认会以POST请求调用, GET请求实体参数注解@SpringQueryMap, POST请求body实体参数注解@RequestBody;

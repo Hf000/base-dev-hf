@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  *
  * @author hufei
  * @date 2022/8/21 17:10
-*/
+ */
 @FeignClient(value = "service-demo", fallback = UserFeignClientFallback.class, configuration = FeignConfig.class, contextId = "userFeignClient", path = "/user")
 public interface UserFeignClient {
 
@@ -27,6 +27,6 @@ public interface UserFeignClient {
      * @param id 入参
      * @return User
      */
-@GetMapping("/{id}")
+    @GetMapping("/{id}")
     UserDto queryById(@PathVariable Long id);
 }

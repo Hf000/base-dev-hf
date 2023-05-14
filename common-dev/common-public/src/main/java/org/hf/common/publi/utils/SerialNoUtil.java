@@ -5,6 +5,7 @@ import cn.hutool.core.util.HashUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.hf.common.publi.components.RedisUtilComponent;
 import org.hf.common.publi.constants.BussinessCodeEnum;
 import org.hf.common.publi.exception.BusinessException;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -138,6 +139,31 @@ public class SerialNoUtil {
             log.error("获取统一序列编号，genLongSerialNo24d出错，cause：", e);
             throw new BusinessException("获取统一序列编号出错，请检查！");
         }
+    }
+
+    /**
+     * 使用redis辅助业务生成长期自增的数字
+     * @param prefixCode 业务编码前缀
+     * @param redisKey 缓存的数字的redisKey
+     * @param newValue 指定要自增的初始值
+     * @param numLength 指定数字的最大长度
+     * @return String
+     */
+    public static String genAutoAddSerialNo(String prefixCode, String redisKey, Long newValue, Integer numLength) {
+        if (StringUtils.isBlank(prefixCode)) {
+            throw new BusinessException("业务编码不能为空");
+        }
+        if (StringUtils.isBlank(redisKey)) {
+            throw new BusinessException("缺少缓存的key");
+        }
+        if (numLength == null) {
+            numLength = 8;
+        }
+        RedisUtilComponent redisUtilComponent = SpringBeanUtil.getBean(RedisUtilComponent.class);
+        RedisAtomicLong redisCounter = redisUtilComponent.getRedisCounter(redisKey, newValue);
+        long num = redisCounter.incrementAndGet();
+        redisCounter.expire(6, TimeUnit.HOURS);
+        return prefixCode + formatAutoIncrNo(num, numLength);
     }
 
     /**
