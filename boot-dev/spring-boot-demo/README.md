@@ -13,7 +13,7 @@
 12. org.hf.boot.springboot.controller.RequestController request请求接收参数示例
 13. 默认集成logback日志框架, 如果需要使用别的日志框架需要先排除logback相关依赖;
 14. SpringBoot中使用AopContext.currentProxy()需要在启动类开启@EnableAspectJAutoProxy(exposeProxy = true);
-15. SpringBoot中集成线程池
+15. SpringBoot中集成线程池 org.hf.boot.springboot.config.AsyncExecutorConfig
     15.1 启动类上添加@EnableAsync注解, 开启异步支持, 然后直接在对应的@Service方法上添加@Async, 进行异步调用(此时使用的是默认线程池SimpleAsyncTaskExecutor);
     15.2 在@Configuration配置类上添加@EnableAsync注解, 自定义线程池对象上添加@Bean(name = "多个线程池对象需要根据name区分"), 然后直接在对应的@Service方法上添加@Async("线程池name")进行调用;
     15.3 SpringBoot中集成线程池失效
@@ -21,6 +21,26 @@
         2> 异步方法类没有使用@Service注解（或其他注解）导致spring无法扫描到异步类
         3> controller中需要使用@Autowired或@Resource等注解自动注入service类，不能自己手动new对象
 16. spring缓存配置: org.hf.boot.springboot.config.CustomCacheConfig
+17. org.hf.boot.springboot.error.handler.GlobalExceptionHandler 全局异常统一处理,并且集成对响应返回的处理(继承ResponseBodyAdvice,org.hf.boot.springboot.error.handler.GlobalExceptionHandler#beforeBodyWrite自定义响应结果处理)
+18. org.hf.boot.springboot.proxy包下为代理转发相关实现
+    整体流程:
+    ProxyServletHandlerMapping通过urlPath匹配ProxyServletController -> ProxyServletController调用AbstractProxyServlet的service方法 -> 获取urlPath并记录目标地址 -> 解析request请求体,转化为json对象 -> 执行继承AbstractProxyServlet的handler方法(处理目标服务器的请求响应封装) -> 获取handler的处理结果并写入response -> ProxyServletController组装ModelAndView -> 执行DispatcherServlet后续处理
+    使用方法: 
+        1> org.hf.boot.springboot.proxy.impl.servlet.CustomServiceProxyServlet 自定义实现servlet请求转发
+        2> org.hf.boot.springboot.proxy.impl.controller.CustomServiceProxyServletController 自定义实现controller进行请求映射注册
+        3> org.hf.boot.springboot.proxy.impl.config.ProxyServletConfiguration 自定义配置类进行自定义代理controller的bean初始化和自定义代理处理映射器注册
+        4> src/main/resources/proxy/application-proxy-conf.yml 代理转发路径映射配置, 支持多个server的配置
+        5> src/main/resources/application.yml 中新增请求代理相关配置
+        6> 直接请求path路径,会转发到target-path
+    包下除以上的类,其他均为公共实现
+19. org.hf.boot.springboot.config.AbstractEventSubscriber 拓展spring事件分发和订阅
+20. org.hf.boot.springboot.config.CustomTransactional 自定义事务注解
+21. org.hf.boot.springboot.annotations.CustomRedisLock 自定义redis锁实现,支持锁续期
+22. org.hf.boot.springboot.annotations.CustomPrefixRedisLock 自定义redis锁实现,支持spel表达式
+23. org.hf.boot.springboot.retry.CustomRetryException 自定义异步记录需要重试的异常记录
+    使用方法:
+        1> 在可能需要异常重试的方法上添加@CustomRetryException注解
+        2> 调用方法进行异步方法重试: org.hf.boot.springboot.service.RetryExceptionRecordService.retryExceptionRecord
 
 
 

@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 /**
  * <p> 防重处理过程实现 </p >
  * 2.防重注解切面
+ * 自定义防重复注解借助redis实现 - 2
  * @author hufei
  * @date 2023-04-11
  **/

@@ -46,9 +46,9 @@ public class TestController {
         String paraJsonStr = req.getParaJsonStr();
         Object[] paraList = req.getParaList();
         String paraJsonArrayStr = req.getParaJsonArrayStr();
-        if (StringUtils.isEmpty(paraJsonStr) && paraList == null && StringUtils.isEmpty(paraJsonArrayStr)) {
+        /*if (StringUtils.isEmpty(paraJsonStr) && paraList == null && StringUtils.isEmpty(paraJsonArrayStr)) {
             throw new CustomWebException("paraJsonStr paraList paraJsonArrayStr 不能同时为空");
-        }
+        }*/
         Object object = SpringBeanUtil.getBean(serviceName);
         if (object == null) {
             throw new CustomWebException("服务不存在");
@@ -59,13 +59,13 @@ public class TestController {
             ReflectionUtils.makeAccessible(method);
             if (methodName.equals(method.getName())) {
                 Class<?>[] parameterTypes = method.getParameterTypes();
-                if (StringUtils.isNotEmpty(paraJsonStr)) {
+                if (StringUtils.isEmpty(paraJsonStr) && StringUtils.isEmpty(paraJsonArrayStr) && Objects.isNull(paraList)) {
+                    resultObj = method.invoke(object);
+                } else if (StringUtils.isNotEmpty(paraJsonStr)) {
                     resultObj = method.invoke(object, JSON.parseObject(paraJsonStr, parameterTypes[0]));
-                }
-                if (StringUtils.isNotEmpty(paraJsonArrayStr)) {
+                } else if (StringUtils.isNotEmpty(paraJsonArrayStr)) {
                     resultObj = method.invoke(object, JSON.parseArray(paraJsonArrayStr, Object.class));
-                }
-                if (!Objects.isNull(paraList)) {
+                } else if (!Objects.isNull(paraList)) {
                     resultObj = method.invoke(object, paraList);
                 }
                 break;

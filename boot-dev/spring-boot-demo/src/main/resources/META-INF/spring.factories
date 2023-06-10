@@ -1,0 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor= \
+org.hf.boot.springboot.proxy.config.CustomEnvironmentPostProcessor

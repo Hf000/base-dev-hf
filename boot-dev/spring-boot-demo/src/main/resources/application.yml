@@ -49,3 +49,11 @@ logging:      #配置日志的记录级别
 request:
   filter:
     enable: true
+
+# 请求代理相关配置
+proxy:
+  servlet:
+    open: true
+  server:
+    url:
+      customService: http://localhost:${server.port}${server.servlet.context-path}

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hf.boot.springboot.dao.RetryExceptionRecordMapper">
+  <resultMap id="BaseResultMap" type="org.hf.boot.springboot.pojo.entity.RetryExceptionRecord">
+    <!-- WARNING - @mbg.generated -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="business_code" jdbcType="VARCHAR" property="businessCode" />
+    <result column="service_code" jdbcType="VARCHAR" property="serviceCode" />
+    <result column="retry_type" jdbcType="VARCHAR" property="retryType" />
+    <result column="retry_count" jdbcType="INTEGER" property="retryCount" />
+    <result column="retry_state" jdbcType="TINYINT" property="retryState" />
+    <result column="delete_state" jdbcType="TINYINT" property="deleteState" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+    <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+    <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="org.hf.boot.springboot.pojo.entity.RetryExceptionRecord">
+    <!-- WARNING - @mbg.generated -->
+    <result column="exception_msg" jdbcType="LONGVARCHAR" property="exceptionMsg" />
+    <result column="request_info" jdbcType="LONGVARCHAR" property="requestInfo" />
+  </resultMap>
+  <sql id="BaseColumnList">
+    <!-- WARNING - @mbg.generated -->
+    id, business_code, service_code, retry_type, retry_count, retry_state,
+    delete_state, created_by, created_date, updated_by, updated_date
+  </sql>
+  <sql id="Blob_Column_List">
+    <!-- WARNING - @mbg.generated -->
+    exception_msg, request_info
+  </sql>
+</mapper>

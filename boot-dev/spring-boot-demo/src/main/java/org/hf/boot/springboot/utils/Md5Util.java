@@ -1,5 +1,7 @@
 package org.hf.boot.springboot.utils;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -169,5 +171,27 @@ public final class Md5Util {
             stringbuilder.append(HEX_CHARS.charAt(aByte & 0x0F));
         }
         return stringbuilder.toString();
+    }
+
+    /**
+     * 二进制byte数组转十六进制<br/>
+     * @param bin byte array
+     * @return hex string
+     */
+    public static String byteToHex(byte[] bin) {
+        return Hex.encodeHexString(bin);
+    }
+
+    /**
+     * 十六进制转二进制byte数组<br/>
+     * @param hex hex string
+     * @return byte array
+     */
+    public static byte[] hexToByte(String hex) {
+        try {
+            return Hex.decodeHex(hex.toCharArray());
+        } catch (DecoderException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

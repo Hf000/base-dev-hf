@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * <p> 事件订阅实现 </p >
+ * 自定义扩展Sprig事件发布订阅实现 - 2
  * @author hufei
  * @date 2022-09-21
  **/

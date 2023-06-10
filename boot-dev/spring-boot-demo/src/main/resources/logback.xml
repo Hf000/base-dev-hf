@@ -84,8 +84,8 @@
     <root level="INFO">
         <!-- 定义了多个appender，日志会通过往这两个appender里面写-->
         <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
-        <appender-ref ref="FILE-SQL"/>
+<!--        <appender-ref ref="FILE"/>
+        <appender-ref ref="FILE-SQL"/>-->
     </root>
 
     <!-- 1. logger可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个logger;
@@ -97,9 +97,10 @@
          6. level:用来设置打印级别，日志级别从高到低：TRACE < DEBUG < INFO < WARN < ERROR < FATAL, 大小写无关
          代表强制执行上级的级别。如果未设置此属性，那么当前loger将会继承上级的级别
           -->
-    <logger name="org.hf" additivity="false" level="DEBUG">
+    <logger name="org.hf" additivity="false" level="INFO">
         <!--定义了appender，日志会往这个appender里面写-->
-        <appender-ref ref="FILE"/>
+        <!--<appender-ref ref="FILE"/>-->
+        <appender-ref ref="CONSOLE"/>
     </logger>
     <!-- 打印SQL日志到sql文件, 由于这里设置了additivity="true", 那么会使用root中的appender, 如果设置additivity="false"那么日志就不
         会输出到任何地方 -->

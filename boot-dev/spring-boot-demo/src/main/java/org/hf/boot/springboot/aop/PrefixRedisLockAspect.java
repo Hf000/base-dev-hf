@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 /**
  * <p> 带前缀锁名称的redis锁切面 </p >
  * 2.redis锁注解切面
+ * 自定义redis锁CustomPrefixRedisLock实现 - 2
  * @author hufei
  * @date 2023-04-11
  **/

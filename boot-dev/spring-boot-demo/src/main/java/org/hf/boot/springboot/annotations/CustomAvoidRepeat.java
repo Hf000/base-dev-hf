@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 /**
  * <p> 自定义防重注解 </p >
  * 1.防重注解, 切面: org.hf.boot.springboot.aop.AvoidRepeatAspect
+ * 自定义防重复注解借助redis实现 - 1
  * @author hufei
  * @date 2023-04-11
  **/

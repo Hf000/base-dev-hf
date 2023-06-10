@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * <p> Redis分布式锁切面处理 </p >
  *  2.自定义redis锁注解切面
+ *  自定义redis锁CustomRedisLock实现 - 2
  * @author HUFEI
  * @date 2023-03-27
  **/

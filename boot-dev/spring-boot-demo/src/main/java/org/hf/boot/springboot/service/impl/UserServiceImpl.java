@@ -1,11 +1,13 @@
 package org.hf.boot.springboot.service.impl;
 
 import org.hf.boot.springboot.config.CustomTransactional;
+import org.hf.boot.springboot.constants.RetryTypeEnum;
 import org.hf.boot.springboot.dao.UserInfoMapper;
 import org.hf.boot.springboot.dao.UserMapper;
 import org.hf.boot.springboot.pojo.dto.UserInfoReq;
 import org.hf.boot.springboot.pojo.entity.User;
 import org.hf.boot.springboot.pojo.entity.UserInfo;
+import org.hf.boot.springboot.retry.CustomRetryException;
 import org.hf.boot.springboot.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +65,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CustomRetryException(serviceCode = "UserServiceImpl", retryType = RetryTypeEnum.METHOD)
     public List<User> getUserAll() {
+        int a = 1/0;
         return userMapper.getUserAll();
     }
 

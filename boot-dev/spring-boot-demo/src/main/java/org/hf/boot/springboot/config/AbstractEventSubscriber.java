@@ -7,6 +7,7 @@ import org.springframework.context.PayloadApplicationEvent;
 
 /**
  * <p> 事件订阅类 </p >
+ * 自定义扩展Sprig事件发布订阅实现 - 1
  * @author hufei
  * @date 2022-09-21
  **/

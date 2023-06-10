@@ -2,11 +2,13 @@ package org.hf.boot.springboot.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.hf.boot.springboot.constants.RetryTypeEnum;
 import org.hf.boot.springboot.pojo.dto.Result;
 import org.hf.boot.springboot.pojo.dto.UserInfoReq;
 import org.hf.boot.springboot.pojo.dto.UserReq;
 import org.hf.boot.springboot.pojo.entity.User;
 import org.hf.boot.springboot.pojo.entity.UserInfo;
+import org.hf.boot.springboot.retry.CustomRetryException;
 import org.hf.boot.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,7 +64,9 @@ public class UserController {
 
     @ApiOperation("根据条件查询用户信息")
     @PostMapping("/findUserAllByCondition")
+    @CustomRetryException(serviceCode = "UserController", retryType = RetryTypeEnum.URL)
     public List<User> findUserAllByCondition(@RequestBody UserReq req) {
+        int a = 1/0;
         return userServiceImpl.getUserAll();
     }
 

@@ -1,0 +1,13 @@
+# 请求代理器实现 - 6
+proxy:
+  servlet:
+    server:
+      - name: customService
+        urlPattern: /proxyApi
+        target-domain: ${proxy.server.url.customService}
+        proxy-class: org.hf.boot.springboot.proxy.impl.controller.CustomServiceProxyServletController
+        location:
+          - path: /testProxy
+            target-path: /findUserAll
+          - path: /testProxy2
+            target-path: /findUserAllByCondition

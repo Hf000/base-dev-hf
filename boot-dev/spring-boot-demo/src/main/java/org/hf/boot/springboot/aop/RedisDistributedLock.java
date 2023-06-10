@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <p> 基于redis实现的分布式锁,支持单节点，主从，哨兵模式，不支持集群模式 哨兵模式在主从切换瞬间可能导致同一资源产生两把锁 </p >
- *
+ * 自定义redis锁CustomPrefixRedisLock实现 - 4
  * @author hufei
  * @date 2023-04-11
  **/

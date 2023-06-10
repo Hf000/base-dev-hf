@@ -27,7 +27,7 @@ public class FileUploadConfiguration {
      * @return MultipartConfigElement
      */
     @Bean
-    public MultipartConfigElement multipartConfigElement(@Value("${file.maxFileSize}") String maxFileSize, @Value("${file.maxRequestSize}") String maxRequestSize) {
+    public MultipartConfigElement multipartConfigElement(@Value("${file.maxFileSize:10240KB}") String maxFileSize, @Value("${file.maxRequestSize:20240KB}") String maxRequestSize) {
         MultipartConfigFactory factory = new MultipartConfigFactory();
         // 单个文件最大
         factory.setMaxFileSize(parseFileDataSize(maxFileSize));
