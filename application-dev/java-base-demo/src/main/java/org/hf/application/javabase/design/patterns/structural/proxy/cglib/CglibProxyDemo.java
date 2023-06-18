@@ -4,6 +4,7 @@ import org.springframework.cglib.proxy.Enhancer;
 
 /**
  * <p> 代理模式-cglib动态代理 </p>
+ * cglib动态代理是基于生成一个被代理类的子类，该子类会重写被代理类的所有非final方法
  * @author hufei
  * @date 2022/10/6 10:46
 */

@@ -21,9 +21,9 @@ public class ProxyImpl implements InvocationHandler {
 
     /**
      * 代理过程
-     * @param proxy    被代理对象
-     * @param method   被代理方法
-     * @param args     方法参数
+     * @param proxy    被代理对象    指代我们所代理的那个真实对象
+     * @param method   被代理方法    指代的是我们所要调用真实对象的某个方法的Method对象
+     * @param args     方法参数     指代的是调用真实对象某个方法时接收的参数
      * @return Object
      */
     @SneakyThrows
