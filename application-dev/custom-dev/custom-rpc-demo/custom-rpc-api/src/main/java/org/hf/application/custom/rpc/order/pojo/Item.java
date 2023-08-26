@@ -4,8 +4,7 @@ import java.util.Arrays;
 
 public class Item implements java.io.Serializable{
 
-    private static final long serialVersionUID = -1768340664273809021L;
-
+    private static final long serialVersionUID = -3780038588905322925L;
     private Long itemId;
     private String title;
     private String[] pics;

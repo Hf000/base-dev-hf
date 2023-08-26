@@ -1,6 +1,7 @@
 package org.hf.springboot.web.controller;
 
 import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hf.common.publi.utils.SpringBeanUtil;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -29,11 +31,17 @@ import java.util.Objects;
 public class TestController {
 
     /**
-     * 请求入参示例
+     * 1.json参数请求入参示例
      * {
      *     "methodName":"getCurrentLdspClockActInfo",
      *     "serviceName":"oprActivityInfoServiceImpl",
      *     "paraJsonStr":"{\"activityCode\":\"\",\"activityType\":\"CLOCK_PASS\"}"
+     * }
+     * 2.数组参数请求示例
+     * {
+     *     "methodName":"方法名称",
+     *     "serviceName":"服务名称",
+     *     "paraList":[对象1, 对象2] （如果不是基本数据类型的包装类，对象最好用json方式传递）
      * }
      * @param req 入参
      * @return 执行结果
@@ -46,9 +54,6 @@ public class TestController {
         String paraJsonStr = req.getParaJsonStr();
         Object[] paraList = req.getParaList();
         String paraJsonArrayStr = req.getParaJsonArrayStr();
-        /*if (StringUtils.isEmpty(paraJsonStr) && paraList == null && StringUtils.isEmpty(paraJsonArrayStr)) {
-            throw new CustomWebException("paraJsonStr paraList paraJsonArrayStr 不能同时为空");
-        }*/
         Object object = SpringBeanUtil.getBean(serviceName);
         if (object == null) {
             throw new CustomWebException("服务不存在");
@@ -66,6 +71,12 @@ public class TestController {
                 } else if (StringUtils.isNotEmpty(paraJsonArrayStr)) {
                     resultObj = method.invoke(object, JSON.parseArray(paraJsonArrayStr, Object.class));
                 } else if (!Objects.isNull(paraList)) {
+                    // 兼容对象数据的json格式
+                    for (int i = 0; i < paraList.length; i++) {
+                        if (paraList[i] instanceof Map) {
+                            paraList[i] = JSONObject.parseObject(JSONObject.toJSONString(paraList[i]), parameterTypes[i]);
+                        }
+                    }
                     resultObj = method.invoke(object, paraList);
                 }
                 break;

@@ -1,8 +1,15 @@
 package org.hf.application.custom.rpc.core.base;
 
+/**
+ * 自定义请求基类
+ */
 public abstract class BaseRpcBean implements java.io.Serializable{
 
-    private String requestId; //请求id
+    private static final long serialVersionUID = 4332229479159998963L;
+    /**
+     *  请求id
+     */
+    private String requestId;
 
     public String getRequestId() {
         return requestId;

@@ -14,9 +14,9 @@ import java.util.List;
  */
 public class MyDecoder<T extends BaseRpcBean> extends ReplayingDecoder<Void> {
 
-    private static MySerializer hessianSerializer = new HessianSerializer();
+    private static final MySerializer HESSIAN_SERIALIZER = new HessianSerializer();
 
-    private Class<T> clazz;
+    private final Class<T> clazz;
 
     public MyDecoder(Class<T> clazz) {
         this.clazz = clazz;
@@ -24,10 +24,11 @@ public class MyDecoder<T extends BaseRpcBean> extends ReplayingDecoder<Void> {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+        // 获取消息内容
         byte[] bytes = new byte[in.readInt()];
         in.readBytes(bytes);
-
-        BaseRpcBean rpcBean = hessianSerializer.deserialize(bytes, clazz);
+        // 进行反序列化
+        BaseRpcBean rpcBean = HESSIAN_SERIALIZER.deserialize(bytes, clazz);
         out.add(rpcBean);
     }
 }

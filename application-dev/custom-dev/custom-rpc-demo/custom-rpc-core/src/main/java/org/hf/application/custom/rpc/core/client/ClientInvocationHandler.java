@@ -13,12 +13,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class ClientInvocationHandler implements InvocationHandler {
 
-    private NettyClient nettyClient;
+    private final NettyClient nettyClient;
 
     /**
      * 需要将NettyClient传入，因为要基于此发送消息数据
-     *
-     * @param nettyClient
      */
     public ClientInvocationHandler(NettyClient nettyClient) {
         this.nettyClient = nettyClient;
@@ -26,12 +24,11 @@ public class ClientInvocationHandler implements InvocationHandler {
 
     /**
      * 执行的业务逻辑
-     *
-     * @param proxy
-     * @param method
-     * @param args
-     * @return
-     * @throws Throwable
+     * @param proxy     指代我们所代理的那个真实对象
+     * @param method    指代的是我们所要调用的真实对象的某个方法的Method对象
+     * @param args      指代的是调用真实对象某个方法时的接收的参数
+     * @return      结果
+     * @throws Throwable 异常
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -39,8 +36,6 @@ public class ClientInvocationHandler implements InvocationHandler {
         String className = method.getDeclaringClass().getName();
         String methodName = method.getName();
         Class<?>[] parameterTypes = method.getParameterTypes();
-        Object[] parameters = args;
-
         //封装请求对象
         RpcRequest request = new RpcRequest();
         request.setRequestId(UUID.randomUUID().toString());
@@ -48,14 +43,11 @@ public class ClientInvocationHandler implements InvocationHandler {
         request.setClassName(className);
         request.setMethodName(methodName);
         request.setParameterTypes(parameterTypes);
-        request.setParameters(parameters);
-
+        request.setParameters(args);
         //定义异步的响应对象
         RpcFutureResponse futureResponse = new RpcFutureResponse(request);
-
-        //向服务端发送消息
+        //向服务端发送消息，真正的订单提交操作就是这里发送到服务端然后服务端进行订单提交动作
         nettyClient.sendMsg(request);
-
         //获取异步响应的消息
         RpcResponse rpcResponse = futureResponse.get(5, TimeUnit.SECONDS);
         if (rpcResponse.getErrorMsg() != null) {
@@ -63,5 +55,4 @@ public class ClientInvocationHandler implements InvocationHandler {
         }
         return rpcResponse.getResult();
     }
-
 }

@@ -41,7 +41,8 @@
     使用方法:
         1> 在可能需要异常重试的方法上添加@CustomRetryException注解
         2> 调用方法进行异步方法重试: org.hf.boot.springboot.service.RetryExceptionRecordService.retryExceptionRecord
-
+24. spring重试
+    使用方法见：org.hf.boot.springboot.service.impl.RetryExceptionRecordServiceImpl.springExceptionRetry注释内容
 
 
 扩展: 

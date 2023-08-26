@@ -12,7 +12,6 @@ public class NettyServer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NettyServer.class);
 
-
     public static void start(String host, int port) {
         doStart(host, port);
     }
@@ -22,18 +21,18 @@ public class NettyServer {
         EventLoopGroup boss = new NioEventLoopGroup(1);
         // 工作线程，线程数默认是：cpu*2
         EventLoopGroup worker = new NioEventLoopGroup();
-
         try {
             // 服务器启动类
             ServerBootstrap serverBootstrap = new ServerBootstrap();
-
-            serverBootstrap.group(boss, worker) //设置线程组
-                    .channel(NioServerSocketChannel.class)  //配置server通道
-                    .childHandler(new ServerInitializer()); //worker线程的处理器
-
+            //设置线程组
+            serverBootstrap.group(boss, worker)
+                    //配置server通道
+                    .channel(NioServerSocketChannel.class)
+                    //worker线程的处理器
+                    .childHandler(new ServerInitializer());
+            // 绑定端口号
             ChannelFuture future = serverBootstrap.bind(host, port).sync();
             LOGGER.info("服务器启动完成，地址为：" + host + ":" + port);
-
             //等待服务端监听端口关闭
             future.channel().closeFuture().sync();
         } catch (Exception e) {
@@ -43,7 +42,5 @@ public class NettyServer {
             boss.shutdownGracefully();
             worker.shutdownGracefully();
         }
-
     }
-
 }

@@ -19,6 +19,9 @@ import org.hf.boot.springboot.utils.SpringContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
@@ -150,5 +153,28 @@ public class RetryExceptionRecordServiceImpl implements RetryExceptionRecordServ
             }
         }
         return resultObj;
+    }
+
+    /**
+     * 开启方式:需要在启动类开启@EnableRetry重试注解, 需要依赖spring-retry和spring-boot-starter-aop
+     * // @Retryable spring重试, value-需要重试的异常类型; maxAttempts-最大重试次数, backoff-重试偏移量(delay-重试之间的等待时间, multiplier-等待时间的倍数, mayDelay-最大等待时间默认30秒),  recover-最终重试失败后的回调方法
+     */
+    @Override
+    @Retryable(value = BusinessException.class, maxAttempts = 3, backoff = @Backoff(delay = 60000, multiplier = 2, maxDelay = 600000), recover = "retryFailedCallback")
+    public String springExceptionRetry(Integer number) {
+        log.info("接口访问参数:{}", number);
+        if (new Integer(0).equals(number)) {
+            throw new BusinessException("服务名称或者方法名称为空");
+        }
+        return "接口访问成功";
+    }
+
+    /**
+     * 失败回调方法, 需要和重试方法在同一个类中 方法的回参需要和重试方法一致, 参数列表一定要有重试方法抛出的异常, 然后其他根据需要填充重试方法的入参即可
+     */
+    @Recover
+    public String retryFailedCallback(BusinessException e, Integer number) {
+        log.error("同步用户健康档案信息重试后失败,入参={}", number, e);
+        return "接口访问异常";
     }
 }

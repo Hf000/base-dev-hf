@@ -12,13 +12,12 @@ import org.hf.application.custom.rpc.core.util.MySerializer;
  */
 public class MyEncoder extends MessageToByteEncoder<BaseRpcBean> {
 
-
-    private static MySerializer hessianSerializer = new HessianSerializer();
+    private static final MySerializer HESSIAN_SERIALIZER = new HessianSerializer();
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, BaseRpcBean msg, ByteBuf out) throws Exception {
-        byte[] bytes = hessianSerializer.serialize(msg);
-
+    protected void encode(ChannelHandlerContext ctx, BaseRpcBean msg, ByteBuf out) {
+        // 将消息内容序列化
+        byte[] bytes = HESSIAN_SERIALIZER.serialize(msg);
         out.writeInt(bytes.length);
         out.writeBytes(bytes);
     }

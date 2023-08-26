@@ -6,6 +6,8 @@ import org.hf.boot.springboot.pojo.dto.Result;
 import org.hf.boot.springboot.pojo.dto.RetryExceptionReq;
 import org.hf.boot.springboot.service.RetryExceptionRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,5 +31,11 @@ public class RetryExceptionRecordController {
     public Result<Void> retryExceptionRecord(@RequestBody RetryExceptionReq req) {
         retryExceptionRecordService.retryExceptionRecord(req);
         return new Result<>();
+    }
+
+    @ApiOperation(value = "spring异常重试")
+    @GetMapping("/springExceptionRetry/{number}")
+    public Result<String> springExceptionRetry(@PathVariable("number") Integer number) {
+        return Result.success(retryExceptionRecordService.springExceptionRetry(number));
     }
 }

@@ -2,8 +2,7 @@ package org.hf.application.custom.rpc.order.pojo;
 
 public class Order implements java.io.Serializable{
 
-    private static final long serialVersionUID = 8069637444287105148L;
-
+    private static final long serialVersionUID = 7677458290162024601L;
     private String orderId;
     private Long userId;
     private Long date;

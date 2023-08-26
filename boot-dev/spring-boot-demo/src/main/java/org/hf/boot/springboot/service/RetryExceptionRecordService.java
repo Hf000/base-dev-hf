@@ -30,4 +30,6 @@ public interface RetryExceptionRecordService {
      * @return Object
      */
     Object invokeServiceMethod(InvokeMethodReq req);
+
+    String springExceptionRetry(Integer number);
 }

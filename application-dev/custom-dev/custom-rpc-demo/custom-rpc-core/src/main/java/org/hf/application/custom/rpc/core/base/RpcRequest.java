@@ -2,15 +2,32 @@ package org.hf.application.custom.rpc.core.base;
 
 import java.util.Arrays;
 
+/**
+ * 请求入参
+ */
 public class RpcRequest extends BaseRpcBean {
 
     private static final long serialVersionUID = -4403913516658154989L;
-
-    private long createMillisTime; //创建请求时间
-    private String className; //类名称，全包路径
-    private String methodName; //执行方法名
-    private Class<?>[] parameterTypes; //方法中的参数类型
-    private Object[] parameters; //执行方法传入的参数
+    /**
+     *  创建请求时间
+     */
+    private long createMillisTime;
+    /**
+     *  类名称，全包路径
+     */
+    private String className;
+    /**
+     * 执行方法名
+     */
+    private String methodName;
+    /**
+     * 方法中的参数类型
+     */
+    private Class<?>[] parameterTypes;
+    /**
+     * 执行方法传入的参数
+     */
+    private Object[] parameters;
 
     public long getCreateMillisTime() {
         return createMillisTime;

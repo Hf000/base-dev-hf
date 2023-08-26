@@ -7,10 +7,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
- * <p> rpc服务 </p>
+ * <p> rpc服务 初始化消息处理器 </p >
  * @author hufei
  * @date 2022/8/6 20:42
-*/
+ */
 public class MyRpcServer {
 
     public void start(int port) {
@@ -27,10 +27,15 @@ public class MyRpcServer {
             serverBootstrap.group(boss, worker)
                     //配置server通道
                     .channel(NioServerSocketChannel.class)
-                    //设置worker线程的处理器
+                    // 设置worker线程的处理器, 如果这里只有单个处理器也可以直接加载
+//                    .childHandler(new MyCustomChannelHandler())
+                    // 设置worker线程的处理器, 这里可以设置多个处理器也可以设置单个处理器
                     .childHandler(new MyChannelInitializer());
+            //ByteBuf 的分配要设置为非池化，否则不能切换到堆缓冲区模式
+//            serverBootstrap.childOption(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT);
             //绑定端口
             ChannelFuture future = serverBootstrap.bind(port).sync();
+            System.out.println("服务端启动完成。。。。。");
             //等待服务端监听端口关闭
             future.channel().closeFuture().sync();
         } catch (Exception e) {
