@@ -34,3 +34,8 @@
 ## 系统设置
  1. ctrl + shift + alt + s 开启当前项目的结构体structure
  2. ctrl + alt + s 快捷打开idea的setting窗口 
+ 3. 在settings -> editor -> inspections -> Java -> declaration redundancy -> 
+    unused declarations -> entry points -> annotations可以按注解设置忽略警告
+ 4. 在settings -> editor -> File Encodings中设置文件的编码
+ 5. 在settings -> editor -> Font中设置字体大小
+ 6. 在settings -> editor -> Code Style -> java -> import中设置自动导包的数量

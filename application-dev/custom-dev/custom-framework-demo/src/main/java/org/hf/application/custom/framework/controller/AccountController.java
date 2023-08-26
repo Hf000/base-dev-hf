@@ -20,7 +20,7 @@ public class AccountController {
     @RequestMapping(value = "/account/one")
     public String one() {
         System.out.println("执行了one!");
-        String result = accountService.one();
+        accountService.one();
         return "/WEB-INF/pages/one.jsp";
     }
 
