@@ -30,6 +30,7 @@ public class MyCustomProtocolClientHandler extends SimpleChannelInboundHandler<M
             myProtocol.setBody(data);
             ctx.writeAndFlush(myProtocol);
         }
+        // 这里不用释放是因为进行了自动释放
     }
 
     @Override

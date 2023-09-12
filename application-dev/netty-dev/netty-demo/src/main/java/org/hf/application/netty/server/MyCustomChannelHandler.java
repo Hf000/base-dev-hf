@@ -31,9 +31,9 @@ public class MyCustomChannelHandler extends ChannelInboundHandlerAdapter {
         System.out.println("客户端发来数据：" + msgStr);
         //向客户端发送数据
         ctx.writeAndFlush(Unpooled.copiedBuffer("ok", CharsetUtil.UTF_8));
-        //手动释放资源
+        //手动释放资源 如果采用的是直接缓冲区那么就必须进行释放 注意要手动释放就都手动释放,一定要保持一致
 //        ReferenceCountUtil.release(byteBuf);
-        // 将ByteBuf向下传递, 由流⽔线最后⼀棒 TailHandler 完成⾃动释放。
+        // 将ByteBuf向下传递, 由流⽔线最后⼀棒 TailHandler 完成⾃动释放。 如果采用的是直接缓冲区那么就必须进行释放
         ctx.fireChannelRead(msg);
     }
 

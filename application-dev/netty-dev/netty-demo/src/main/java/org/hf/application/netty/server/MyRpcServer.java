@@ -31,7 +31,7 @@ public class MyRpcServer {
 //                    .childHandler(new MyCustomChannelHandler())
                     // 设置worker线程的处理器, 这里可以设置多个处理器也可以设置单个处理器
                     .childHandler(new MyChannelInitializer());
-            //ByteBuf 的分配要设置为非池化，否则不能切换到堆缓冲区模式
+            // 默认是池化分配， ByteBuf 的分配要设置为非池化，否则不能切换到堆缓冲区模式, 搭配System.setProperty("io.netty.noUnsafe", "true");使用
 //            serverBootstrap.childOption(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT);
             //绑定端口
             ChannelFuture future = serverBootstrap.bind(port).sync();
