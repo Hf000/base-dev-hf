@@ -34,7 +34,7 @@
         6> 直接请求path路径,会转发到target-path
     包下除以上的类,其他均为公共实现
 19. org.hf.boot.springboot.config.AbstractEventSubscriber 拓展spring事件分发和订阅
-20. org.hf.boot.springboot.config.CustomTransactional 自定义事务注解
+20. org.hf.boot.springboot.annotations.CustomTransactional 自定义事务注解
 21. org.hf.boot.springboot.annotations.CustomRedisLock 自定义redis锁实现,支持锁续期
 22. org.hf.boot.springboot.annotations.CustomPrefixRedisLock 自定义redis锁实现,支持spel表达式
 23. org.hf.boot.springboot.retry.CustomRetryException 自定义异步记录需要重试的异常记录

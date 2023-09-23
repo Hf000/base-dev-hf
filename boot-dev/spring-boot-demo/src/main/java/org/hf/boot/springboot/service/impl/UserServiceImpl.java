@@ -1,6 +1,6 @@
 package org.hf.boot.springboot.service.impl;
 
-import org.hf.boot.springboot.config.CustomTransactional;
+import org.hf.boot.springboot.annotations.CustomTransactional;
 import org.hf.boot.springboot.constants.RetryTypeEnum;
 import org.hf.boot.springboot.dao.UserInfoMapper;
 import org.hf.boot.springboot.dao.UserMapper;

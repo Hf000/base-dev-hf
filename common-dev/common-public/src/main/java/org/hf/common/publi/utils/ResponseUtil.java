@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /**
  * <p> 响应工具类 </p>
- *
+ * 此工具类用于业务层服务之间调用的返回响应工具类
  * @author hufei
  * @version 1.0.0
  * @date 2021/10/9 12:23
