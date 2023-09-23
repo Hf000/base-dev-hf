@@ -1,4 +1,4 @@
-package org.hf.boot.springboot.config;
+package org.hf.boot.springboot.aop;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.hf.boot.springboot.annotations.CustomTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -47,7 +48,7 @@ public class CustomTransactionalAspect {
      * @return 返回结果
      */
     @SneakyThrows
-    @Around("@annotation(CustomTransactional)")
+    @Around("@annotation(org.hf.boot.springboot.annotations.CustomTransactional)")
     public Object around(ProceedingJoinPoint joinPoint) {
         // 获取一个事务
         TransactionStatus transaction = transactionManager.getTransaction(transactionDefinition);

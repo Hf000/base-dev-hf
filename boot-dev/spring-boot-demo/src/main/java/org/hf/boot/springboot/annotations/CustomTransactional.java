@@ -1,4 +1,4 @@
-package org.hf.boot.springboot.config;
+package org.hf.boot.springboot.annotations;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
