@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.hf.application.mybatis.tk.springboot.mapper.UserInfoMapper">
+<mapper namespace="org.hf.application.dubbo.provider.boot.mapper.UserInfoMapper">
     <resultMap id="BaseResultMap" type="org.hf.application.dubbo.provider.boot.pojo.entity.UserInfo">
         <!-- WARNING - @mbg.generated -->
         <id column="id" jdbcType="INTEGER" property="id" />

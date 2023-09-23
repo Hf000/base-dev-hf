@@ -14,3 +14,9 @@
     使用方法: 
         1> 引入common-web依赖
         2> 在Controller层方法上添加@ControllerPagination
+# 8. 自定义三种限流注解
+    使用方法: 
+        1> 基于guava的令牌桶限流注解, 在类方法上添加org.hf.common.web.currentlimiting.guava.TokenBucketLimiter注解
+        2> 基于java自带的Semaphore限流注解, 在类方法上添加org.hf.common.web.currentlimiting.semaphore.ShLimiter注解
+        3> 基于sentinel的限流注解, 在类方法上添加org.hf.common.web.currentlimiting.sentinel.SentinelLimiter
+    示例参考: org.hf.springboot.web.controller.CurrentLimitController

@@ -31,6 +31,7 @@
         <pagehelper.version>1.4.3</pagehelper.version>
         <reflections.version>0.10.2</reflections.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
+        <sentinel-core.version>1.8.0</sentinel-core.version>
     </properties>
 
     <dependencyManagement>
@@ -92,6 +93,12 @@
                 <groupId>commons-fileupload</groupId>
                 <artifactId>commons-fileupload</artifactId>
                 <version>${commons-fileupload.version}</version>
+            </dependency>
+            <!-- sentinel依赖 -->
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-core</artifactId>
+                <version>${sentinel-core.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

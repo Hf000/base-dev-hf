@@ -20,7 +20,7 @@
         1> 异步方法使用static修饰;
         2> 异步方法类没有使用@Service注解（或其他注解）导致spring无法扫描到异步类
         3> controller中需要使用@Autowired或@Resource等注解自动注入service类，不能自己手动new对象
-16. spring缓存配置: org.hf.boot.springboot.config.CustomCacheConfig
+16. spring整合redis缓存配置: org.hf.boot.springboot.config.CustomRedisCacheConfig
 17. org.hf.boot.springboot.error.handler.GlobalExceptionHandler 全局异常统一处理,并且集成对响应返回的处理(继承ResponseBodyAdvice,org.hf.boot.springboot.error.handler.GlobalExceptionHandler#beforeBodyWrite自定义响应结果处理)
 18. org.hf.boot.springboot.proxy包下为代理转发相关实现
     整体流程:
@@ -43,7 +43,8 @@
         2> 调用方法进行异步方法重试: org.hf.boot.springboot.service.RetryExceptionRecordService.retryExceptionRecord
 24. spring重试
     使用方法见：org.hf.boot.springboot.service.impl.RetryExceptionRecordServiceImpl.springExceptionRetry注释内容
-
+25. 基于redis+lua脚本实现限流注解@RedisLimitAnnotation **(待验证)**
+    使用方法: 在对应的类方法上添加org.hf.boot.springboot.currentlimit.redis.RedisLimitAnnotation注解
 
 扩展: 
     1. immutables

@@ -9,7 +9,7 @@ import org.assertj.core.util.Lists;
 import java.util.List;
 
 /**
- * <p> 测试类 </p>
+ * <p> 分布式锁测试类{@link PrefixRedisLockUtil} </p>
  *
  * @author hufei
  * @date 2023/4/16 15:37

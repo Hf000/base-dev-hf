@@ -8,78 +8,91 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
+import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @Author:hufei
- * @CreateTime:2020-09-30
- * @Description:连接、消息管理
+ * 连接、消息管理
+ * //@ServerEndpoint("/ws/{messageType}/{userId}")  //开启端点的方式进行访问注解
+ * //@Component    //将该实例实例化到spring容器中
  */
-@ServerEndpoint("/ws/{messageType}/{userId}")     //开启端点的方式进行访问注解
-@Component                          //将该实例实例化到spring容器中
+@ServerEndpoint("/ws/{messageType}/{userId}")
+@Component
 public class WebSocketServer {
-    //日志
-    static Log log = LogFactory.getLog(WebSocketServer.class);
-    //在线数量
-    private static final AtomicInteger onlineCount = new AtomicInteger(0);
-    //处理客户端连接socket
-    private static Map<String, WebSocketServer> webSocketMap = new ConcurrentHashMap<String, WebSocketServer>();
-    //会话信息
-    private Session session;
-    //用户信息
-    private String userId = "";
-    //聊天室
-    private static Map<Integer, ConcurrentHashMap<String, WebSocketServer>> webSocketRoomMap = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, WebSocketServer>>();
-    //当前聊天室频道
-    private Integer roomNum = 0;
-    //聊天室当前在线人数
-    private static Map<Integer, AtomicInteger> roomCountMap = new ConcurrentHashMap<Integer, AtomicInteger>();
 
     /**
-    *@params: [userId, messageType, session]
-    *@return: void
-    *@description: 打开WebSokcet连接
-    *@author: hufei
-    *@time: 2020/10/10 10:32
-    */
+     * 日志
+     */
+    static Log log = LogFactory.getLog(WebSocketServer.class);
+    /**
+     * 在线数量
+     */
+    private static final AtomicInteger ONLINE_COUNT = new AtomicInteger(0);
+    /**
+     * 处理客户端连接socket
+     */
+    private static final Map<String, WebSocketServer> WEBSOCKET_MAP = new ConcurrentHashMap<String, WebSocketServer>();
+    /**
+     * 会话信息
+     */
+    private Session session;
+    /**
+     * 用户信息
+     */
+    private String userId = "";
+    /**
+     * 聊天室
+     */
+    private static final Map<Integer, ConcurrentHashMap<String, WebSocketServer>> WEBSOCKET_ROOM_MAP = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, WebSocketServer>>();
+    /**
+     * 当前聊天室频道
+     */
+    private Integer roomNum = 0;
+    /**
+     * 聊天室当前在线人数
+     */
+    private static final Map<Integer, AtomicInteger> ROOM_COUNT_MAP = new ConcurrentHashMap<Integer, AtomicInteger>();
+
+    /**
+     * 打开WebSokcet连接
+     */
     @OnOpen
-    public void onOPen(@PathParam("userId") String userId, @PathParam("messageType") Integer messageType, Session session) {
+    public void onOpen(@PathParam("userId") String userId, @PathParam("messageType") Integer messageType, Session session) {
         try {
             //处理session和用户信息
             this.session = session;
             this.userId = userId;
             this.roomNum = messageType;
             if (roomNum == 0) {
-                if (webSocketMap.containsKey(userId)) {
-                    webSocketMap.remove(userId);
-                    webSocketMap.put(userId, this);
+                if (WEBSOCKET_MAP.containsKey(userId)) {
+                    WEBSOCKET_MAP.remove(userId);
+                    WEBSOCKET_MAP.put(userId, this);
                 } else {
-                    webSocketMap.put(userId, this);
+                    WEBSOCKET_MAP.put(userId, this);
                     //增加在线人数
                     addOnlineCount(null);
                 }
                 //处理连接成功消息的发送
                 sendMessage("Server>>>>远程WebSoket连接成功");
                 log.info("用户" + userId + "成功连接，当前的在线人数为" + getOnlineCount(null));
-            } else if(roomNum == 1) {
+            } else if (roomNum == 1) {
                 ConcurrentHashMap<String, WebSocketServer> roomMap = null;
                 AtomicInteger roomOnlineCount = null;
-                if (webSocketRoomMap.containsKey(roomNum)) {
-                    roomMap = webSocketRoomMap.get(roomNum);
-                    if (roomCountMap.containsKey(roomNum)) {
-                        roomOnlineCount = roomCountMap.get(roomNum);
+                if (WEBSOCKET_ROOM_MAP.containsKey(roomNum)) {
+                    roomMap = WEBSOCKET_ROOM_MAP.get(roomNum);
+                    if (ROOM_COUNT_MAP.containsKey(roomNum)) {
+                        roomOnlineCount = ROOM_COUNT_MAP.get(roomNum);
                     } else {
                         roomOnlineCount = new AtomicInteger(0);
-                        roomCountMap.put(roomNum, roomOnlineCount);
+                        ROOM_COUNT_MAP.put(roomNum, roomOnlineCount);
                     }
                     if (roomMap.containsKey(userId)) {
                         roomMap.remove(userId);
@@ -91,15 +104,13 @@ public class WebSocketServer {
                 } else {
                     roomMap = new ConcurrentHashMap<String, WebSocketServer>();
                     roomMap.put(userId, this);
-                    webSocketRoomMap.put(roomNum, roomMap);
-                    if (roomCountMap.containsKey(roomNum)) {
-                        roomCountMap.remove(roomNum);
-                    }
+                    WEBSOCKET_ROOM_MAP.put(roomNum, roomMap);
+                    ROOM_COUNT_MAP.remove(roomNum);
                     roomOnlineCount = new AtomicInteger(0);
                     addOnlineCount(roomOnlineCount);
-                    roomCountMap.put(roomNum, roomOnlineCount);
+                    ROOM_COUNT_MAP.put(roomNum, roomOnlineCount);
                 }
-                sendMessageMCR("上线成功");
+                sendMessageMcr("上线成功");
                 log.info("用户" + userId + "成功连接，聊天室当前的在线人数为" + getOnlineCount(roomOnlineCount));
             } else {
                 sendMessage("Server>>>>远程WebSoket连接失败");
@@ -110,12 +121,8 @@ public class WebSocketServer {
     }
 
     /**
-    *@params: [message]
-    *@return: void
-    *@description: 服务端向客户端发送数据
-    *@author: hufei
-    *@time: 2020/10/10 10:35
-    */
+     * 服务端向客户端发送数据
+     */
     public void sendMessage(String message) {
         try {
             this.session.getBasicRemote().sendText(message == null ? "" : message);
@@ -126,60 +133,48 @@ public class WebSocketServer {
     }
 
     /**
-    *@params: [roomOnlineCount]
-    *@return: void
-    *@description: 增加在线人数
-    *@author: hufei
-    *@time: 2020/10/10 10:34
-    */
+     * 增加在线人数
+     */
     public static synchronized void addOnlineCount(AtomicInteger roomOnlineCount) {
-        if (roomOnlineCount != null){
+        if (roomOnlineCount != null) {
             roomOnlineCount.incrementAndGet();
             log.info("聊天室当前在线人数加1，总的在线人数：" + getOnlineCount(roomOnlineCount));
         } else {
-            WebSocketServer.onlineCount.incrementAndGet();
+            WebSocketServer.ONLINE_COUNT.incrementAndGet();
             log.info("websocket连接成功，当前在线人数加1，总的在线人数：" + getOnlineCount(null));
         }
     }
 
     /**
-    *@params: [roomOnlineCount]
-    *@return: AtomicInteger
-    *@description: 获取在线人数的数量
-    *@author: hufei
-    *@time: 2020/10/10 10:36
-    */
+     * 获取在线人数的数量
+     */
     public static synchronized AtomicInteger getOnlineCount(AtomicInteger roomOnlineCount) {
         if (roomOnlineCount != null) {
             return roomOnlineCount;
         } else {
-            return onlineCount;
+            return ONLINE_COUNT;
         }
     }
 
     /**
-    *@params: []
-    *@return: void
-    *@description: 关闭连接
-    *@author: hufei
-    *@time: 2020/10/10 10:37
-    */
+     * 关闭连接
+     */
     @OnClose
     public void onClose() {
         try {
             String msg = "用户退出....";
             if (roomNum == 0) {
-                if (webSocketMap.containsKey(userId)) {
-                    webSocketMap.remove(userId);
+                if (WEBSOCKET_MAP.containsKey(userId)) {
+                    WEBSOCKET_MAP.remove(userId);
                     subOnlineCount(null);
                 }
             } else if (roomNum == 1) {
-                if (webSocketRoomMap.containsKey(roomNum)) {
-                    ConcurrentHashMap<String, WebSocketServer> roomMap = webSocketRoomMap.get(roomNum);
+                if (WEBSOCKET_ROOM_MAP.containsKey(roomNum)) {
+                    ConcurrentHashMap<String, WebSocketServer> roomMap = WEBSOCKET_ROOM_MAP.get(roomNum);
                     if (roomMap.containsKey(userId)) {
                         roomMap.remove(userId);
-                        if (roomCountMap.containsKey(roomNum)) {
-                            AtomicInteger roomOnlineCount = roomCountMap.get(roomNum);
+                        if (ROOM_COUNT_MAP.containsKey(roomNum)) {
+                            AtomicInteger roomOnlineCount = ROOM_COUNT_MAP.get(roomNum);
                             subOnlineCount(roomOnlineCount);
                         }
                     }
@@ -194,29 +189,21 @@ public class WebSocketServer {
     }
 
     /**
-    *@params: [roomOnlineCount]
-    *@return: void
-    *@description: 用户下线，当前在线人数减1
-    *@author: hufei
-    *@time: 2020/10/10 10:37
-    */
+     * 用户下线，当前在线人数减1
+     */
     public static synchronized void subOnlineCount(AtomicInteger roomOnlineCount) {
         if (roomOnlineCount != null) {
             roomOnlineCount.decrementAndGet();
             log.info("聊天室当前在线人数减1，总的在线人数：" + getOnlineCount(roomOnlineCount));
         } else {
-            WebSocketServer.onlineCount.decrementAndGet();
+            WebSocketServer.ONLINE_COUNT.decrementAndGet();
             log.info("websocket连接关闭成功，当前在线人数减1，总的在线人数：" + getOnlineCount(null));
         }
     }
 
     /**
-    *@params: [message, session]
-    *@return: void
-    *@description: 消息中转
-    *@author: hufei
-    *@time: 2020/10/10 10:38
-    */
+     * 消息中转
+     */
     @OnMessage
     public void onMessage(String message, Session session) {
         try {
@@ -227,19 +214,19 @@ public class WebSocketServer {
                 String msg = jsonObject.getString("msg");
                 int type = jsonObject.getInteger("type");
                 if (type == 0) {
-                    if (StringUtils.isNotEmpty(toUserId) && webSocketMap.containsKey(toUserId)) {
+                    if (StringUtils.isNotEmpty(toUserId) && WEBSOCKET_MAP.containsKey(toUserId)) {
                         if (toUserId.equals(userId)) {
                             msg = "不能自己给自己发送消息";
-                            webSocketMap.get(toUserId).sendMessage(msg);
+                            WEBSOCKET_MAP.get(toUserId).sendMessage(msg);
                         } else {
-                            webSocketMap.get(toUserId).sendMessage(msg);
+                            WEBSOCKET_MAP.get(toUserId).sendMessage(msg);
                             sendMessage("发送消息成功！");
                         }
                     } else {
                         sendMessage("您推送消息的目标用户当前不在线，消息推送失败！");
                     }
                 } else if (type == 1) {
-                    sendMessageMCR(msg);
+                    sendMessageMcr(msg);
                 } else {
                     sendMessage("发送消息有误！");
                 }
@@ -250,18 +237,12 @@ public class WebSocketServer {
     }
 
     /**
-    *@params: [msg]
-    *@return: void
-    *@description: 多人聊天发送消息
-    *@author: hufei
-    *@time: 2020/10/10 13:12
-    */
-    private void sendMessageMCR(String msg) {
-        if (webSocketRoomMap.containsKey(roomNum)) {
-            ConcurrentHashMap<String, WebSocketServer> roomMap = webSocketRoomMap.get(roomNum);
-            Iterator<String> iterator = roomMap.keySet().iterator();
-            while(iterator.hasNext()) {
-                String toUserId = iterator.next();
+     * 多人聊天发送消息
+     */
+    private void sendMessageMcr(String msg) {
+        if (WEBSOCKET_ROOM_MAP.containsKey(roomNum)) {
+            ConcurrentHashMap<String, WebSocketServer> roomMap = WEBSOCKET_ROOM_MAP.get(roomNum);
+            for (String toUserId : roomMap.keySet()) {
                 if (toUserId.equals(userId)) {
                     sendMessage(msg);
                 } else {
@@ -272,21 +253,17 @@ public class WebSocketServer {
     }
 
     /**
-    *@params: [message, userId]
-    *@return: boolean
-    *@description: 服务器消息推送
-    *@author: hufei
-    *@time: 2020/10/10 10:38
-    */
+     * 服务器消息推送
+     */
     public static boolean sendInfo(String message, @PathParam("userId") String userId) throws IOException {
         boolean flag = false;
         try {
-            if (StringUtils.isNotEmpty(userId) && webSocketMap.containsKey(userId)) {
-                webSocketMap.get(userId).sendMessage(message);
+            if (StringUtils.isNotEmpty(userId) && WEBSOCKET_MAP.containsKey(userId)) {
+                WEBSOCKET_MAP.get(userId).sendMessage(message);
                 flag = true;
             } else {
                 log.info("用户" + userId + "不在线");
-                flag = false;
+                return false;
             }
         } catch (Exception e) {
             log.error("消息推送异常！");
@@ -294,4 +271,11 @@ public class WebSocketServer {
         return flag;
     }
 
+    /**
+     * 错误处理
+     */
+    @OnError
+    public void onError(Session session, Throwable error) {
+        log.error("用户错误：" + this.userId + "，原因：" + error.getMessage());
+    }
 }

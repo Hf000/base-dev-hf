@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>websocket-springboot-demo</module>
+        <module>socket-demo</module>
     </modules>
 
     <properties>

@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
@@ -16,9 +17,11 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.util.StringUtils;
 
 import java.time.Duration;
@@ -36,9 +39,9 @@ import java.util.Map;
 @Configuration
 @EnableCaching
 @AutoConfigureAfter(RedisAutoConfiguration.class)
-public class CustomCacheConfig extends CachingConfigurerSupport {
+public class CustomRedisCacheConfig extends CachingConfigurerSupport {
 
-    public CustomCacheConfig() {
+    public CustomRedisCacheConfig() {
         log.info("初始化自定义Redis缓存配置...");
     }
 
@@ -107,13 +110,16 @@ public class CustomCacheConfig extends CachingConfigurerSupport {
 
     /**
      * Redis模板自定义配置, 此处报红是由于springboot版本高导致的, 换成2.6.x及以下就ok, 也并不影响启动和编译
+     * 基于redis+lua限流实现注解 - 3
      * @param redisConnectionFactory redis连接工厂
      * @return org.springframework.data.redis.core.RedisTemplate<String, Object>
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+        //设置key的序列化方式为String
         redisTemplate.setKeySerializer(new StringRedisSerializer());
+        // GenericJackson2JsonRedisSerializer可以替换为Jackson2JsonRedisSerializer(Object.class)
         redisTemplate.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         /* Hash key序列化 */
         redisTemplate.setHashKeySerializer(new StringRedisSerializer());
@@ -133,5 +139,17 @@ public class CustomCacheConfig extends CachingConfigurerSupport {
         StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
         stringRedisTemplate.setConnectionFactory(redisConnectionFactory);
         return stringRedisTemplate;
+    }
+
+    /**
+     * redis配合使用lua脚本配置
+     * 基于redis+lua限流实现注解 - 2
+     */
+    @Bean
+    public DefaultRedisScript<Number> redisLuaScript() {
+        DefaultRedisScript<Number> redisScript = new DefaultRedisScript<>();
+        redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("redisLimit.lua")));
+        redisScript.setResultType(Number.class);
+        return redisScript;
     }
 }

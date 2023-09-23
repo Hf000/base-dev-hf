@@ -1,2 +1,29 @@
 server:
   port: 80
+
+# 端口
+#http:
+#  port: 7777
+#server:
+#  # 服务端口 使用HTTPS默认端口
+#  port: 443
+#  # HTTPS加密配置 阿里云证书配置
+#  ssl:
+#    #证书路径
+#    key-store: classpath:4108720_www.it.cloud.pfx
+#    #证书密码
+#    key-store-password: 64BbYVeK
+
+## 端口
+#http.port=7777
+## 指定服务访问端口号
+#server.port=8888
+## jdk证书配置
+## 指定签名文件，对应生成的密钥库文件
+#server.ssl.key-store=classpath:czbk.keystore
+## 指定签名密码，设置的密钥库指令
+#server.ssl.key-store-password=123456
+## 指定密钥仓库类型，JKS
+#server.ssl.key-store-type=JKS
+## 指定别名，生成密钥库的时候进行了设定
+#server.ssl.key-alias=czbk

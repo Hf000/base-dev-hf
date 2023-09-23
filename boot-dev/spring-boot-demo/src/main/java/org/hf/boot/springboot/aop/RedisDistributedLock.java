@@ -29,7 +29,7 @@ public class RedisDistributedLock {
     private final static String PREFIX = "lock_";
     private static final Long RELEASE_SUCCESS = 1L;
     /**
-     * 释放锁的脚本
+     * 释放锁的lua脚本
      */
     private static final String RELEASE_LOCK_SCRIPT = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
 
@@ -53,7 +53,8 @@ public class RedisDistributedLock {
             }
             try {
                 // 如果没有超过最大等待时间, 则暂停一下线程
-                Thread.sleep(5L);
+//                Thread.sleep(5L);
+                TimeUnit.MILLISECONDS.sleep(5);
             } catch (InterruptedException e) {
                 logger.warn("", e);
             }

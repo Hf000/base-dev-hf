@@ -37,9 +37,11 @@ public class IpUtil {
         if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        if (StringUtils.isNotBlank(ip.trim()) && CommonConstant.NULL_STRING.equalsIgnoreCase(ip.trim()) && ip.contains(CommonConstant.EN_COMMA)) {
+        // 对于通过多个代理的情况，第一个IP为客户端真实IP，多个IP按照","分割
+        if (ip != null && StringUtils.isNotBlank(ip.trim()) && !CommonConstant.NULL_STRING.equalsIgnoreCase(ip.trim()) && ip.contains(CommonConstant.EN_COMMA)) {
             ip = ip.split(CommonConstant.EN_COMMA)[0];
         }
+        // 判断是否是本地机器地址
         if (LOCALHOST2.equals(ip) || LOCALHOST.equals(ip)){
             InetAddress inet = null;
             try {

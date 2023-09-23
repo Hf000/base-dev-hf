@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  org.hf.common.web.currentlimiting.guava.GuavaLimiterAop,\
+  org.hf.common.web.currentlimiting.semaphore.SemaphoreLimiterAop,\
+  org.hf.common.web.currentlimiting.sentinel.SentinelLimiterAop
