@@ -28,8 +28,10 @@ public class MyRPCClient {
                     });
             //连接到远程服务
             ChannelFuture future = bootstrap.connect(host, port).sync();
+            // 连接成功后将持续阻塞该线程不会执行到finally中去
             future.channel().closeFuture().sync();
         } finally {
+            // 关闭连接
             worker.shutdownGracefully();
         }
     }

@@ -28,7 +28,7 @@ public class MyRPCServer {
             serverBootstrap.childOption(ChannelOption.ALLOCATOR, UnpooledByteBufAllocator.DEFAULT);
             ChannelFuture future = serverBootstrap.bind(port).sync();
             System.out.println("服务器启动完成，端口为：" + port);
-            //等待服务端监听端口关闭
+            //等待服务端监听端口关闭 连接成功后将持续阻塞该线程不会执行到finally中去
             future.channel().closeFuture().sync();
         } finally {
             //优雅关闭

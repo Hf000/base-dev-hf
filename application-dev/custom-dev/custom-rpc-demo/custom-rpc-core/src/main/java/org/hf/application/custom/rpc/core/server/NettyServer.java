@@ -33,7 +33,7 @@ public class NettyServer {
             // 绑定端口号
             ChannelFuture future = serverBootstrap.bind(host, port).sync();
             LOGGER.info("服务器启动完成，地址为：" + host + ":" + port);
-            //等待服务端监听端口关闭
+            //等待服务端监听端口关闭 连接成功后将持续阻塞该线程不会执行到finally中去
             future.channel().closeFuture().sync();
         } catch (Exception e) {
             LOGGER.error("服务器启动失败！",e);

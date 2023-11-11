@@ -41,7 +41,7 @@ public class MyRpcClient {
                     });
             //建立远程连接
             ChannelFuture future = bootstrap.connect(host, port).sync();
-            //关闭连接
+            // 等待服务端监听端口关闭 连接成功后将持续阻塞该线程不会执行到finally中去
             future.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();

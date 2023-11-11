@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * <p> 文件上传代理对象 </p>
- *
+ * 1.通过代理模式控制对上传原始对象的访问, 2.在代理中增强,用策略模式进行实际上传对象的选择
  * @author hufei
  * @date 2022/7/17 20:02
  */
@@ -55,7 +55,7 @@ public class FileUploadProxy implements ApplicationContextAware {
             //匹配当前用户上传的文件扩展名是否匹配
             for (String suffix : suffixList) {
                 if (extName.equalsIgnoreCase(suffix)) {
-                    //获取指定key   aliyunOSSFileUpload | fastdfsFileUpload; 一旦匹配执行文件上传
+                    //获取指定key   aliyunOSSFileUpload | fastdfsFileUpload 一旦匹配执行文件上传, 这里实际是策略模式思想
                     String key = entry.getKey();
                     return act.getBean(key, FileUpload.class).upload(buffers, extName);
                 }

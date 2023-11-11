@@ -36,7 +36,7 @@ public class MyRpcServer {
             //绑定端口
             ChannelFuture future = serverBootstrap.bind(port).sync();
             System.out.println("服务端启动完成。。。。。");
-            //等待服务端监听端口关闭
+            //等待服务端监听端口关闭 连接成功后将持续阻塞该线程不会执行到finally中去
             future.channel().closeFuture().sync();
         } catch (Exception e) {
             e.printStackTrace();

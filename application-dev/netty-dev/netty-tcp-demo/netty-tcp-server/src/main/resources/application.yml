@@ -1,0 +1,9 @@
+server:
+  # 自定义netty配置
+  netty:
+    # 端口
+    port: 6666
+    # 超时时间
+    connection-timeout: 10000
+  # 服务端口号配置
+  port: 8081

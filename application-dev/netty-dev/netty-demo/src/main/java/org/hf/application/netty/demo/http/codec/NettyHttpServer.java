@@ -43,7 +43,7 @@ public class NettyHttpServer {
             });
             ChannelFuture future = serverBootstrap.bind(8080).sync();
             System.out.println("服务器启动完成。。。。。");
-            //等待服务端监听端口关闭
+            //等待服务端监听端口关闭 连接成功后将持续阻塞该线程不会执行到finally中去
             future.channel().closeFuture().sync();
         } finally {
             //优雅关闭

@@ -25,6 +25,7 @@ public class NettyHessianClient {
                 }
             });
             ChannelFuture future = bootstrap.connect("127.0.0.1", 6677).sync();
+            // 连接成功后将持续阻塞该线程不会执行到finally中去
             future.channel().closeFuture().sync();
         } finally {
             worker.shutdownGracefully();
