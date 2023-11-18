@@ -172,9 +172,15 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
-        <dependency>
+        <!-- jakarta.validation-api为此依赖的升级版本 -->
+        <!--<dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
+        </dependency>-->
+        <!-- 参数校验，这里会引入jakarta.validation-api的依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <!-- spring重试 -->
         <dependency>

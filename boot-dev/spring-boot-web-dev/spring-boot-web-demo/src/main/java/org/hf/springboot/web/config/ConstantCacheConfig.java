@@ -20,6 +20,9 @@ public class ConstantCacheConfig {
 
     private Constants constantNumber;
 
+    /**
+     * //@PostConstruct注解在对象注入完成时执行, 执行顺序: Constructor -> @Autowired -> @PostConstruct, 只执行一次, 此方法不能抛出异常
+     */
     @PostConstruct
     public void init() {
         if (null == constantNumber) {

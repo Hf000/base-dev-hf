@@ -7,7 +7,7 @@ import java.util.List;
  * <p> 对象引用demo </p >
  *  1. 方法之间对象参数的传递是引用复制后的传递, 而不是直接传递的对象的引用
  *  2. 集合保存的是对象引用而不是对象本身, 将一个对象放入到集合中,实际是新维护了一个集合和存放对象的引用关系,而不是直接保存的原有的引用变量
- * @author HUFEI781
+ * @author hf
  * @date 2023-10-19
  **/
 public class ReferencesDemo {

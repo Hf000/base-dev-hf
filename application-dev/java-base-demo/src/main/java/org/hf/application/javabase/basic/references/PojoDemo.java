@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * <p> 测试实体demo </p >
  *
- * @author HUFEI781
+ * @author hf
  * @date 2023-10-19
  **/
 @Data

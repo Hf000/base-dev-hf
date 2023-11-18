@@ -45,6 +45,15 @@
     使用方法见：org.hf.boot.springboot.service.impl.RetryExceptionRecordServiceImpl.springExceptionRetry注释内容
 25. 基于redis+lua脚本实现限流注解@RedisLimitAnnotation **(待验证)**
     使用方法: 在对应的类方法上添加org.hf.boot.springboot.currentlimit.redis.RedisLimitAnnotation注解
+26. javax.validation.Valid的@Valid和org.springframework.validation.annotation.Validated的@Validated注解区别:
+    1> 加载方式差异: @Valid是SpringMVC在进行参数加载的时候, 对验证器接口通过SPI的方式加载的hibernate参数验证器实现; @Validated是Spring通过自动配置类去加载的;
+    2> 实现方式: 在controller层, @Valid和@Validated是SpringMVC处理器生成参数对象的时候进行参数验证生效的; 在service层, @Validated是通过Spring AOP的方式进行切面拦截@Valid生效的;
+    3> 使用方式: 在controller层, 都可以直接在方法入参前加上@Valid或者@Validated注解; 在service层要使用方法的@Valid生效, 需要在类上加上@Validated注解;
+    4> 使用区别: @Valid注解可以实现对参数对象的嵌套校验; @Validated注解可以实现对参数对象的分组校验;
+    5> 需要引入的依赖: spring-boot-starter-validation
+    6> 使用实例: org.hf.boot.springboot.controller.ValidatedController
+    7> 扩展: 自定义校验注解, 需要在自定义注解上指定校验器实现类@Constraint(validatedBy = 类名.class), 然后实现类实现接口ConstraintValidator<注解类型, 参数类型>
+
 
 
 扩展: 
@@ -144,6 +153,10 @@
                     j. 常见情况的性能对比: Using index > NULL > Using where >= Using temporary > Using filesort
         7.2 MySQL索引存在在硬盘中(会在硬盘的指定文件中存储), 这样能避免服务宕机导致数据丢失, 当服务启动时会加载到内存中, 这样能提高索引查询效率
         7.3 MySQL的主键的最大值存储在表结构信息中, 同理7.2, 服务启动时会将表结构信息加载到内存中
+        7.4 MySQL的varchar转int类型, 如果用字符串和数值进行比较, 此时字符串和数值都会转换成浮点数(此操作会导致该字段索引失效), 转换如下:
+            1> SELECT CAST('abc123' AS SIGNED); -> 0
+            2> SELECT CAST('123abc' AS SIGNED); -> 123
+            3> SELECT CAST('12' AS SIGNED); -> 12
     8. Doris相关, 参考文档1: https://www.bookstack.cn/read/doris-1.2-zh/157a16c97e044495.md 参考文档2: https://doris.apache.org/zh-CN/docs/dev/lakehouse/multi-catalog/jdbc/
         8.1 doris建表, 三种模型: Unique - 唯一索引模型; Aggregate - 数据聚合模型; Duplicate - 数据明细模型;
             8.1.1 创建doris数据库表, 模型UNIQUE KEY
