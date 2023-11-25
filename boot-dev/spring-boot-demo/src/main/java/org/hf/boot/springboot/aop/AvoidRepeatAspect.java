@@ -107,8 +107,8 @@ public class AvoidRepeatAspect {
      * @return 返回时间, 单位毫秒
      */
     private long getExpiredInMilliSeconds(MethodSignature methodSignature) {
-        CustomAvoidRepeat jarvisAvoidRepeat = methodSignature.getMethod().getAnnotation(CustomAvoidRepeat.class);
-        return jarvisAvoidRepeat.value();
+        CustomAvoidRepeat customAvoidRepeat = methodSignature.getMethod().getAnnotation(CustomAvoidRepeat.class);
+        return customAvoidRepeat.value();
     }
 
     /**
@@ -141,8 +141,8 @@ public class AvoidRepeatAspect {
         }
         res += url;
         // userId
-        CustomAvoidRepeat jarvisAvoidRepeat = methodSignature.getMethod().getAnnotation(CustomAvoidRepeat.class);
-        if (jarvisAvoidRepeat.needUserId()) {
+        CustomAvoidRepeat customAvoidRepeat = methodSignature.getMethod().getAnnotation(CustomAvoidRepeat.class);
+        if (customAvoidRepeat.needUserId()) {
             Integer userId = getUserId();
             res += ("_" + userId);
         }

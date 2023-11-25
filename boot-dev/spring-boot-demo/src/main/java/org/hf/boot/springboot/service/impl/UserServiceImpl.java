@@ -1,6 +1,7 @@
 package org.hf.boot.springboot.service.impl;
 
 import org.hf.boot.springboot.annotations.CustomTransactional;
+import org.hf.boot.springboot.config.UserContext;
 import org.hf.boot.springboot.constants.RetryTypeEnum;
 import org.hf.boot.springboot.dao.UserInfoMapper;
 import org.hf.boot.springboot.dao.UserMapper;
@@ -109,6 +110,12 @@ public class UserServiceImpl implements UserService {
         req.setUserName(req.getUserName() + count);
         addUserInfo(req);
         System.out.println(Thread.currentThread().getName() + "线程测试" + count);
+    }
+
+    @Override
+    @Async("customTaskExecutor")
+    public void testAysnc() {
+        System.out.println(UserContext.getUser());
     }
 
 }

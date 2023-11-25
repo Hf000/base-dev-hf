@@ -105,7 +105,7 @@ public class SpringContextUtil implements ApplicationContextAware, EnvironmentAw
 
     public static String getUuid20() {
         StringBuilder shortBuffer = new StringBuilder();
-        shortBuffer.append("JVS_");
+        shortBuffer.append("CUSTOM_");
         String uuid = UUID.randomUUID().toString().replace("-", "");
         for (int i = 0; i < 16; i++) {
             String str = uuid.substring(i * 2, i * 2 + 2);

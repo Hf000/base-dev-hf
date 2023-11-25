@@ -38,7 +38,7 @@ public class AsyncExecutorConfig {
      * bean的名称，默认为首字母小写的方法名
      */
     @Bean("customTaskExecutor")
-    public ThreadPoolTaskExecutor jvsTaskExecutor() {
+    public ThreadPoolTaskExecutor customTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(CORE_POOL_SIZE);
         executor.setMaxPoolSize(MAX_POOL_SIZE);

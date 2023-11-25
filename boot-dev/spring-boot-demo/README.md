@@ -20,6 +20,12 @@
         1> 异步方法使用static修饰;
         2> 异步方法类没有使用@Service注解（或其他注解）导致spring无法扫描到异步类
         3> controller中需要使用@Autowired或@Resource等注解自动注入service类，不能自己手动new对象
+    15.4 通过TaskDecorator实现自定义任务装饰器, 进行Spring异步线程池的线程上下文传递
+        1> 实现: org.hf.boot.springboot.config.CustomThreadPoolTaskDecorator
+        2> 使用案例:org.hf.boot.springboot.controller.UserController.testAysnc
+    15.5 通过实现AsyncConfigurer接口, 实现springboot默认线程池的替换和异步线程执行异常捕获
+        1> 重写方法实现线程池替换: org.hf.boot.springboot.config.AsyncExecutorConfig.getAsyncExecutor
+        2> 重写方法实现线程池异步任务异常捕获: org.hf.boot.springboot.config.AsyncExecutorConfig.getAsyncUncaughtExceptionHandler
 16. spring整合redis缓存配置: org.hf.boot.springboot.config.CustomRedisCacheConfig
 17. org.hf.boot.springboot.error.handler.GlobalExceptionHandler 全局异常统一处理,并且集成对响应返回的处理(继承ResponseBodyAdvice,org.hf.boot.springboot.error.handler.GlobalExceptionHandler#beforeBodyWrite自定义响应结果处理)
 18. org.hf.boot.springboot.proxy包下为代理转发相关实现
@@ -53,6 +59,7 @@
     5> 需要引入的依赖: spring-boot-starter-validation
     6> 使用实例: org.hf.boot.springboot.controller.ValidatedController
     7> 扩展: 自定义校验注解, 需要在自定义注解上指定校验器实现类@Constraint(validatedBy = 类名.class), 然后实现类实现接口ConstraintValidator<注解类型, 参数类型>
+27. 根据自定义枚举注解@CustomEnum获取具体枚举的枚举项列表; 参考实例: org.hf.boot.springboot.controller.EnumController.getEnumList
 
 
 
@@ -216,10 +223,10 @@
                 )
                 WITH (
                   'connector' = 'mysql-cdc',
-                  'hostname' = 'T3MJARVIS-mysql.dbstg.paic.com.cn',
+                  'hostname' = 'mysql.dbstg.paic.com.cn',
                   'port' = '3116',
-                  'username' = 'pub_test',
-                  'password' = 'Jvs2021!@Test',
+                  'username' = 'test',
+                  'password' = 'password',
                   'database-name' = 'customer',
                   'table-name' = 'customer_info',
                   'jdbc.properties.tinyInt1isBit' = 'false'
@@ -266,9 +273,9 @@
                 FROM KAFKA
                 (
                   "kafka_broker_list" = "30.104.225.11:9092,30.104.225.12:9092,30.104.225.13:9092",
-                  "kafka_topic" = "sx_jarvis_core-jarvis_customer_data_sync",
+                  "kafka_topic" = "topic_data_sync",
                   "property.group.id" = "customer_info",
-                  "property.client.id" = "sx_jarvis_core.jarvis_customer_data_sync.jJL6CWtfFB",
+                  "property.client.id" = "client_data_sync.jJL6CWtfFB",
                   "property.kafka_default_offsets" = "OFFSET_BEGINNING"
                 );
                 -- 指定json根节点: "json_root" = "$.after"

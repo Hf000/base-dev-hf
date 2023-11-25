@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
  *     @CustomPrefixRedisLock(lockNamePrefix = "UPDATE_USER_INFO_LOCK_PREFIX", lockNameDiffExpress = "#{userInfo.userId}")
  *     public void updateUserInfo(UserInfo userInfo) {...}
  *  5> userId从静态方法中获取
- *     @CustomPrefixRedisLock(lockNamePrefix = "UPDATE_USER_INFO_LOCK_PREFIX", lockNameDiffExpress = "#{T(com.paic.jarvis.common.dto.UserContext).getUserId()}")
+ *     @CustomPrefixRedisLock(lockNamePrefix = "UPDATE_USER_INFO_LOCK_PREFIX", lockNameDiffExpress = "#{T(org.hf.boot.springboot.config.UserContext).getUserId()}")
  *     public void updateUserInfo() {...}
  *  6> 分布式锁工具类：org.hf.boot.springboot.aop.PrefixRedisLockUtil
  *     public class Test {

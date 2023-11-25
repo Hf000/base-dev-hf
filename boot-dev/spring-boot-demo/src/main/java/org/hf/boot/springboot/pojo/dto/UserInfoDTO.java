@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Date;
+import java.io.Serializable;
 
 /**
  * <p>  </p>
@@ -14,14 +14,9 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class UserInfoDTO extends BaseDataDTO {
+public class UserInfoDTO implements Serializable {
     private static final long serialVersionUID = -5201854131689368150L;
-    private Integer id;
+    private Integer userId;
     private String userName;
-    private String password;
-    private String name;
-    private Byte age;
-    private String sex;
-    private Date birthday;
-
+    private String systemCode;
 }

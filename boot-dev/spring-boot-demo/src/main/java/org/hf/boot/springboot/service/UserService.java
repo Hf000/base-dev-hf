@@ -30,4 +30,6 @@ public interface UserService {
     void addUserInfo(UserInfoReq req);
 
     void addUserInfoAysnc(UserInfoReq req);
+
+    void testAysnc();
 }

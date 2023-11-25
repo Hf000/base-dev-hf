@@ -89,4 +89,9 @@ public class UserController {
         return new Result<>();
     }
 
+    @PostMapping("testAysnc")
+    public Result<Void> testAysnc() {
+        userServiceImpl.testAysnc();
+        return new Result<>();
+    }
 }
