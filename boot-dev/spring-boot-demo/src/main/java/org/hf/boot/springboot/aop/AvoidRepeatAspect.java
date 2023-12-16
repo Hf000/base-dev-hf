@@ -10,6 +10,7 @@ import org.hf.boot.springboot.annotations.CustomAvoidRepeat;
 import org.hf.boot.springboot.utils.Md5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @Order(-9999)
+@ConditionalOnProperty(name = "redis.enable", havingValue = "true")
 public class AvoidRepeatAspect {
 
     @Autowired

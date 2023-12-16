@@ -58,7 +58,7 @@ public @interface CustomPrefixRedisLock {
     String lockNameDiffExpress() default "";
 
     /**
-     * (支持多重锁的)锁特殊标识符的表达式, 当需要多个锁的场景时可以使用。会默认用String的自然顺序排序后逐个获取锁
+     * (支持多重锁的)锁特殊标识符的表达式,当需要多个锁的场景时可以使用。会默认用String的自然顺序排序后逐个获取锁
      */
     String multiLockNameDiffExpress() default "";
 

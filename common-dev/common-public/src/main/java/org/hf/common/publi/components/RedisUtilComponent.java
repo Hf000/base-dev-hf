@@ -300,7 +300,7 @@ public class RedisUtilComponent {
     }
 
     /**
-     * Redis Incr 命令将 key 中储存的数字值增1，如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作，且将key的有效时间设置为长期有效。<br/>
+     * Redis Incr 命令将 key 中储存的数字值增1，如果 key 不存在，那么 key 的值会先被初始化为 0 ，然后再执行 INCR 操作，且将key的有效时间设置为长期有效。
      * @param key key
      * @return 自增后结果
      */

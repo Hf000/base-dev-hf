@@ -13,7 +13,7 @@ public enum SensitiveTypeEnum {
     CHINESE_NAME,
 
     /**
-     * 电子邮件,@前的字符显示前2位，2位后掩盖，@后面完整显示, DJ*********@pingan.com.cn
+     * 电子邮件,@前的字符显示前2位，2位后掩盖，@后面完整显示, DJ*********@163.com.cn
      */
     EMAIL,
 

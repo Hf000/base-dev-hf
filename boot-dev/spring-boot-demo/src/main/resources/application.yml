@@ -13,18 +13,26 @@ spring:     #spring配置项
     url: jdbc:mysql://127.0.0.1:3306/base_dev?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false      #数据库连接地址
     username: root      #数据库账号
     password: root      #数据库密码
-  redis:      #配置redis相关参数
-    host: localhost     #默认
-    port: 6379      #默认
+  jpa:      # spring data jpa相关配置
+    database: mysql     # 表示jpa的数据库类型是mysql，如果不配置则默认根据数据源信息进行选择，建议手动配置
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect      # 不加这句则默认为myisam引擎，配置为InnoDB引擎
+    hibernate:
+      ddl-auto: update      # 项目启动时根据实体类更新数据库中对应的表结构
+    show-sql: true      # 是否在控制台打印jpa执行的sql语句
+#  redis:      #配置redis相关参数
+#    host: localhost     #默认，如果是默认参数这里可以不用配置
+#    port: 6379      #默认，如果是默认参数这里可以不用配置
   mvc:
     pathmatch:
-      matching-strategy: ant_path_matcher # swagger3.0.0整合springboot2.7.2报空指针问题
+      matching-strategy: ant_path_matcher     # swagger3.0.0整合springboot2.7.2报空指针问题
 
 mybatis:      #mybatis配置
   type-aliases-package: org.hf.boot.springboot.pojo.entity      #配置实体类别名包路径，配置这个配置项在mapper里面就不需要写全限定名了，只需要写对应实体类名即可
   mapper-locations: classpath:mapper/*.xml      #配置mapper映射文件路径地址，如果没有则不写该项配置
   configuration:      #配置mybati日志配置项
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl     #配置mybatis日志后台输出
+  type-handlers-package: org.hf.boot.springboot.enumerate.repository.mybatis      # 配置mybatis自定义类型转换处理器包路径
+
 mapper:     #通用mapper配置项
   identity: MYSQL     #取回主键的方式
   not-empty: false      #是否判断字符串类型!=''
@@ -40,20 +48,25 @@ logging:      #配置日志的记录级别
     org.hf: info      #表示以org.hf开头的类的日志记录级别是debug
     org.springframework: error     #表示以org.springframework开头的类的日志记录级别是info
 
-#springfox:
+#springfox:     # swagger配置项
 #  documentation:
 #    swagger-ui:
 #      enabled: true # 开启swagger文档,也可在配置类中设置
 
-# 过滤器开关
-request:
+request:      # 自定义过滤器开关
   filter:
     enable: true
 
-# 请求代理相关配置
-proxy:
+proxy:      # 自定义请求代理转发相关配置
   servlet:
     open: true
   server:
     url:
       customService: http://localhost:${server.port}${server.servlet.context-path}
+
+redis:      # 自定义redis相关配置开关
+  enable: false
+  cache:      # 自定义redis缓存配置开关
+    enable: false
+  lock:     # 自定义redis分布式锁配置开关
+    enable: false

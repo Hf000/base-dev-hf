@@ -128,7 +128,7 @@ public class SpringContextUtil implements ApplicationContextAware, EnvironmentAw
     }
 
     /**
-     * 获取当前线程请求对象<br/>
+     * 获取当前线程请求对象
      */
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -136,7 +136,7 @@ public class SpringContextUtil implements ApplicationContextAware, EnvironmentAw
     }
 
     /**
-     * 获取当前线程响应对象<br/>
+     * 获取当前线程响应对象
      */
     public static HttpServletResponse getResponse() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -144,7 +144,7 @@ public class SpringContextUtil implements ApplicationContextAware, EnvironmentAw
     }
 
     /**
-     * 获取实现类的bean实例<br/>
+     * 获取实现类的bean实例
      *
      * @param requiredType 类型
      * @return T

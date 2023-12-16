@@ -12,6 +12,7 @@ import org.hf.boot.springboot.annotations.CustomRedisLock;
 import org.hf.boot.springboot.constants.RedisLockTypeEnum;
 import org.hf.boot.springboot.pojo.bo.RedisLockBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 @Aspect
+@ConditionalOnProperty(name = "redis.lock.enable", havingValue = "true")
 public class RedisLockAspect {
 
     /**

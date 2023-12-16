@@ -197,7 +197,7 @@ public class SerialNoUtil {
     }
 
     /**
-     * 获取自增数，redis锁24小时有效期<br/>
+     * 获取自增数，redis锁24小时有效期
      *
      * @param redisKey 入参
      * @return long
@@ -211,7 +211,7 @@ public class SerialNoUtil {
     }
 
     /**
-     * 获取自增数，redis锁60分钟有效期<br/>
+     * 获取自增数，redis锁60分钟有效期
      *
      * @param redisKey 入参
      * @return long
@@ -225,7 +225,7 @@ public class SerialNoUtil {
     }
 
     /**
-     * 获取自增数，redis锁60秒有效期<br/>
+     * 获取自增数，redis锁60秒有效期
      *
      * @param redisKey 入参
      * @return long

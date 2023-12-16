@@ -57,10 +57,9 @@ public class GlobalExceptionHandler implements ResponseBodyAdvice<Object> {
 //            return om.writeValueAsString(new Result<>(false, StatusCode.ERROR, "系统错误"));
             // 在配置类org.hf.boot.springboot.config.WebConfig中的configureMessageConverters方法处理转换器
             return Result.fail(body);
-        }
-        if (body instanceof Result) {
+        } else {
+            // 注意: 这里不能统一包装,需要根据已识别的返回类型做定制化封装,如果统一包装可能会出现问题,例如:会导致swagger无法使用,因为将swagger返回类型进行了转换导致无法识别
             return body;
         }
-        return Result.success(body);
     }
 }

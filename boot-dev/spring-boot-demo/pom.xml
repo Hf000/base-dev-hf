@@ -24,7 +24,8 @@
         <hutool-all.version>5.8.4</hutool-all.version>
         <fastjson2.version>2.0.10</fastjson2.version>
         <guava.version>31.1-jre</guava.version>
-        <jetbrains.annotations>13.0</jetbrains.annotations>
+        <jetbrains.annotations.version>13.0</jetbrains.annotations.version>
+        <easyexcel.version>3.0.5</easyexcel.version>
     </properties>
 
     <dependencies>
@@ -91,6 +92,11 @@
                 <exclusion>
                     <artifactId>spring-boot-starter-jdbc</artifactId>
                     <groupId>org.springframework.boot</groupId>
+                </exclusion>
+                <!-- 这里排除的原因是和下面引入的jpa依赖中的jar冲突了 -->
+                <exclusion>
+                    <groupId>javax.persistence</groupId>
+                    <artifactId>persistence-api</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -188,10 +194,22 @@
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
+        <!-- jetbrains注解依赖 -->
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>${jetbrains.annotations}</version>
+            <version>${jetbrains.annotations.version}</version>
+        </dependency>
+        <!-- jpa依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <!-- easyexcel依赖 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>${easyexcel.version}</version>
         </dependency>
     </dependencies>
 

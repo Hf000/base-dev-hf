@@ -174,7 +174,7 @@ public final class Md5Util {
     }
 
     /**
-     * 二进制byte数组转十六进制<br/>
+     * 二进制byte数组转十六进制
      * @param bin byte array
      * @return hex string
      */
@@ -183,7 +183,7 @@ public final class Md5Util {
     }
 
     /**
-     * 十六进制转二进制byte数组<br/>
+     * 十六进制转二进制byte数组
      * @param hex hex string
      * @return byte array
      */

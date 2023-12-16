@@ -51,7 +51,7 @@ public class RestTemplateUtil {
     }
 
     /**
-     * GET请求 参数封装在URL中<br/>
+     * GET请求 参数封装在URL中
      *
      * @param urlWithParam 带参数的URL
      * @return 结果json字符串
@@ -63,7 +63,7 @@ public class RestTemplateUtil {
     }
 
     /**
-     * GET请求 在URL中预留占位<br/>
+     * GET请求 在URL中预留占位
      *
      * @param url url?param1={param1}&param2={param2}...
      * @return 结果json字符串
@@ -75,7 +75,7 @@ public class RestTemplateUtil {
     }
 
     /**
-     * GET请求 在URL中预留占位<br/>
+     * GET请求 在URL中预留占位
      *
      * @param url url?param1={param1}&param2={param2}...
      * @return 结果json字符串
@@ -180,7 +180,7 @@ public class RestTemplateUtil {
     }
 
     /**
-     * POST表单数据<br/>
+     * POST表单数据
      */
     public static String postForm(String url, HttpHeaders httpHeaders, MultiValueMap<String, Object> params) {
         //  封装参数，千万不要替换为Map与HashMap，否则参数无法传递

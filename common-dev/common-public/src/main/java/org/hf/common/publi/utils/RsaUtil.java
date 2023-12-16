@@ -39,11 +39,11 @@ public class RsaUtil {
     private static final String FULL_CIPHER_NAME = "RSA/ECB/PKCS1Padding";
     private static final String ALGORITHM = "RSA";
     /**
-     * RSA默认加密位数 1024bit<br/>
+     * RSA默认加密位数 1024bit
      */
     private static final int DEFAULT_KEY_SIZE = 1024;
     /**
-     * RSA加密位数 2048bit<br/>
+     * RSA加密位数 2048bit
      */
     private static final int KEY_SIZE_2048 = 2048;
 
@@ -51,40 +51,40 @@ public class RsaUtil {
     }
 
     /**
-     * 公钥加密<br/>
-     * param就是请求的参数<br/>
+     * 公钥加密
+     * param就是请求的参数
      */
     public static String publicEncrypt(String data, String publicKey) throws GeneralSecurityException, IOException {
         return doPublicEncrypt(data, getPublicKeyFromX509(publicKey), DEFAULT_KEY_SIZE);
     }
 
     /**
-     * 公钥加密<br/>
-     * param就是请求的参数<br/>
+     * 公钥加密
+     * param就是请求的参数
      */
     public static String publicEncrypt(final Map<String, String> params, String publicKey) throws GeneralSecurityException, IOException {
         return doPublicEncrypt(JSON.toJSONString(parseString(params)), getPublicKeyFromX509(publicKey), DEFAULT_KEY_SIZE);
     }
 
     /**
-     * 公钥加密2048<br/>
-     * param就是请求的参数<br/>
+     * 公钥加密2048
+     * param就是请求的参数
      */
     public static String publicEncrypt2048(String data, String publicKey) throws GeneralSecurityException, IOException {
         return doPublicEncrypt(data, getPublicKeyFromX509(publicKey), KEY_SIZE_2048);
     }
 
     /**
-     * 公钥加密2048<br/>
-     * param就是请求的参数<br/>
+     * 公钥加密2048
+     * param就是请求的参数
      */
     public static String publicEncrypt2048(final Map<String, String> params, String publicKey) throws GeneralSecurityException, IOException {
         return doPublicEncrypt(JSON.toJSONString(parseString(params)), getPublicKeyFromX509(publicKey), KEY_SIZE_2048);
     }
 
     /**
-     * 私钥解密<br/>
-     * data就是待解密的数据<br/>
+     * 私钥解密
+     * data就是待解密的数据
      */
     public static String privateDecrypt(String data, String privateKey) throws GeneralSecurityException, IOException {
         String decrypt = doPrivateDecrypt(data, getPrivateKeyFromPkcs8(privateKey), DEFAULT_KEY_SIZE);
@@ -92,8 +92,8 @@ public class RsaUtil {
     }
 
     /**
-     * 私钥解密2048<br/>
-     * data就是待解密的数据<br/>
+     * 私钥解密2048
+     * data就是待解密的数据
      */
     public static String privateDecrypt2048(String data, String privateKey) throws GeneralSecurityException, IOException {
         String decrypt = doPrivateDecrypt(data, getPrivateKeyFromPkcs8(privateKey), KEY_SIZE_2048);
@@ -101,7 +101,7 @@ public class RsaUtil {
     }
 
     /**
-     * 公钥加密<br/>
+     * 公钥加密
      * @param data 待加密数据
      */
     private static String doPublicEncrypt(String data, Key publicKey, int keySize) throws GeneralSecurityException, IOException {
@@ -133,7 +133,7 @@ public class RsaUtil {
     }
 
     /**
-     * 私钥解密<br/>
+     * 私钥解密
      * @param data 待解密数据
      */
     private static String doPrivateDecrypt(String data, Key privateKey, int keySize) throws GeneralSecurityException, IOException {
@@ -164,7 +164,7 @@ public class RsaUtil {
     }
 
     /**
-     * 获取公钥对象<br/>
+     * 获取公钥对象
      * @param publicKey 公钥字符串
      */
     public static PublicKey getPublicKeyFromX509(String publicKey) throws NoSuchAlgorithmException,
@@ -176,7 +176,7 @@ public class RsaUtil {
     }
 
     /**
-     * 获取私钥对象<br/>
+     * 获取私钥对象
      * @param privateKey 私钥字符串
      */
     public static PrivateKey getPrivateKeyFromPkcs8(String privateKey) throws GeneralSecurityException {
@@ -217,14 +217,14 @@ public class RsaUtil {
     }
 
     /**
-     * 生成默认1024bit密钥对<br/>
+     * 生成默认1024bit密钥对
      */
     private static KeyPair generatorKeyPair() throws NoSuchAlgorithmException {
         return generatorKeyPair(DEFAULT_KEY_SIZE);
     }
 
     /**
-     * 生成指定长度密钥对<br/>
+     * 生成指定长度密钥对
      */
     private static KeyPair generatorKeyPair(int keySize) throws NoSuchAlgorithmException {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM);
@@ -234,7 +234,7 @@ public class RsaUtil {
     }
 
     /**
-     * 生成秘钥对，私钥格式：pkcs8，公钥格式：X509<br/>
+     * 生成秘钥对，私钥格式：pkcs8，公钥格式：X509
      *
      * @throws NoSuchAlgorithmException 异常
      */

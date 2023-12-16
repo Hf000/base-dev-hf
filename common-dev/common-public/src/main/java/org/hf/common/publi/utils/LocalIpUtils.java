@@ -58,7 +58,7 @@ public class LocalIpUtils {
     }
 
     /**
-     * 判断是否windows操作系统<br/>
+     * 判断是否windows操作系统
      * @return boolean true-是Windows操作系统
      */
     public static boolean isWindowsOs(){

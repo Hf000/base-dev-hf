@@ -90,7 +90,7 @@ public class CustomEnvironmentPostProcessor implements EnvironmentPostProcessor 
                     log.error("CustomEnvironmentPostProcessor.postProcessEnvironment 配置文件{}查询不到PropertySourceLoader", location);
                 }
             } catch (IOException e) {
-                log.warn("CustomEnvironmentPostProcessor.postProcessEnvironment 加载配置文件{}失败: {}", location, e);
+                log.warn("CustomEnvironmentPostProcessor.postProcessEnvironment 加载配置文件{}失败", location, e);
             }
         }
     }

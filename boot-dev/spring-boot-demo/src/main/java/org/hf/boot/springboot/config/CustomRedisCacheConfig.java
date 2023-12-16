@@ -2,6 +2,7 @@ package org.hf.boot.springboot.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
@@ -39,6 +40,7 @@ import java.util.Map;
 @Configuration
 @EnableCaching
 @AutoConfigureAfter(RedisAutoConfiguration.class)
+@ConditionalOnProperty(name = "redis.cache.enable", havingValue = "true")
 public class CustomRedisCacheConfig extends CachingConfigurerSupport {
 
     public CustomRedisCacheConfig() {

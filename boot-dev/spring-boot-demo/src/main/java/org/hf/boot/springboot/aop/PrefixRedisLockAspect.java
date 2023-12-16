@@ -9,6 +9,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.assertj.core.util.Lists;
 import org.hf.boot.springboot.annotations.CustomPrefixRedisLock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.expression.MapAccessor;
 import org.springframework.core.annotation.Order;
 import org.springframework.expression.Expression;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @Order(-10000)
+@ConditionalOnProperty(name = "redis.lock.enable", havingValue = "true")
 public class PrefixRedisLockAspect {
 
     @Autowired
