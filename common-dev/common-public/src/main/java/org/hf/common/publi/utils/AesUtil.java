@@ -36,11 +36,11 @@ public class AesUtil {
     private static final String DEFAULT_KEY256 = "J/Qfj4F/XZxLGg8O0kqjO3s/oPSUcqhiK+rP0RP5TVc=";
     private static final String RANDOM_TYPE = "SHA1PRNG";
     /**
-     * 默认密钥大小<br/>
+     * 默认密钥大小
      */
     private static final int DEFAULT_KEY_SIZE = 128;
     /**
-     * 256位密钥大小<br/>
+     * 256位密钥大小
      */
     private static final int KEY_SIZE_256 = 256;
 
@@ -80,7 +80,7 @@ public class AesUtil {
     }
 
     /**
-     * 根据key加密数据<br/>
+     * 根据key加密数据
      * @param content 需要加密的数据
      * @param key     base64后的key
      * @return 加密后base64数据
@@ -95,7 +95,7 @@ public class AesUtil {
     }
 
     /**
-     * 根据key 解密<br/>
+     * 根据key 解密
      * @param encryptedString 加密后base64数据
      * @param keyBase64       base64后的key
      * @return 解密后数据
@@ -110,7 +110,7 @@ public class AesUtil {
     }
 
     /**
-     * create AES Cipher<br/>
+     * create AES Cipher
      */
     public static Cipher getAesCipher(int cipherMode, SecretKeySpec key) {
         Cipher cipher;
@@ -127,7 +127,7 @@ public class AesUtil {
     /***************************************方式一结束********************************************/
     /***************************************方式二开始********************************************/
     /**
-     * AES加密<br/>
+     * AES加密
      * @param content         待加密原文
      * @param secret          base64处理后的对称秘钥
      * @param cipherTransform 秘钥全称，AES/CBC/PKCS5Padding
@@ -149,7 +149,7 @@ public class AesUtil {
     }
 
     /**
-     * AES解密<br/>
+     * AES解密
      * @param content         十六进制加密串
      * @param secret          base64处理后的对称秘钥
      * @param cipherTransform 秘钥全称，AES/CBC/PKCS5Padding
