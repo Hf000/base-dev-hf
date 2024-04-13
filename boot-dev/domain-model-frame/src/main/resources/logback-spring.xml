@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 配置文件加载顺序:logback.xml —> application.properties —> logback-spring.xml -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 自定义变量获取 -->
+    <define name="ip" class="org.hf.domain.model.frame.web.config.logback.LogbackIpDefine"/>
+    <!-- 变量定义,日志输出相关配置 -->
+    <property name="app.shortName" value="custom"/>
+    <property name="console_log_pattern"
+              value="%d{HH:mm:ss.SSS} %clr(%5p) %clr([%15.15t]){faint} [%X{traceId:-}] %clr(%-40.40logger{39}){cyan} [%4L]%clr(:){faint} %m%n%wEx"/>
+    <property name="file_log_pattern"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${app.shortName},%X{traceId:-}] %5p [%15t] %-40.40logger{39} [%4L]: %m%n%wEx"/>
+    <property name="log.max.history" value="540"/>
+    <property name="log.max.file.size" value="300MB"/>
+    <!-- 获取application.yml的值, name是当前文件使用的变量名, source是配置文件中的变量名称 -->
+    <!--<springProperty scope="context" name="customName" source="cfgFileCustomName"/>-->
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr"
+                    converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <!-- 自定义日志输出转换 -->
+    <conversionRule conversionWord="m"
+                    converterClass="org.hf.domain.model.frame.web.config.logback.CustomMessageConverter"/>
+    <!-- 控制台输出配置 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>${console_log_pattern}</pattern>
+        </encoder>
+    </appender>
+    <!-- 日志输出到文件配置 -->
+    <appender name="FILE-ALL"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- ${LOG_PATH}取的是配置文件中的logging.file.path配置项的值 -->
+        <File>${LOG_PATH}/${app.shortName}/all/all-${ip}.log</File>
+        <!-- 生产环境过滤掉INFO级别以下的日志,其他环境由logger配置决定 -->
+        <springProfile name="prd">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+                <!-- 日志级别从低到高分为TRACE < DEBUG < INFO < WARN < ERROR < FATAL，如果设置为WARN，则低于WARN的信息都不会输出 -->
+                <level>INFO</level>
+            </filter>
+        </springProfile>
+        <!-- 按照文件大小和时间创建日志文件策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/${app.shortName}/archive/%d{yyMMdd}/all-${ip}-%i.log
+            </FileNamePattern>
+            <!--日志文件最大的大小-->
+            <maxFileSize>${log.max.file.size}</maxFileSize>
+            <!-- 日志文件保存的最大数量,超出则删除就文件 -->
+            <maxHistory>${log.max.history}</maxHistory>
+        </rollingPolicy>
+        <!-- 自定义输出格式 -->
+        <encoder class="org.hf.domain.model.frame.web.config.logback.CustomPatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>${file_log_pattern}</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE-ERROR"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 定义了一个过滤器,在指定级别下的日志输出不会被打印出来 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <File>${LOG_PATH}/${app.shortName}/error/error-${ip}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/${app.shortName}/archive/%d{yyMMdd}/error-${ip}-%i.log
+            </FileNamePattern>
+            <!--日志文件最大的大小-->
+            <maxFileSize>${log.max.file.size}</maxFileSize>
+            <maxHistory>${log.max.history}</maxHistory>
+        </rollingPolicy>
+        <!-- 自定义输出格式 -->
+        <encoder class="org.hf.domain.model.frame.web.config.logback.CustomPatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>${file_log_pattern}</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE-SQL"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/${app.shortName}/sql/sql-${ip}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/${app.shortName}/archive/%d{yyMMdd}/sql-${ip}-%i.log
+            </FileNamePattern>
+            <!--日志文件最大的大小-->
+            <maxFileSize>${log.max.file.size}</maxFileSize>
+            <maxHistory>${log.max.history}</maxHistory>
+        </rollingPolicy>
+        <!-- 自定义输出格式 -->
+        <encoder class="org.hf.domain.model.frame.web.config.logback.CustomPatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>${file_log_pattern}</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE-MQ"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/${app.shortName}/mq/mq-${ip}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/${app.shortName}/archive/%d{yyMMdd}/mq-${ip}-%i.log
+            </FileNamePattern>
+            <!--日志文件最大的大小-->
+            <maxFileSize>${log.max.file.size}</maxFileSize>
+            <maxHistory>${log.max.history}</maxHistory>
+        </rollingPolicy>
+        <!-- 自定义输出格式 -->
+        <encoder class="org.hf.domain.model.frame.web.config.logback.CustomPatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>${file_log_pattern}</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE-JOB"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/${app.shortName}/job/job-${ip}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <FileNamePattern>${LOG_PATH}/${app.shortName}/archive/%d{yyMMdd}/job-${ip}-%i.log
+            </FileNamePattern>
+            <!--日志文件最大的大小-->
+            <maxFileSize>${log.max.file.size}</maxFileSize>
+            <maxHistory>${log.max.history}</maxHistory>
+        </rollingPolicy>
+        <!-- 自定义输出格式 -->
+        <encoder class="org.hf.domain.model.frame.web.config.logback.CustomPatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>${file_log_pattern}</pattern>
+        </encoder>
+    </appender>
+    <!-- 异步打印日志 -->
+    <appender name="ASYNC-LOG" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+        <queueSize>512</queueSize>
+        <!-- 添加附加的appender,最多只能添加一个 -->
+        <appender-ref ref="FILE-ERROR"/>
+        <!-- 是否将调用者的数据提供给远程主机,默认为false -->
+        <!--<includeCallerData>true</includeCallerData>-->
+    </appender>
+    <!-- 区分环境打印日志 这里有个坑,name取的是配置文件配置项spring.profiles.active的值,有待验证:dev取不到,其他能取到,这里统一取非生产环境,注意:springProfile使用时,需要将日志配置文件命名成logback-spring -->
+    <springProfile name="sit,uat,pet">
+        <!-- 日志输出级别 -->
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE-ALL"/>
+        </root>
+    </springProfile>
+    <springProfile name="prd">
+        <!-- 日志输出级别 -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE-ALL"/>
+        </root>
+    </springProfile>
+    <springProfile name="dev">
+        <!-- 日志输出级别 -->
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE-ALL"/>
+        </root>
+    </springProfile>
+    <!-- logger可以包含零个或多个<appender-ref>元素,标识这个appender将会添加到这个logger,没有设置appender时logger本身不打印任何信息,将打印信息传递给root节点Logger打印 -->
+    <logger name="com.apache.ibatis" level="WARN"/>
+    <logger name="java.sql.Connection" level="WARN"/>
+    <logger name="java.sql.PreparedStatement" level="WARN"/>
+    <logger name="io.swagger.models.parameters.AbstractSerializableParameter" level="ERROR"/>
+    <!-- 打印项目日志 addtivity:是否向上级loger传递打印信息。默认是true -->
+    <logger name="org.hf" additivity="true" level="DEBUG">
+        <appender-ref ref="FILE-ERROR"/>
+    </logger>
+    <!-- 打印SQL日志到sql文件  -->
+    <logger name="org.hf.domain.model.frame.web.interceptor.MybatisSqlCostInterceptor" additivity="true" level="INFO">
+        <appender-ref ref="FILE-SQL"/>
+    </logger>
+    <!-- 打印MQ日志到mq文件  -->
+    <logger name="org.hf.domain.model.frame.custom.application.mq" additivity="true" level="INFO">
+        <appender-ref ref="FILE-MQ"/>
+    </logger>
+    <!-- 打印JOB日志到job文件  -->
+    <logger name="org.hf.domain.model.frame.custom.application.job" additivity="true" level="INFO">
+        <appender-ref ref="FILE-JOB"/>
+    </logger>
+</configuration>

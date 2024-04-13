@@ -83,6 +83,34 @@
 ## 25. 获取SpringMVC注册url资源
     1> 获取所有的接口资源并导出成excel文件(注意:依赖swagger的@Api和@ApiOperation注解); 示例: org.hf.boot.springboot.controller.UrlResController#scanUrlRes **(待验证)**
     2> 比较两个分支新增的controller接口(依赖SpringMVC的@PostMapping和@GetMapping注解); 工具类: org.hf.boot.springboot.utils.FileCompareUtil
+## 26. springboot自定义多数据源切换 **(事务支持待验证)**
+    1> 实现思想: 通过配置文件配置多数据源信息,或者数据库配置的数据源信息加载多个数据实例进行数据源的配置,根据重写获取数据源路由key方法获取当前线程
+    数据源, 并采用threadlocal保存当前线程数据源信息
+    2> 核心类实现的包路径: org.hf.boot.springboot.dynamic.datasource
+    3> 测试参考实例: org.hf.boot.springboot.controller.DynamicDataSourceController 
+## 27. SpringBoot中测试类被@SpringBootTest注解标识, 那么测试方法上加@Transactional注解, 就表示此为测试用例方法, 事务不用提交;
+## 28. 循环依赖
+    一. 可能出现的问题
+        1> spring是通过三级缓存解决了循环依赖的, 但是springboot自2.6.0及以上版本默认禁止循环依赖, 如果开启需配置spring.main.allow-circular-references=true
+        2> 开启循环依赖也可能会导致所持有的依赖对像的引用不同而报错, 因为循环依赖过程中先实例化的对象如果使用了@Async注解或由BeanPostProcessor后置处理器返回代理对象时
+        会报错:BeanCurrentlyInCreationException, 原因是因为当循环依赖中先实例化的对象实例化而属性赋值之前会先将ObjectFactory添加至三级缓存中, 从而使得循环依赖中后
+        实例化的对象在实例化时可以从三级缓存中拿到先实例化对象的引用完成实例化, 而先实例化的对象完成赋值后进行初始化时如果存在@Async注解, 此时会进行其对应的后置处理器
+        AsyncAnnotationBeanPostProcessor的处理, 在postProcessAfterInitialization方法中将返回代理对象，此代理对象与B中持有的A对象引用不同从而报错
+    二. 解决方法
+        1> 尽可能从设计层面避免循环依赖, 这里可以采用接口隔离的方式
+        2> 使用@Lazy注解进行延迟加载
+        3> 使用@DependsOn注解指定依赖项的加载顺序
+        4> 使用@Autowired注解, 配置允许循环依赖, 但是需要注意先实例化的对象不要出现使用@Async注解或由BeanPostProcessor后置处理器返回代理对象的场景
+        5> 使用org.hf.boot.springboot.utils.SpringContextUtil.getBean(java.lang.Class<T>)的方式获取spring容器bean实例对象后进行方法调用
+        6> 使用@PostConstruct注解, 因为@PostConstruct注解告诉Spring在创建Bean后立即执行指定的初始化方法, 此时在初始化方法中去获取容器中指定的bean
+        对象, 使得对象的创建和依赖的解析分开进行, 避免循环依赖的出现
+        7> 通过构造函数注入, 需要将循环依赖的对象通过
+    三. 注意
+        1> 使用lambda的@RequiredArgsConstructor注解进行构造注入时, 需要避免循环依赖, 所以要慎用, 也可以使用
+        @RequiredArgsConstructor(onConstructor_ = {@Lazy})方式实现
+        2> 通过构造函数注入, 在此工程依赖的springboot版本进行实现时, 还是会报循环依赖问题, 需要@Lazy注解辅助实现, 采用构造注入需要避免循环依赖场景
+        3> 通过Setter方法注入依赖对象实例, 也可能会出现BeanCurrentlyInCreationException报错问题(需要@Lazy注解辅助实现), 还有可能出现实例没有完成
+        注入就被其他bean使用而导致空指针问题
 
 
 
@@ -111,6 +139,14 @@
     4.2 不同依赖中的同包同类: JVM的类加载器的随机加载;
     4.3 原则上不要出现重复依赖引用;
     4.4 在<packaging>pom</packaging>类型的工程下不要在test -> java的源文件夹(Test Sources Root)中写单元测试类,不然编译时会生成三个文件夹,一个arget文件夹,其下子文件夹generated-test-sources,再其下子文件夹test-annotations
+    4.5 maven版本3.8.1起阻塞http请求解决办法:
+        <mirror>
+            <id>maven-default-http-blocker</id>
+            <mirrorOf>external:dummy:*</mirrorOf>
+            <name>Pseudo repository to mirror external repositories initially using HTTP.</name>
+            <url>http://0.0.0.0/</url>
+            <blocked>true</blocked>
+        </mirror>
 ## 5. idea使用
     5.1 工程名称和文件路径不一致：
         5.1.1 方法一：直接将该模块路径文件夹名称修改的跟模块名称一致；
@@ -163,16 +199,17 @@
                 f. const: 当MySQL对查询某部分进行优化, 并转换为一个常量时, 使用这些类型访问. 如将主键置于where列表中, MySQL就能将该查询转换为一个常量
                 g. system: system是const类型的特例, 当查询的表只有一行的情况下, 使用system
                 h. NULL: MySQL在优化过程中分解语句, 执行时甚至不用访问表或索引, 例如从一个索引列里选取最小值可以通过单独索引查找完成.
-                i. 查询效率从高到底的取值为; 所有的type字段取值: NULL > system > const > eq_ref > ref > fulltext > ref_or_null > index_merge > unique_subquery > index_subquery > range > index > ALL; 一般情况下type字段取值: system > const > eq_ref > ref > range > index > ALL
+                i. index_merge: 索引合并, 表示查询一张表时使用了多个索引的情况
+                j. 查询效率从高到底的取值为; 所有的type字段取值: NULL > system > const > eq_ref > ref > fulltext > ref_or_null > index_merge > unique_subquery > index_subquery > range > index > ALL; 一般情况下type字段取值: system > const > eq_ref > ref > range > index > ALL
             6> 第六列possible_keys字段表示: 指出MySQL能使用哪个索引在表中找到记录, 查询涉及到的字段上若存在索引, 则该索引将被列出, 但不一定被查询使用
             7> 第七列key字段表示: 显示MySQL在查询中实际使用的索引, 若没有使用索引, 显示为NULL
             8> 第八列key_len字段表示: 索引中使用的字节数, 可通过该列计算查询中使用的索引的长度(key_len显示的值为索引字段的最大可能长度, 并非实际使用长度, 即key_len是根据表定义计算而得, 不是通过表内检索出的)
             9> 第九列ref字段表示: 上述表的连接匹配条件, 哪些列或常量被用于查找索引列上的值, 即某表的某个字段引用到了本表的索引字段
-            10> 第十列字段表示: MySQL根据表统计信息及索引选用情况，估算的找到所需的记录所需要读取的行数
+            10> 第十列rows字段表示: MySQL根据表统计信息及索引选用情况，估算的找到所需的记录所需要读取的行数
             11> 第十一列filtered字段表示: 返回结果与实际结果的差值占总记录数的百分比
             12> 第十二列Extra字段表示: 包含不适合在其他列中显示但十分重要的额外信息
                 a. Using index: 该值表示相应的select操作中使用了覆盖索引(Covering Index: MySQL可以利用索引返回select列表中的字段, 而不必根据索引再次读取数据文件, 包含所有满足查询需要的数据的索引称为覆盖索引), 注意: 如果要使用覆盖索引, 一定要注意select列表中只取出需要的列, 不可select *, 因为如果将所有字段一起做索引会导致索引文件过大, 查询性能下降
-                b. Using where: 表示mysql服务器将在存储引擎检索行后再进行过滤, 即扫描全表. 如果where条件里涉及索引中的列, 当读取索引时就能被存储引擎检索, 因此不是所有带where字句的查询都会显示"Using where". 有时"Using where"的出现就是一个暗示: 查询用到了不同的索引. 注意: 索引设置不合理也可能导致全表扫描, 例如删除状态或者性别字段设置索引也会导致全表扫描
+                b. Using where: 表示mysql服务器将在存储引擎检索行后再进行过滤, 即使用where条件进行数据过滤. 如果where条件里涉及索引中的列, 当读取索引时就能被存储引擎检索, 但不是所有带where的查询都会显示"Using where". 有时"Using where"的出现就是一个暗示: 查询用到了不同的索引. 注意: 索引设置不合理可能导致全表扫描, 例如删除状态或者性别字段设置索引会导致全表扫描
                 c. Using temporary: 表示MySQL需要使用临时表来存储结果集, 常见于排序和分组查询
                 d. Using filesort: MySQL中无法利用索引完成的排序操作称为"文件排序"
                 e. Using join buffer: 该值强调了在获取连接条件时没有使用索引, 并且需要连接缓冲区来存储中间结果. 如果出现了这个值, 那应该注意, 根据查询的具体情况可能需要添加索引来改进能.
@@ -181,12 +218,17 @@
                 h. Index merges: 当MySQL决定要在一个给定的表上使用超过一个索引的时候, 就会出现以下格式中的一个，详细说明使用的索引以及合并的类型。
                 i. NULL: 没有用到额外的附加条件
                 j. 常见情况的性能对比: Using index > NULL > Using where >= Using temporary > Using filesort
+                k. Using intersect: 指会在查询时对使用到的索引执行同步扫描分别获取数据集，并对所获得的数据集取交集。
     7.2 MySQL索引存在在硬盘中(会在硬盘的指定文件中存储), 这样能避免服务宕机导致数据丢失, 当服务启动时会加载到内存中, 这样能提高索引查询效率
     7.3 MySQL的主键的最大值存储在表结构信息中, 同理7.2, 服务启动时会将表结构信息加载到内存中
     7.4 MySQL的varchar转int类型, 如果用字符串和数值进行比较, 此时字符串和数值都会转换成浮点数(此操作会导致该字段索引失效), 转换如下:
         1> SELECT CAST('abc123' AS SIGNED); -> 0
         2> SELECT CAST('123abc' AS SIGNED); -> 123
         3> SELECT CAST('12' AS SIGNED); -> 12
+    7.5 MySQL更新时是使用表锁还是行锁? (注意这个要区分MySQL的引擎, MyISAM采用的是表锁, 只有InnoDB才有行锁)
+        1> 如果是范围更新则采用的间隙锁
+        2> 如果是索引字段为条件进行更新则采用行锁(如果索引失效也会采用表锁)
+        3> 如果是非索引字段为条件进行更新则采用表锁
 ## 8. Doris相关, 参考文档1: https://www.bookstack.cn/read/doris-1.2-zh/157a16c97e044495.md 参考文档2: https://doris.apache.org/zh-CN/docs/dev/lakehouse/multi-catalog/jdbc/
     8.1 doris建表, 三种模型: Unique - 唯一索引模型; Aggregate - 数据聚合模型; Duplicate - 数据明细模型;
         8.1.1 创建doris数据库表, 模型UNIQUE KEY

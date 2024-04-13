@@ -8,7 +8,6 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -60,7 +59,7 @@ public class AllOfDemo {
         list.add(future1);
         list.add(future2);
         list.add(future3);
-        // 所有任务都正常执行完成后才会执行,无返回值, 如果有任务执行异常获取结果时会抛出异常
+        // 所有任务都正常执行完成后才会执行,无返回值, 如果有任务执行异常, 获取结果时会抛出异常
         CompletableFuture<Void> all = CompletableFuture.allOf(list.toArray(new CompletableFuture[]{}));
         try {
             System.out.println("获取结果:" + all.get());

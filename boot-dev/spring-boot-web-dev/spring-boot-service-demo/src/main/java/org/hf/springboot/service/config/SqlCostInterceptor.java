@@ -1,5 +1,6 @@
 package org.hf.springboot.service.config;
 
+import cn.hutool.db.sql.SqlFormatter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.mapping.BoundSql;
@@ -49,6 +50,9 @@ public class SqlCostInterceptor implements Interceptor {
             // 格式化Sql语句，去除换行符，替换参数
             sql = formatSql(sql, parameterObject, parameterMappingList);
             log.info("SQL:\n\t\t" + sql + "\ntake-time:" + sqlCost + "ms");
+            // 这里需要注意,格式化sql的时候根据"("和")"去判断sql入参和出参的开始和结束,如果参数中也有"("或者")"且不成对则会出现格式化异常问题
+            String formattedSql = SqlFormatter.format(sql);
+            log.info("SQL-Print:\n{}\nSQL-TakeTime:{}ms", formattedSql, sqlCost);
         }
     }
 
@@ -127,6 +131,7 @@ public class SqlCostInterceptor implements Interceptor {
                 } else if (objClass.isAssignableFrom(String.class)) {
                     value = "\"" + obj.toString() + "\"";
                 }
+                // 这里需要注意替换占位符时可能出现参数中有英文问号?的情况
                 sql = sql.replaceFirst("\\?", value);
             }
         }
@@ -144,6 +149,7 @@ public class SqlCostInterceptor implements Interceptor {
                 if (propertyValue.getClass().isAssignableFrom(String.class)) {
                     propertyValue = "\"" + propertyValue + "\"";
                 }
+                // 这里需要注意替换占位符时可能出现参数中有英文问号?的情况
                 sql = sql.replaceFirst("\\?", propertyValue.toString());
             }
         }
@@ -170,6 +176,7 @@ public class SqlCostInterceptor implements Interceptor {
                     propertyValue = "\"" + propertyValue + "\"";
                 }
             }
+            // 这里需要注意替换占位符时可能出现参数中有英文问号?的情况
             sql = sql.replaceFirst("\\?", propertyValue);
         }
         return sql;

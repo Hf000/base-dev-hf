@@ -9,10 +9,20 @@ spring:     #spring配置项
 #  profiles:      #多yaml文件配置项
 #    active: a,b      #激活多个yml配置文件, 其他配置文件的命名规则 application-*.yml
   datasource:     #配置hikari数据库连接池参数
-    driver-class-name: com.mysql.jdbc.Driver      #数据库驱动类地址
-    url: jdbc:mysql://127.0.0.1:3306/base_dev?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false      #数据库连接地址
-    username: root      #数据库账号
-    password: root      #数据库密码
+#    driver-class-name: com.mysql.jdbc.Driver      #数据库驱动类地址
+#    url: jdbc:mysql://127.0.0.1:3306/base_dev?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false      #数据库连接地址
+#    username: root      #数据库账号
+#    password: root      #数据库密码
+    master:     # 主数据源配置
+      driver-class-name: com.mysql.jdbc.Driver      #数据库驱动类地址
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/base_dev?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false      # 多个数据源用jdbc-url表示数据库连接地址
+      username: root      #数据库账号
+      password: root      #数据库密码
+    slave:      # 从数据源配置
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/base_test?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=false
+      username: root
+      password: root
   jpa:      # spring data jpa相关配置
     database: mysql     # 表示jpa的数据库类型是mysql，如果不配置则默认根据数据源信息进行选择，建议手动配置
 #    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect      # 不加这句则默认为myisam引擎，配置为InnoDB引擎
@@ -25,12 +35,16 @@ spring:     #spring配置项
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher     # swagger3.0.0整合springboot2.7.2报空指针问题
+  main:
+    allow-bean-definition-overriding: true # 是否允许相同名称的Bean覆盖,spring默认允许,springboot默认不允许,这里设置为允许
+    allow-circular-references: true # 是否允许循环依赖,这里设置为允许,springboot2.6.0及以上版本默认是不允许的
 
 mybatis:      #mybatis配置
   type-aliases-package: org.hf.boot.springboot.pojo.entity      #配置实体类别名包路径，配置这个配置项在mapper里面就不需要写全限定名了，只需要写对应实体类名即可
   mapper-locations: classpath:mapper/*.xml      #配置mapper映射文件路径地址，如果没有则不写该项配置
   configuration:      #配置mybati日志配置项
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl     #配置mybatis日志后台输出
+    map-underscore-to-camel-case: true  # 设置驼峰命名
   type-handlers-package: org.hf.boot.springboot.enumerate.repository.mybatis      # 配置mybatis自定义类型转换处理器包路径
 
 mapper:     #通用mapper配置项
@@ -47,6 +61,8 @@ logging:      #配置日志的记录级别
   level:      #日志等级配置项
     org.hf: info      #表示以org.hf开头的类的日志记录级别是debug
     org.springframework: error     #表示以org.springframework开头的类的日志记录级别是info
+  file: # 配置日志文件生成路径
+    path: D:/logs
 
 #springfox:     # swagger配置项
 #  documentation:

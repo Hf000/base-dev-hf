@@ -6,7 +6,7 @@ package org.hf.application.javabase.thread.threadLocal;
  * InheritableThreadLocal 实现父子线程的共享, 复制父线程的副本,而不是使用父线程的引用
  * TransmittableThreadLocal 解决线程池线程没有销毁而导致的变量获取问题,在执行任务的时候复制父线程的
  * ThreadLocal上下文, 原因: 是因为线程池线程没有销毁而导致线程没有重新初始化;
- *
+ * 注意点: treadLocal的使用一定要注意使用完后进行数据清理,避免线程污染
  * @author hufei
  * @date 2022/9/25 18:53
  */

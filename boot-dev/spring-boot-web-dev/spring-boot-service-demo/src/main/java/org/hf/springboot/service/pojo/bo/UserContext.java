@@ -5,7 +5,7 @@ import org.hf.springboot.service.pojo.dto.UserInfoDTO;
 
 /**
  * <p> 存放线程用户上下文，供单次请求简单从上下文获取用户信息。 </p >
- *
+ * 注意: treadLocal的使用一定要注意使用完进行数据清理, 避免线程污染
  * @author hufei
  * @date 2022-09-05
  **/

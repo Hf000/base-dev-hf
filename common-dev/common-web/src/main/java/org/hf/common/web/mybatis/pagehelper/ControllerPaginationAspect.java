@@ -29,6 +29,7 @@ import java.util.Map;
  * <p> 自定义mybatis分页注解的aop处理 </p>
  * 自定义分页注解ControllerPagination实现 - 2
  * 基于mybatis框架和pagehelper分页插件
+ * 注意: 在分页后需要进行分页信息清理, 一般在请求拦截器的后置处理方法进行方法PageMethod.clearPage();调用
  * @author hufei
  * @version 1.0.0
  * @date 2021/11/2 11:02

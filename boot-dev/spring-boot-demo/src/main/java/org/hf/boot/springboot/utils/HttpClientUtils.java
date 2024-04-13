@@ -36,7 +36,7 @@ import java.util.Map;
 
 /**
  * <p> httpClient请求工具类 </p >
- *
+ * 请求对象配置参考示例: {@link HttpClientDemoUtils}
  * @author HUFEI
  * @date 2023-06-09
  **/

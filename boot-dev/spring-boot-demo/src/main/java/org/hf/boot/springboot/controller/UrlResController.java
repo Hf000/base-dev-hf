@@ -1,6 +1,8 @@
 package org.hf.boot.springboot.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +33,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Api("遍历获取url资源相关接口")
 @Slf4j
@@ -43,11 +46,53 @@ public class UrlResController {
     
     public static final String COMMA = ",";
 
-    private static final String MICRO_SRV = "custom-hub";
+    private static final String MICRO_SRV = "custom服务";
+
+    private final List<String> CUSTOM_FIELD_LIST = CollectionUtil.newArrayList("id");
     
     @ApiOperation("遍历URL资源")
     @GetMapping("/scanUrlRes")
     public void scanUrlRes() {
+        List<RequestMappingDTO> requestMappingList = scanRequestMapping();
+        log.info("requestMappingList:{}", requestMappingList);
+        String sheetName = "URL资源";
+        String fileName = sheetName + DateUtil.format(new Date(), "yyyyMMddHHmm");
+        SheetDTO sheetDto = new SheetDTO();
+        sheetDto.setSheetName(sheetName);
+        sheetDto.setHeadClass(RequestMappingDTO.class);
+        sheetDto.setDataList(requestMappingList);
+        try {
+            ExcelUtil.exportExcel(fileName, sheetDto, SpringContextUtil.getResponse());
+        } catch (IOException e) {
+            log.error("遍历URL资源文件导出异常", e);
+        }
+    }
+
+    @ApiOperation("遍历包含字段字段出入参的url资源")
+    @GetMapping("/scanCustomFieldRes")
+    public void scanCustomFieldRes() {
+        List<RequestMappingDTO> requestMappingList = scanRequestMapping();
+        // 过滤,取返回字段中含有手机号,身份证号的接口
+        requestMappingList = requestMappingList.stream().filter(requestMappingDto ->
+                StrUtil.isNotBlank(requestMappingDto.getOutParamCustomFields())).collect(Collectors.toList());
+        log.info("requestMappingList:{}", requestMappingList);
+        String sheetName = "出入参带敏感字段信息的URL资源";
+        String fileName = sheetName + DateUtil.format(new Date(), "yyyyMMddHHmm");
+        SheetDTO sheetDto = new SheetDTO();
+        sheetDto.setSheetName(sheetName);
+        sheetDto.setHeadClass(RequestMappingDTO.class);
+        sheetDto.setDataList(requestMappingList);
+        try {
+            ExcelUtil.exportExcel(fileName, sheetDto, SpringContextUtil.getResponse());
+        } catch (IOException e) {
+            log.info("IOException：", e);
+        }
+    }
+
+    /**
+     * 扫描在SpringMVC注册接口信息
+     */
+    private List<RequestMappingDTO> scanRequestMapping() {
         // 映射处理器的映射信息
         RequestMappingHandlerMapping requestMappingHandlerMapping = webApplicationContext.getBean(RequestMappingHandlerMapping.class);
         // 映射处理器中的所有方法
@@ -66,18 +111,7 @@ public class UrlResController {
             }
             requestMappingList.add(requestMappingDto);
         });
-        log.info("requestMappingList:{}", requestMappingList);
-        String sheetName = "URL资源";
-        String fileName = sheetName + DateUtil.format(new Date(), "yyyyMMddHHmm");
-        SheetDTO sheetDto = new SheetDTO();
-        sheetDto.setSheetName(sheetName);
-        sheetDto.setHeadClass(RequestMappingDTO.class);
-        sheetDto.setDataList(requestMappingList);
-        try {
-            ExcelUtil.exportExcel(fileName, sheetDto, SpringContextUtil.getResponse());
-        } catch (IOException e) {
-            log.error("遍历URL资源文件导出异常", e);
-        }
+        return requestMappingList;
     }
 
     /**
@@ -102,6 +136,8 @@ public class UrlResController {
         requestMappingDto.setUrlResName(getApiOperationAnnotationValue(handlerMethod.getMethod()));
         requestMappingDto.setInParamFields(getInParamFields(handlerMethod));
         requestMappingDto.setOutParamFields(getOutParamFields(handlerMethod));
+        requestMappingDto.setOutParamCustomFields(getOutParamCustomFields(handlerMethod));
+        requestMappingDto.setInParamCustomFields(getInParamCustomFields((handlerMethod)));
         return requestMappingDto;
     }
 
@@ -150,22 +186,21 @@ public class UrlResController {
         if (parameters.length == 0) {
             return "";
         }
-        StringBuilder params = new StringBuilder();
+        List<String> fieldNameList = new ArrayList<>();
         Arrays.stream(parameters).forEach(parameter -> {
             Class<?> type = parameter.getType();
             if (isBaseType(type)) {
-                params.append(parameter.getName()).append(COMMA);
+                fieldNameList.add(parameter.getName());
                 // 跳过此参数
                 return;
             }
             Field[] fields = type.getDeclaredFields();
             if (fields.length > 0) {
                 log.info("fieldName:{}", fields[0].getName());
-                Arrays.stream(fields).forEach(field -> params.append(field.getName()).append(COMMA));
+                Arrays.stream(fields).forEach(field -> fieldNameList.add(field.getName()));
             }
         });
-        log.info("inParams:{}", params);
-        return params.toString();
+        return String.join(COMMA, fieldNameList);
     }
 
     /**
@@ -174,29 +209,88 @@ public class UrlResController {
     private String getOutParamFields(HandlerMethod handlerMethod) throws ClassNotFoundException {
         Type genericReturnType = handlerMethod.getMethod().getGenericReturnType();
         Type finalActualTypeFromGenericType = getFinalActualTypeFromGenericType(genericReturnType);
-        StringBuilder params = new StringBuilder();
+        List<String> fieldNameList = new ArrayList<>();
         try {
             Class<?> finalActualClazz = Class.forName(finalActualTypeFromGenericType.getTypeName());
             if (isBaseType(finalActualClazz)) {
-                params.append(finalActualClazz.getName()).append(COMMA);
-                return params.toString();
+                return finalActualClazz.getName();
             }
             Field[] declaredFields = finalActualClazz.getDeclaredFields();
             if (declaredFields.length == 0) {
-                return "";
+                return null;
             }
             Arrays.stream(declaredFields).forEach(field -> {
-                params.append(field.getName()).append(COMMA);
+                fieldNameList.add(field.getName());
             });
-            return params.toString();
+            return String.join(COMMA, fieldNameList);
         } catch (ClassNotFoundException e) {
             return "";
         }
     }
 
+    private String getOutParamCustomFields(HandlerMethod handlerMethod) throws ClassNotFoundException {
+        Type genericReturnType = handlerMethod.getMethod().getGenericReturnType();
+        Type finalActualTypeFromGenericType = getFinalActualTypeFromGenericType(genericReturnType);
+        List<String> fieldNameList = new ArrayList<>();
+        try {
+            Class<?> finalActualClazz = Class.forName(finalActualTypeFromGenericType.getTypeName());
+            if (isBaseType(finalActualClazz)) {
+                // 返回基本类型,没法判定
+                return null;
+            }
+            Field[] declaredFields = finalActualClazz.getDeclaredFields();
+            if (declaredFields.length == 0) {
+                return null;
+            }
+            Arrays.stream(declaredFields).forEach(field -> {
+                String fieldName = field.getName();
+                boolean flag = containsCustomFields(fieldName, CUSTOM_FIELD_LIST);
+                if (flag) {
+                    fieldNameList.add(fieldName);
+                }
+            });
+            return String.join(COMMA, fieldNameList);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
+    private String getInParamCustomFields(HandlerMethod handlerMethod) throws ClassNotFoundException {
+        Parameter[] parameters = handlerMethod.getMethod().getParameters();
+        if (parameters.length == 0) {
+            return "";
+        }
+        List<String> fieldNameList = new ArrayList<>();
+        Arrays.stream(parameters).forEach(parameter -> {
+            Class<?> type = parameter.getType();
+            if (isBaseType(type)) {
+                String fieldName = parameter.getName();
+                boolean flag = containsCustomFields(fieldName, CUSTOM_FIELD_LIST);
+                if (flag) {
+                    fieldNameList.add(fieldName);
+                }
+                // 跳过此参数
+                return;
+            }
+            Field[] fields = type.getDeclaredFields();
+            if (fields.length > 0) {
+                log.info("fieldName:{}", fields[0].getName());
+                Arrays.stream(fields).forEach(field -> {
+                    String fieldName = field.getName();
+                    boolean flag = containsCustomFields(fieldName, CUSTOM_FIELD_LIST);
+                    if (flag) {
+                        fieldNameList.add(fieldName);
+                    }
+                });
+            }
+        });
+        return String.join(COMMA, fieldNameList);
+    }
+
     /**
      * urlMapping转Ant风格urlPattern
      */
+    @SuppressWarnings("all")
     private String transUrlMappingToUrlPattern(String urlMapping) {
         return "/" + MICRO_SRV + urlMapping.replaceAll("\\{((?!\\{).)*\\}", urlMapping);
     }
@@ -235,5 +329,18 @@ public class UrlResController {
         return clazz.equals(Integer.class) || clazz.equals(Long.class)
                 || clazz.equals(Byte.class) || clazz.equals(Boolean.class)
                 || clazz.equals(Character.class) || clazz.equals(String.class);
+    }
+
+    private boolean containsCustomFields(String fieldName, List<String> customFieldList) {
+        if (StrUtil.isBlank(fieldName)) {
+            return false;
+        }
+        fieldName = fieldName.toLowerCase();
+        for (String customField : customFieldList) {
+            if (fieldName.contains(customField)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

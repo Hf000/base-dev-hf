@@ -32,4 +32,6 @@ public interface UserService {
     void addUserInfoAysnc(UserInfoReq req);
 
     void testAysnc();
+
+    void saveDynamicSourceData(String userName);
 }

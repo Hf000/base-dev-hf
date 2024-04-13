@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 
 /**
  * @author hf
- * CommandLineRunner springboot项目在启动时需要预先加载的数据需要实现此接口,
+ * CommandLineRunner springboot项目在启动完成时需要预先加载的数据,可以实现此接口重写run方法,在该方法中完成数据加载逻辑
  * 注意这里需要注入spring管理的bean, 所以需要加上@Configuration注解   // TODO 待验证
  * 自定义实现tcp消息客户端 - 8 消息消费
  */

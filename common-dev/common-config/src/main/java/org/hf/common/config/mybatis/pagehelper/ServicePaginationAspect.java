@@ -1,8 +1,5 @@
 package org.hf.common.config.mybatis.pagehelper;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.ObjectMapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -15,7 +12,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.hf.common.publi.constants.CommonConstant;
 import org.hf.common.publi.pojo.dto.BasePageReq;
 import org.hf.common.publi.utils.TypeConvertUtils;
 import org.springframework.stereotype.Component;
@@ -29,6 +25,7 @@ import java.util.Map;
  * <p> 自定义mybatis分页注解的aop处理 </p>
  * 自定义分页注解ServicePagination实现 - 2
  * 基于mybatis框架和pagehelper分页插件
+ * 注意: 在分页后需要进行分页信息清理, 一般在请求拦截器的后置处理方法进行方法PageMethod.clearPage();调用
  * @author hufei
  * @version 1.0.0
  * @date 2021/11/2 11:02

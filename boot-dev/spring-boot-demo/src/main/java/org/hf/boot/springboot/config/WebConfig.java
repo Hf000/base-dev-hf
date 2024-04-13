@@ -43,6 +43,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(initCustomizeInterceptor())
                 // 拦截所有的路径
                 .addPathPatterns("/*");
+                // 放行swagger相关路径
+//                .excludePathPatterns("/**/swagger-ui/**")
+//                .excludePathPatterns("/**/swagger-resources/**")
+//                .excludePathPatterns("/**/v3/**");
     }
 
     /**

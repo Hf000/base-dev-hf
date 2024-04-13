@@ -24,7 +24,11 @@ java基础
         2. 装饰者模式和代理模式应用场景的区别:
            装饰者模式: 关注的是在一个对象原有逻辑上动态的新增方法逻辑
            代理模式: 控制对原始对象的访问,不关注被代理对象,关注调用时的逻辑增强
-## 3. 压制警告 @SuppressWarnings
+## 3. 基础知识: org.hf.application.javabase.basic
+## 4. jdk8新特性: org.hf.application.javabase.jdk8
+## 5. spring特性使用: org.hf.application.javabase.spring
+## 6. 线程相关: org.hf.application.javabase.thread
+## 7. 压制警告 @SuppressWarnings
     类型: 
         all: 抑制所有警告
         boxing :抑制装箱、拆箱操作时候的警告

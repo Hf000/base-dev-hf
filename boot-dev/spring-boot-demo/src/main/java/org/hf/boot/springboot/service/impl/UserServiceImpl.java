@@ -118,4 +118,14 @@ public class UserServiceImpl implements UserService {
         System.out.println(UserContext.getUser());
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveDynamicSourceData(String userName) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserName(userName);
+        userInfo.setPassword("123d");
+        userInfoMapper.insertSelective(userInfo);
+        int i = 1/0;
+    }
+
 }
