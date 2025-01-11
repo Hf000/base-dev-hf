@@ -24,7 +24,7 @@ public class DeepCloneDemo {
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(s1);
         oos.flush();
-        // 返序列化:将字节序列转化为对象
+        // 反序列化:将字节序列转化为对象
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(baos.toByteArray()));
         Student s2 = (Student) ois.readObject();
         s2.setName("wangwu");

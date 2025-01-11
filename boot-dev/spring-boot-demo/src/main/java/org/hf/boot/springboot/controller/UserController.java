@@ -10,6 +10,7 @@ import org.hf.boot.springboot.pojo.entity.User;
 import org.hf.boot.springboot.pojo.entity.UserInfo;
 import org.hf.boot.springboot.retry.CustomRetryException;
 import org.hf.boot.springboot.service.UserService;
+import org.hf.boot.springboot.utils.PerfTrackerUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,10 +37,13 @@ public class UserController {
     @ApiOperation(value = "查询用户信息")
     @GetMapping("/find/{id}")
     public User getUserInfo(@PathVariable Long id) {
-        if (id == null) {
-            id = 0L;
+        // 统计耗时
+        try (PerfTrackerUtil.TimerContext timer = PerfTrackerUtil.start()) {
+            if (id == null) {
+                id = 0L;
+            }
+            return userServiceImpl.findUserInfo(id);
         }
-        return userServiceImpl.findUserInfo(id);
     }
 
     @RequestMapping("/save")

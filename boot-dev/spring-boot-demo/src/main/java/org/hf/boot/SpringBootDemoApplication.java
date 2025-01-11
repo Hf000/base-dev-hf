@@ -1,5 +1,6 @@
 package org.hf.boot;
 
+import org.redisson.spring.starter.RedissonAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,9 +19,9 @@ import tk.mybatis.spring.annotation.MapperScan;
  * @author hufei
  * @date 2022/8/3 22:00
 */
-@EnableRetry
-@SpringBootApplication
+@SpringBootApplication(exclude = {RedissonAutoConfiguration.class})
 @MapperScan("org.hf.boot.**.dao")
+@EnableRetry
 //@ComponentScan(excludeFilters = {@ComponentScan.Filter(type = FilterType.REGEX, pattern = "org.hf.boot.springboot.error.handler.*")})
 public class SpringBootDemoApplication {
     public static void main(String[] args) {

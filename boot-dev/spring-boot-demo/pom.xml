@@ -27,6 +27,7 @@
         <jetbrains.annotations.version>13.0</jetbrains.annotations.version>
         <easyexcel.version>3.0.5</easyexcel.version>
         <json-lib.version>2.4</json-lib.version>
+        <redisson.version>3.18.0</redisson.version>
     </properties>
 
     <dependencies>
@@ -226,6 +227,12 @@
             <version>${json-lib.version}</version>
             <!-- 这里需要指定classifier才能成功拉取依赖 -->
             <classifier>jdk15</classifier>
+        </dependency>
+        <!-- Redisson依赖 -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>${redisson.version}</version>
         </dependency>
     </dependencies>
 

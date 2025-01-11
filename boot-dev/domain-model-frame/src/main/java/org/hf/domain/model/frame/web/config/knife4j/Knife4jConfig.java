@@ -124,6 +124,7 @@ public class Knife4jConfig {
     /**
      * 找到所有的@Endpoint标记的服务端点注册到springMVC中,交给路由转发
      * swagger3.0兼容springBoot 2.6.x以上配置, 如果依赖了actuator, 这段配置必须加上,否则可以不加, 建议最好加上不然会出现一些请求无法识别
+     * spring.mvc.pathmatch.matching-strategy=ant_path_matcher配置是必须加上的
      */
     @Bean
     public WebMvcEndpointHandlerMapping webEndpointServletHandlerMapping(WebEndpointsSupplier webEndpointsSupplier, ServletEndpointsSupplier servletEndpointsSupplier, ControllerEndpointsSupplier controllerEndpointsSupplier, EndpointMediaTypes endpointMediaTypes, CorsEndpointProperties corsProperties, WebEndpointProperties webEndpointProperties, Environment environment) {
@@ -141,4 +142,40 @@ public class Knife4jConfig {
     private boolean shouldRegisterLinksMapping(WebEndpointProperties webEndpointProperties, Environment environment, String basePath) {
         return webEndpointProperties.getDiscovery().isEnabled() && (StringUtils.hasText(basePath) || ManagementPortType.get(environment).equals(ManagementPortType.DIFFERENT));
     }
+
+    /**
+     * 集成swagger过滤掉请求为空的前端处理映射
+     */
+/*    @Bean
+    public static BeanPostProcessor springfoxHandlerProviderBeanPostProcessor() {
+        return new BeanPostProcessor() {
+            @Override
+            public Object postProcessAfterInitialization(@NotNull Object bean, @NotNull String beanName) throws BeansException {
+                if (bean instanceof WebMvcRequestHandlerProvider || bean instanceof WebFluxRequestHandlerProvider) {
+                    customizeSpringfoxHandlerMappings(getHandlerMappings(bean));
+                }
+                return bean;
+            }
+
+            private <T extends RequestMappingInfoHandlerMapping> void customizeSpringfoxHandlerMappings(List<T> mappings) {
+                List<T> copy = mappings.stream()
+                        .filter(mapping -> mapping.getPatternParser() == null)
+                        .collect(Collectors.toList());
+                mappings.clear();
+                mappings.addAll(copy);
+            }
+
+            @SuppressWarnings("unchecked")
+            private List<RequestMappingInfoHandlerMapping> getHandlerMappings(Object bean) {
+                try {
+                    Field field = ReflectionUtils.findField(bean.getClass(), "handlerMappings");
+                    assert field != null;
+                    field.setAccessible(true);
+                    return (List<RequestMappingInfoHandlerMapping>) field.get(bean);
+                } catch (IllegalArgumentException | IllegalAccessException e) {
+                    throw new IllegalStateException(e);
+                }
+            }
+        };
+    }*/
 }

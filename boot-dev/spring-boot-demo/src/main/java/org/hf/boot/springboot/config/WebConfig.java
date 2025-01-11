@@ -2,6 +2,9 @@ package org.hf.boot.springboot.config;
 
 import org.hf.boot.springboot.filter.CustomFilter;
 import org.hf.boot.springboot.interceptor.CustomizeInterceptor;
+import org.hf.boot.springboot.security.encryption.ApiDecAndEncInterceptor;
+import org.hf.boot.springboot.security.sign.ApiSignVerificationInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +25,12 @@ import java.util.List;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private ApiSignVerificationInterceptor apiSignVerificationInterceptor;
+
+    @Autowired
+    private ApiDecAndEncInterceptor apiDecAndEncInterceptor;
 
     /**
      * 自定义拦截器对象初始化
@@ -47,6 +56,8 @@ public class WebConfig implements WebMvcConfigurer {
 //                .excludePathPatterns("/**/swagger-ui/**")
 //                .excludePathPatterns("/**/swagger-resources/**")
 //                .excludePathPatterns("/**/v3/**");
+        registry.addInterceptor(apiSignVerificationInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(apiDecAndEncInterceptor).addPathPatterns("/**");
     }
 
     /**

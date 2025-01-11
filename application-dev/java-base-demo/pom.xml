@@ -22,6 +22,7 @@
         <aliyun-sdk-oss.version>3.8.0</aliyun-sdk-oss.version>
         <fastdfs-client-java.version>1.27.0.0</fastdfs-client-java.version>
         <jjwt.version>0.9.0</jjwt.version>
+        <jetbrains.annotations.version>13.0</jetbrains.annotations.version>
     </properties>
 
     <dependencies>
@@ -110,6 +111,12 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+        </dependency>
+        <!-- jetbrains注解依赖 -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains.annotations.version}</version>
         </dependency>
     </dependencies>
 

@@ -30,6 +30,7 @@ public class EventListenerAdapter extends EventListenerAbstract<EventBase> {
     private static ResolvableType resolveDeclaredEventType(EventListener<? extends EventBase> eventListener) {
         ResolvableType declaredEventType = resolveDeclaredEventType(eventListener.getClass());
         if (null == declaredEventType) {
+            // 获取代理对象所代表的目标对象class
             Class<?> targetClass = AopUtils.getTargetClass(eventListener);
             if (targetClass != eventListener.getClass()) {
                 declaredEventType = resolveDeclaredEventType(targetClass);
@@ -39,15 +40,17 @@ public class EventListenerAdapter extends EventListenerAbstract<EventBase> {
     }
 
     /**
-     * 解析声明的事件类型
+     * 获取声明事件的泛型类型
      * @param eventListenerType 时间监听类型
      * @return 解析结果
      */
     private static ResolvableType resolveDeclaredEventType(Class<?> eventListenerType) {
+        // 根据传入的class类型向上取接口或者父类, 获取类型信息
         ResolvableType resolvableType = ResolvableType.forClass(eventListenerType).as(EventListener.class);
         if (!resolvableType.hasGenerics()) {
             return null;
         }
+        // 获取第一个位置的泛型
         return resolvableType.getGeneric();
     }
 

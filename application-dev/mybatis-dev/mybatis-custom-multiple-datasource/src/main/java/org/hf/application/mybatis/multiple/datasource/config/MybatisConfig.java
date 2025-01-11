@@ -46,6 +46,9 @@ public class MybatisConfig {
         return sqlSessionFactoryBean.getObject();
     }
 
+    /**
+     * 声明式事务配置
+     */
     @Bean
     public PlatformTransactionManager platformTransactionManager() {
         return new DataSourceTransactionManager(myRoutingDataSource);

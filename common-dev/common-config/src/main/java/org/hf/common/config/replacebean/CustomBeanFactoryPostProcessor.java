@@ -15,6 +15,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Objects;
 import java.util.Set;
@@ -36,12 +37,16 @@ import static org.hf.common.publi.constants.CommonConstant.NULL_STRING;
 @Component
 public class CustomBeanFactoryPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
+    /**
+     * 注解@NestedConfigurationProperty用于标记配置类中的嵌套属性,指明该属性为配置属性进行处理
+     */
     @Value("${replaceBean.scannerPackages}")
     @NestedConfigurationProperty
     private String scannerPackages;
 
     /**
-     * bean注册时处理  这种方式替换不需要将替换的实现交给spring管理
+     * bean注册时处理  这种方式替换不需要将替换的实现交给spring管理, 因为此时这里还没有进行bean的注入, 更没有进行实例化, 只是对加了spring
+     * 注解的bean对象进行bean的定义注册, 所以可以直接传入指定的类型即可
      * @param beanDefinitionRegistry bean注册对象
      * @throws BeansException 异常
      */
@@ -49,7 +54,7 @@ public class CustomBeanFactoryPostProcessor implements BeanDefinitionRegistryPos
     public void postProcessBeanDefinitionRegistry(@NonNull BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
         // 获取指定注解的类
         Set<Class<?>> annotationClass = getAnnotationClass();
-        if (CollectionUtil.isNotEmpty(annotationClass)) {
+        if (!CollectionUtils.isEmpty(annotationClass)) {
             annotationClass.forEach(aClass -> {
                 String replacedBeanName = getTargetClassBeanName(aClass);
                 setRegistryBeanReplace(beanDefinitionRegistry, replacedBeanName, aClass);
@@ -131,8 +136,10 @@ public class CustomBeanFactoryPostProcessor implements BeanDefinitionRegistryPos
     }
 
     /**
-     * bean注册后处理 在上面的postProcessBeanDefinitionRegistry方法已经做了bean替换, 这里不需要再次替换, 这里只是代码展示,如果此时替换的做法
-     * 这里替换时, 替换和被替换的bean都需要交给spring管理, 并不能同名
+     * bean注册后处理 在上面的postProcessBeanDefinitionRegistry方法已经做了bean定义的替换, 这里不需要再次替换, 因为bean的定义被替换
+     * 后, bean实例化时就会实例化成替换后的bean对象, 这里只是代码展示(bean替换的另外一种实现), 如果此时去替换, 替换和被替换的bean都需要加
+     * 上交给spring管理的注解(例如: @Service或者@Component), 且bean的名称不能同名, 因为这里实现时会根据注册的bean名称去判断是否已经存
+     * 在有bean的定义, 如果没有开启同名覆盖,同名则会注入异常,最后spring会根据这里bean的定义去实例化对应的bean
      * @param configurableListableBeanFactory bean工厂
      * @throws BeansException 异常
      */

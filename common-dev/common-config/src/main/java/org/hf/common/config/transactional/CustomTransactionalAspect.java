@@ -49,7 +49,7 @@ public class CustomTransactionalAspect {
     @SneakyThrows
     @Around("@annotation(CustomTransactional)")
     public Object around(ProceedingJoinPoint joinPoint) {
-        // 获取一个事务
+        // 获取一个事务, 采用声明式事务进行事务提交
         TransactionStatus transaction = transactionManager.getTransaction(transactionDefinition);
         Object proceed = null;
         CustomTransactional methodAnnotation = getMethodAnnotation(joinPoint);

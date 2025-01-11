@@ -13,3 +13,5 @@ mybatis应用聚合工程
     4> mybatis的xml文件中的<where>标签会过滤多余的 and 关键字;
     5> if标签和SQL语句中的and大小写区分开, if标签中的and只能小写;
     6> mybatis查询, 如果返回结果为集合对象如List或者Map时, 没查询到数据返回的是空集合并不是null; 如果返回结果为普通对象, 没查询到数据返回的是null;
+    7> mybatis查询, 如果返回类型为resultType, 可以直接将字符串映射成为对应的枚举类型;
+    8> mybatis查询, 如果返回类型为实体对应的BaseResultMap的id, 那么即使map中没有定义表中的字段, 查询时进行查询了也会返回, mapper方法返回类型要是表对应的实体对象, 且符合驼峰命名规则

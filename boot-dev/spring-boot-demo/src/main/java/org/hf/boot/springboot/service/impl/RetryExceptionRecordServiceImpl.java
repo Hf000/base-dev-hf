@@ -158,6 +158,7 @@ public class RetryExceptionRecordServiceImpl implements RetryExceptionRecordServ
     /**
      * 开启方式:需要在启动类开启@EnableRetry重试注解, 需要依赖spring-retry和spring-boot-starter-aop
      * // @Retryable spring重试, value-需要重试的异常类型; maxAttempts-最大重试次数, backoff-重试偏移量(delay-重试之间的等待时间, multiplier-等待时间的倍数, mayDelay-最大等待时间默认30秒),  recover-最终重试失败后的回调方法
+     * 另外一种编程式重试: RetryTemplate, 参考:https://blog.csdn.net/weixin_38937840/article/details/136650198
      */
     @Override
     @Retryable(value = BusinessException.class, maxAttempts = 3, backoff = @Backoff(delay = 60000, multiplier = 2, maxDelay = 600000), recover = "retryFailedCallback")

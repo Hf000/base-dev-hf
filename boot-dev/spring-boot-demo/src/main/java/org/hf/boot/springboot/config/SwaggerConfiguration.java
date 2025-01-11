@@ -2,8 +2,22 @@ package org.hf.boot.springboot.config;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
+import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
+import org.springframework.boot.actuate.autoconfigure.web.server.ManagementPortType;
+import org.springframework.boot.actuate.endpoint.ExposableEndpoint;
+import org.springframework.boot.actuate.endpoint.web.EndpointLinksResolver;
+import org.springframework.boot.actuate.endpoint.web.EndpointMapping;
+import org.springframework.boot.actuate.endpoint.web.EndpointMediaTypes;
+import org.springframework.boot.actuate.endpoint.web.ExposableWebEndpoint;
+import org.springframework.boot.actuate.endpoint.web.WebEndpointsSupplier;
+import org.springframework.boot.actuate.endpoint.web.annotation.ControllerEndpointsSupplier;
+import org.springframework.boot.actuate.endpoint.web.annotation.ServletEndpointsSupplier;
+import org.springframework.boot.actuate.endpoint.web.servlet.WebMvcEndpointHandlerMapping;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.util.StringUtils;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -12,6 +26,10 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * <p> swagger配置类 </p>
@@ -74,6 +92,30 @@ public class SwaggerConfiguration {
                 // 版本号
                 .version("1.0.0")
                 .build();
+    }
+
+    /**
+     * 处理springboot整合swagger报空指针的问题,设置spring和spring actuator不设置默认的pathPatternsCondition，而是使用ant_path_matcher
+     * 如果依赖了actuator,这段必须加上,否则可不加,只需加上spring.mvc.pathmatch.matching-strategy=ant_path_matcher
+     */
+    @Bean
+    public WebMvcEndpointHandlerMapping webEndpointServletHandlerMapping(WebEndpointsSupplier webEndpointsSupplier,
+                                                                         ServletEndpointsSupplier servletEndpointsSupplier, ControllerEndpointsSupplier controllerEndpointsSupplier,
+                                                                         EndpointMediaTypes endpointMediaTypes, CorsEndpointProperties corsProperties,
+                                                                         WebEndpointProperties webEndpointProperties, Environment environment) {
+        List<ExposableEndpoint<?>> allEndpoints = new ArrayList<>();
+        Collection<ExposableWebEndpoint> webEndpoints = webEndpointsSupplier.getEndpoints();
+        allEndpoints.addAll(webEndpoints);
+        allEndpoints.addAll(servletEndpointsSupplier.getEndpoints());
+        allEndpoints.addAll(controllerEndpointsSupplier.getEndpoints());
+        String basePath = webEndpointProperties.getBasePath();
+        EndpointMapping endpointMapping = new EndpointMapping(basePath);
+        boolean shouldRegisterLinksMapping =
+                webEndpointProperties.getDiscovery().isEnabled() && (StringUtils.hasText(basePath)
+                        || ManagementPortType.get(environment).equals(ManagementPortType.DIFFERENT));
+        return new WebMvcEndpointHandlerMapping(endpointMapping, webEndpoints, endpointMediaTypes,
+                corsProperties.toCorsConfiguration(), new EndpointLinksResolver(allEndpoints, basePath),
+                shouldRegisterLinksMapping, null);
     }
 
 }

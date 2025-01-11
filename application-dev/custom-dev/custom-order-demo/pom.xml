@@ -55,6 +55,11 @@
             <artifactId>annotations</artifactId>
             <version>13.0</version>
         </dependency>
+        <!-- springBoot监控依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

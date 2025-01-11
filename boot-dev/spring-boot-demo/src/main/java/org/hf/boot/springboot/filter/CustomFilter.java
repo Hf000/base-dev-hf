@@ -1,5 +1,7 @@
 package org.hf.boot.springboot.filter;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.hf.boot.springboot.utils.SpringContextUtil;
@@ -25,8 +27,10 @@ import java.nio.charset.StandardCharsets;
 /**
  * <p> 自定义过滤器 </p>
  * 1. 配置自定义过滤器方式一
- * //@ConditionalOnProperty(prefix = "request", value = "filter.enable", havingValue = "true")   // 配置该类是否能够实例化的条件, 和@Configuration配合使用
- * //@Configuration  // 将该类注册到spring容器中, 配置自定义过滤器方式一, 这样就不需要另外配置org.hf.boot.springboot.config.WebConfig中的initCustomFilter()或者setFilter()方法了, 缺点是不能配置自定义拦截器参数
+ * //@ConditionalOnProperty(prefix = "request", value = "filter.enable", havingValue = "true")   // 配置该类是否能够实例化
+ *  的条件, 和@Configuration配合使用
+ * //@Configuration  // 将该类注册到spring容器中, 配置自定义过滤器方式一, 这样就不需要另外配置org.hf.boot.springboot.config
+ *  .WebConfig中的initCustomFilter()或者setFilter()方法了, 缺点是不能配置自定义拦截器参数
  * 2. 配置自定义过滤器方式二、三在org.hf.boot.springboot.config.WebConfig类中
  * 3. 配置自定义过滤器方式四
  * //@WebFilter  // 需要在启动类上开启扫描注解@ServletComponentScan才能生效
@@ -51,7 +55,10 @@ public class CustomFilter implements Filter {
             filterChain.doFilter(request, servletResponse);
         } else if (RequestMethod.POST.name().equals(request.getMethod()) || RequestMethod.PUT.name().equals(request.getMethod())) {
             String contentType = request.getContentType();
-            if (StringUtils.isNotBlank(contentType) && contentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
+            if (StringUtils.isEmpty(contentType)) {
+                log.info("{} RequestFilter Uri:{}, ContentType is null", request.getMethod(), request.getRequestURI());
+                filterChain.doFilter(request, servletResponse);
+            } else if (StringUtils.isNotBlank(contentType) && contentType.contains(MediaType.APPLICATION_JSON_VALUE)) {
                 RequestWrapper requestWrapper = new RequestWrapper(request);
                 String bodyString = requestWrapper.getRequestBody();
                 log.info("{} RequestFilter Uri:{}, ContentType:{}, Params:{}", request.getMethod(), request.getRequestURI(), contentType, bodyString);
@@ -78,7 +85,9 @@ public class CustomFilter implements Filter {
         /**
          * 请求体
          */
-        private final String requestBody;
+        @Setter
+        @Getter
+        private String requestBody;
 
         public RequestWrapper(HttpServletRequest request) {
             super(request);
@@ -91,13 +100,6 @@ public class CustomFilter implements Filter {
          */
         private String getRequestBody(HttpServletRequest request) {
             return SpringContextUtil.getBodyString(request);
-        }
-
-        /**
-         * 获取请求体
-         */
-        public String getRequestBody() {
-            return requestBody;
         }
 
         @Override

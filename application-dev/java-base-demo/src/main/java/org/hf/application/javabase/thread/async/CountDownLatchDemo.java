@@ -29,6 +29,7 @@ public class CountDownLatchDemo {
 //        taskExecuteDemo();
     }
 
+    @SuppressWarnings("all")
     private static void simpleDemo() throws InterruptedException {
         // 创建CountDownLatch对象,这里初始化时的数量表示控制的线程并发数量
         CountDownLatch latch = new CountDownLatch(3);

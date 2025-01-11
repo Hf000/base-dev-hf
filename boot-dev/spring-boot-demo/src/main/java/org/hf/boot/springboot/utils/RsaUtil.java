@@ -1,4 +1,4 @@
-package org.hf.common.publi.utils;
+package org.hf.boot.springboot.utils;
 
 import com.alibaba.fastjson2.JSON;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +31,8 @@ import java.util.Map;
 
 /**
  * <p> rsa util </p >
- * @author HUFEI
- * @date 2023-06-06
+ * 非对称加密
+ * @author HF
  **/
 @Slf4j
 public class RsaUtil {

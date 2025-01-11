@@ -23,6 +23,15 @@ import java.util.Properties;
 
 /**
  * Sql执行时间记录拦截器
+ * 注解@Intercepts:mybatis拦截器注解, 参数@Signature:拦截点参数(可以定义多个拦截点),参数如下
+ *  1.type:拦截类型,取值如下:
+ *      Executor: 拦截执行器的方法，例如 update、query、commit、rollback 等。可以用来实现缓存、事务、分页等功能。
+ *      ParameterHandler: 拦截参数处理器的方法，例如 setParameters 等。可以用来转换或加密参数等功能。
+ *      ResultSetHandler: 拦截结果集处理器的方法，例如 handleResultSets、handleOutputParameters 等。可以用来转换或过滤结果集等功能。
+ *      StatementHandler: 拦截语句处理器的方法，例如 prepare、parameterize、batch、update、query 等。可以用来修改 SQL 语句、添加参数、记录日志等功能。
+ *  2.method:对应拦截类型中的方法
+ *  3.args:对应拦截类型中方法的入参类型(因为方法可能存在重载,这里区分拦截具体的哪个方法)
+ * @author HF
  */
 @Configuration
 @Slf4j
@@ -31,6 +40,10 @@ import java.util.Properties;
         @Signature(type = StatementHandler.class, method = "batch", args = {Statement.class})})
 public class MybatisSqlCostInterceptor implements Interceptor {
 
+    /**
+     * 进行拦截处理
+     * @param invocation 拦截点对象,Invocation#target(拦截类型对象),Invocation#method(拦截类型指定方法),Invocation#args(拦截类型指定方法参数)
+     */
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         Object target = invocation.getTarget();
@@ -54,11 +67,18 @@ public class MybatisSqlCostInterceptor implements Interceptor {
         }
     }
 
+    /**
+     * 判断是否要进行拦截, 然后对要拦截的指定类型对象生成代理
+     */
     @Override
     public Object plugin(Object target) {
+        // 生成代理对象
         return Plugin.wrap(target, this);
     }
 
+    /**
+     * 支持可配置的变量,在拦截器中进行对应变量的获取
+     */
     @Override
     public void setProperties(Properties properties) {
     }
