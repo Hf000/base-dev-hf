@@ -10,6 +10,6 @@ import org.springframework.stereotype.Component;
 public class TestSpringOrderBean {
 
     public TestSpringOrderBean() {
-        System.out.println("启动顺序3-2:构造函数 TestSpringOrderBean");
+        System.out.println("启动顺序4-1-2:构造函数 TestSpringOrderBean");
     }
 }

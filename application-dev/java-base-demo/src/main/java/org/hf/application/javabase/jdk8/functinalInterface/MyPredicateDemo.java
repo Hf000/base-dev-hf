@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * <p> 函数式接口:Predicate函数接口的test()方法用于进行数据条件判断操作,有返回值:boolean </p>
- *
+ * <p> 断言型函数式接口:Predicate函数接口的test()方法用于进行指定逻辑的条件判断操作,有返回值:boolean类型 </p >
+ *  jdk应用: Stream中的filter方法
  * @author hufei
  * @date 2022/9/3 17:28
  */

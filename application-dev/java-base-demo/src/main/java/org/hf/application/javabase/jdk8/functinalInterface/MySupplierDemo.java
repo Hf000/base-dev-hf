@@ -3,8 +3,8 @@ package org.hf.application.javabase.jdk8.functinalInterface;
 import java.util.function.Supplier;
 
 /**
- * <p> 函数式接口:Supplier函数接口的get()方法用于进行结果获取操作,有返回值 </p>
- *
+ * <p> 供给型(只有输出(出参),没有输入(入参))函数式接口:Supplier函数接口的get()方法用于根据指定逻辑获取相应的结果,有返回值 </p >
+ *  jdk应用: Optional类中的orElseGet方法
  * @author hufei
  * @date 2022/9/3 17:31
  */

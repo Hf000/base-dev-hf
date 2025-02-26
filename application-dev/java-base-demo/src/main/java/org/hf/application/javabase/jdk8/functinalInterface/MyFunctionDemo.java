@@ -3,7 +3,8 @@ package org.hf.application.javabase.jdk8.functinalInterface;
 import java.util.function.Function;
 
 /**
- * <p> 函数式接口: Function函数接口的apply()用于进行数据转换操作,有返回值:返回转换后的结果 </p>
+ * <p> 函数型函数式接口: Function函数接口的apply()用于进行指定逻辑处理,有返回值,返回处理后的接口 </p >
+ * jdk应用: Stream中的map与flatMap方法
  * @author hufei
  * @date 2022/9/3 17:25
 */

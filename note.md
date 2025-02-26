@@ -16,3 +16,10 @@
     5> 总结:
         (1) 如果对数据量不大的集合进行集合运算, 使用ArrayList或者HashSet进行集合操作均可;
         (2) 如果对数据量较大的集合进行集合运算, 推荐使用HashSet进行集合操作;
+        
+# 二、SpringMVC
+## 1. SpringMVC的返回响应
+    1> 如果类或方法上没有标注注解@ResponseBody, 默认返回是会被视图解析器解析成视图, 如果找不到指定的视图则会报错
+    2> servlet的Forward和Redirect区别: 
+        (1) Forward:表示请求转发,不会改变Request,浏览器中看的地址也不会发生改变
+        (2) Redirect:表示请求重定向,会改变Request,浏览器中的地址会变成重定向后的地址

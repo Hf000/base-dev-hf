@@ -23,6 +23,7 @@
 ## 10. org.hf.boot.springboot.controller.RequestController request请求接收参数示例
 ## 11. 默认集成logback日志框架, 如果需要使用别的日志框架需要先排除logback相关依赖;
 ## 12. SpringBoot中使用AopContext.currentProxy()需要在启动类开启@EnableAspectJAutoProxy(exposeProxy = true);
+    1> 获取spring中代理类对象基础类型工具类: org.hf.boot.springboot.utils.SpringAopTargetUtils
 ## 13. SpringBoot中集成线程池 org.hf.boot.springboot.config.AsyncExecutorConfig
     1 启动类上添加@EnableAsync注解, 开启异步支持, 然后直接在对应的@Service方法上添加@Async, 进行异步调用(此时使用的是默认线程池SimpleAsyncTaskExecutor);
     2 在@Configuration配置类上添加@EnableAsync注解, 自定义线程池对象上添加@Bean(name = "多个线程池对象需要根据name区分"), 
@@ -57,12 +58,13 @@
     3. org.hf.boot.springboot.proxy包下的类,除以上的类,其他均为公共实现
 ## 17. org.hf.boot.springboot.config.AbstractEventSubscriber 拓展spring事件分发和订阅
 ## 18. org.hf.boot.springboot.annotations.CustomTransactional 自定义事务注解
-## 19. org.hf.boot.springboot.retry.CustomRetryException 自定义异步记录需要重试的异常记录
+## 19. org.hf.boot.springboot.retry.CustomRetryException 自定义异步记录需要重试的异常记录, 需要手动调接口实现异常重试
     使用方法:
         1> 在可能需要异常重试的方法上添加@CustomRetryException注解
         2> 调用方法进行异步方法重试: org.hf.boot.springboot.service.RetryExceptionRecordService.retryExceptionRecord
-## 20. spring重试
-    使用方法见：org.hf.boot.springboot.service.impl.RetryExceptionRecordServiceImpl.springExceptionRetry注释内容
+## 20. 自动重试
+    1> spring重试注解@Retryable使用方法见: org.hf.boot.springboot.service.impl.RetryExceptionRecordServiceImpl.springExceptionRetry注释内容
+    2> 重试工具类: org.hf.boot.springboot.utils.RetryUtil
 ## 21. 基于redis+lua脚本实现限流注解@RedisLimitAnnotation **(待验证)**
     使用方法: 在对应的类方法上添加org.hf.boot.springboot.currentlimit.redis.RedisLimitAnnotation注解
 ## 22. javax.validation.Valid的@Valid和org.springframework.validation.annotation.Validated的@Validated注解区别:

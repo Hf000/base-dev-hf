@@ -21,10 +21,10 @@ public class ProxyImpl implements MethodInterceptor {
 
     /**
      * 代理的过程
-     * @param o          被代理对象的代理对象实例
-     * @param method     被代理方法
+     * @param o          被代理的对象(需要增强的对象)
+     * @param method     被代理方法(需要增强的方法)
      * @param objects    方法参数
-     * @param methodProxy 方法代理
+     * @param methodProxy 用于调用原始方法
      * @return Object
      */
     @SneakyThrows
