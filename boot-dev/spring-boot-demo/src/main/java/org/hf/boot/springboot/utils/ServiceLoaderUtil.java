@@ -141,7 +141,7 @@ public class ServiceLoaderUtil {
     /**
      * properties文件中配置项:custom.className.list = {"org.hf.spi.CustomImpl"}
      */
-    @Value("#{${custom.className.list}}")
+    @Value("#{${custom.className.list:{}}}")
     private List<String> customClassNameList;
 
     /**

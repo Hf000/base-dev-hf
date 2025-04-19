@@ -57,8 +57,7 @@ public class UrlResResolveController {
     @Autowired
     private WebApplicationContext webApplicationContext;
 
-    private final List<String> CUSTOM_CHAR_FIELD_LIST = Arrays.asList("mobile", "phone", "contacttel", "idno", "certno",
-            "idnum", "email", "address");
+    private static final List<String> CUSTOM_CHAR_FIELD_LIST = Arrays.asList("mobile", "phone", "idNo", "email", "address");
 
     private static final String MICRO_SRV = "custom服务";
 
@@ -135,6 +134,11 @@ public class UrlResResolveController {
         return requestMappingDTO;
     }
 
+    /**
+     * 获取接口的所有出参，嵌套扫描里层对象属性
+     * @param handlerMethod 处理器方法对象
+     * @return 出参拼接字符串
+     */
     private String getOutParamFields(HandlerMethod handlerMethod) {
         Type genericReturnType = handlerMethod.getMethod().getGenericReturnType();
         Type finalActualTypeFromGenericType = getFinalActualTypeFromGenericType(genericReturnType);
@@ -145,8 +149,8 @@ public class UrlResResolveController {
                 // 返回基本类型
                 return finalActualClazz.getName();
             }
-            // 循环获取属性不为基础包装的对象类型字段是否包含字段字段
-            loopObjectAllField(finalActualClazz, fieldNameList, new ArrayList<>());
+            // 循环获取属性不为基础包装对象类型的所有属性字段
+            loopObjectAllField(finalActualClazz, fieldNameList);
             if (CollectionUtils.isEmpty(fieldNameList)) {
                 return null;
             }
@@ -157,7 +161,7 @@ public class UrlResResolveController {
     }
 
     /**
-     * 获取接口的入参,只返回最外层字段属性,不嵌套扫描
+     * 获取接口的入参,嵌套扫描
      * @param handlerMethod 处理器方法对象
      * @return 入参拼接字符串
      */
@@ -174,8 +178,8 @@ public class UrlResResolveController {
                 // 跳过此参数
                 return;
             }
-            // 循环获取属性不为基础包装的对象类型字段是否包含字段字段
-            loopObjectAllField(parameter.getType(), fieldNameList, new ArrayList<>());
+            // 循环获取属性不为基础包装对象类型的所有属性字段
+            loopObjectAllField(parameter.getType(), fieldNameList);
         });
         if (CollectionUtils.isEmpty(fieldNameList)) {
             return null;
@@ -183,23 +187,38 @@ public class UrlResResolveController {
         return String.join(COMMA, fieldNameList);
     }
 
-    private void loopObjectAllField(Class<?> type, List<String> fieldNameList, List<String> refClassName) {
+    private static void loopObjectAllField(Class<?> type, List<String> fieldNameList) {
+        // 第一个参数是当前对象类型
+        // 第二个参数是装载所有的字段的
+        // 第三个参数是为了拼接完整的类属性引用的
+        // 第四个参数是为了防止循环扫描的
+        // 第五个参数是用来控制嵌套扫描的层数
+        loopObjectAllField(type, fieldNameList, new ArrayList<>(), new ArrayList<>(), 2);
+    }
+
+    private static void loopObjectAllField(Class<?> type, List<String> fieldNameList, List<String> refClassName,
+                                           List<Class<?>> refClass, int scanNum) {
         String simpleName = type.getSimpleName();
         refClassName.add(simpleName);
+        refClass.add(type);
         Field[] fields = type.getDeclaredFields();
         for (Field field : fields) {
             Class<?> fieldType = field.getType();
-            if (isListType(fieldType)) {
+            if (isListType(fieldType) && scanNum > 0) {
                 Class<?> aClass = getParamListType(field);
-                if (aClass == null || type.equals(aClass) || isReturnBaseType(aClass)) {
-                    fieldNameList.add(StringUtils.join(refClassName, "#") + "##" +field.getName());
+                if (aClass == null || refClass.contains(aClass) || isReturnBaseType(aClass)) {
+                    // 这里先不加类信息,可能导致超出excel单元格的最大字符限制
+//                    fieldNameList.add(StringUtils.join(refClassName, "#") + "##" +field.getName());
+                    fieldNameList.add(field.getName());
                     continue;
                 }
-                loopObjectField(aClass, fieldNameList, refClassName);
-            } else if (!type.equals(field.getType()) && !isReturnBaseType(fieldType)) {
-                loopObjectField(fieldType, fieldNameList, refClassName);
+                loopObjectAllField(aClass, fieldNameList, refClassName, refClass, scanNum - 1);
+            } else if (!refClass.contains(fieldType) && !isReturnBaseType(fieldType) && scanNum > 0) {
+                loopObjectAllField(fieldType, fieldNameList, refClassName, refClass, scanNum - 1);
             } else {
-                fieldNameList.add(StringUtils.join(refClassName, "#") + "##" +field.getName());
+                // 这里先不加类信息,可能导致超出excel单元格的最大字符限制
+//                fieldNameList.add(StringUtils.join(refClassName, "#") + "##" +field.getName());
+                fieldNameList.add(field.getName());
             }
         }
         refClassName.remove(simpleName);
@@ -219,7 +238,7 @@ public class UrlResResolveController {
     }
 
     /**
-     * 获取请求接口入参中是否包含指定字段信息并缺少指定注解
+     * 获取请求接口所有入参名称是否包含指定字符串并缺少指定注解的入参信息
      */
     private String getInParamIncludeFieldsNotAnnotation(HandlerMethod handlerMethod) {
         Parameter[] parameters = handlerMethod.getMethod().getParameters();
@@ -233,7 +252,7 @@ public class UrlResResolveController {
                 // 跳过此参数 无法加日志脱敏注解
                 return;
             }
-            loopIncludeFiledInfo(type, fieldNameList, new ArrayList<>());
+            loopIncludeFiledInfo(type, fieldNameList);
         });
         if (CollectionUtils.isEmpty(fieldNameList)) {
             return null;
@@ -241,12 +260,18 @@ public class UrlResResolveController {
         return String.join(COMMA, fieldNameList);
     }
 
+    private static void loopIncludeFiledInfo(Class<?> type, List<String> fieldNameList) {
+        loopIncludeFiledInfo(type, fieldNameList, new ArrayList<>(), new ArrayList<>());
+    }
+
     /**
-     * 递归获取对象中的嵌套对象属性
+     * 递归获取对象中的嵌套对象属性名称是否包含字段字符,且属性是否添加了指定注解
      */
-    private void loopIncludeFiledInfo(Class<?> type, List<String> fieldNameList, List<String> refClassNames) {
+    private static void loopIncludeFiledInfo(Class<?> type, List<String> fieldNameList, List<String> refClassNames,
+                                             List<Class<?>> refClass) {
         String simpleName = type.getSimpleName();
         refClassNames.add(simpleName);
+        refClass.add(type);
         Field[] fields = type.getDeclaredFields();
         for (Field field : fields) {
             Class<?> fieldType = field.getType();
@@ -257,12 +282,12 @@ public class UrlResResolveController {
                 }
             }  else if (isListType(fieldType)) {
                 Class<?> aClass = getParamListType(field);
-                if (aClass == null || type.equals(aClass) || isReturnBaseType(aClass)) {
+                if (aClass == null || refClass.contains(aClass) || isReturnBaseType(aClass)) {
                     continue;
                 }
-                loopIncludeFiledInfo(aClass, fieldNameList, refClassNames);
-            } else if (!type.equals(field.getType()) && !isReturnBaseType(fieldType)) {
-                loopIncludeFiledInfo(fieldType, fieldNameList, refClassNames);
+                loopIncludeFiledInfo(aClass, fieldNameList, refClassNames, refClass);
+            } else if (!refClass.contains(fieldType) && !isReturnBaseType(fieldType)) {
+                loopIncludeFiledInfo(fieldType, fieldNameList, refClassNames, refClass);
             }
         }
         refClassNames.remove(simpleName);
@@ -271,7 +296,7 @@ public class UrlResResolveController {
     /**
      * 判断字段是否包含指定字符并没有加指定注解
      */
-    private boolean checkIncludeFieldsNotAnnotation(Field field) {
+    private static boolean checkIncludeFieldsNotAnnotation(Field field) {
         // 判断是否加了指定注解
         FieldEnum annotation = field.getAnnotation(FieldEnum.class);
         boolean isInclude = containsCustomCharFields(field.getName(), CUSTOM_CHAR_FIELD_LIST);
@@ -279,7 +304,7 @@ public class UrlResResolveController {
     }
 
     /**
-     * 获取请求接口出参中是否包含指定字段信息并缺少指定注解
+     * 获取请求接口出参中字段名称是否包含指定字符串并缺少指定注解的出参字段信息
      */
     private String getOutParamIncludeFieldsNotAnnotation(HandlerMethod handlerMethod) {
         Type genericReturnType = handlerMethod.getMethod().getGenericReturnType();
@@ -291,7 +316,7 @@ public class UrlResResolveController {
                 return null;
             }
             List<String> fieldNameList = new ArrayList<>();
-            loopIncludeFiledInfo(finalActualClazz, fieldNameList, new ArrayList<>());
+            loopIncludeFiledInfo(finalActualClazz, fieldNameList);
             if (CollectionUtils.isEmpty(fieldNameList)) {
                 return null;
             }
@@ -338,9 +363,10 @@ public class UrlResResolveController {
     /**
      * 获取出/入参最外层对象是否有加指定注解
      */
-    private void getClassInfo(Class<?> type, List<String> classNameList, List<String> classFieldNameList) {
+    private static void getClassInfo(Class<?> type, List<String> classNameList, List<String> classFieldNameList) {
         String simpleName = type.getSimpleName();
         List<String> refClassNames = Lists.newArrayList(simpleName);
+        List<Class<?>> refClass = Lists.newArrayList(type);
         Field[] fields = type.getDeclaredFields();
         boolean flag = true;
         for (Field field : fields) {
@@ -353,23 +379,58 @@ public class UrlResResolveController {
                 flag = false;
             }
             // 如果不是基本数据类型则递归遍历
-            if (isListType(field.getType())) {
-                Class<?> aClass = getParamListType(field);
-                if (aClass == null || type.equals(aClass) || isReturnBaseType(aClass)) {
-                    continue;
-                }
-                loopFieldClassInfo(field, aClass, classNameList, classFieldNameList, type, refClassNames);
-            } else if (!type.equals(field.getType()) && !isReturnBaseType(field.getType())) {
-                loopFieldClassInfo(field, null, classNameList, classFieldNameList, type, refClassNames);
+            handleCustomObj(field, classNameList, classFieldNameList, type, refClassNames, refClass);
+        }
+    }
+
+    /**
+     * 处理自定义对象时的指定注解检查
+     */
+    private static void handleCustomObj(Field field, List<String> classNameList,
+                                        List<String> classFieldNameList, Class<?> parentTypeParam,
+                                        List<String> refClassNames, List<Class<?>> refClass) {
+        if (isListType(field.getType())) {
+            // 如果是List集合则需要获取集合的泛型真实类型后判断是否遗漏了脱敏注解
+            Class<?> aClass = getParamListType(field);
+            if (aClass == null || isReturnBaseType(aClass)) {
+                return;
             }
+            if (refClass.contains(aClass)) {
+                checkedObjCustomAnno(field, aClass, classFieldNameList, refClassNames);
+                return;
+            }
+            loopFieldClassInfo(field, aClass, classNameList, classFieldNameList, parentTypeParam, refClassNames, refClass);
+        } else if (!isReturnBaseType(field.getType())) {
+            if (refClass.contains(field.getType())) {
+                checkedObjCustomAnno(field, field.getType(), classFieldNameList, refClassNames);
+                return;
+            }
+            // 如果是自定义的实体对象判断是否遗漏了脱敏注解
+            loopFieldClassInfo(field, null, classNameList, classFieldNameList, parentTypeParam, refClassNames, refClass);
+        }
+    }
+
+    /**
+     * 如果已经处理过的自定义对象, 则只检查当前引用和当前引用类型上是否有对应注解。
+     * 第一个参数和第二个参数解释:这里为什么要区分字段field对象和字段类型对象type, 因为当前字段field为集合时,
+     * 需要获取集合的泛型类型而不是字段类型。
+     */
+    private static void checkedObjCustomAnno(Field field, Class<?> type, List<String> classFieldNameList,
+                                             List<String> refClassNames) {
+        FieldClass annotation1 = type.getAnnotation(FieldClass.class);
+        if (annotation1 != null && field.getAnnotation(FieldAttribute.class) == null) {
+            classFieldNameList.add(StringUtils.join(refClassNames, "#") + "##" + field.getName());
         }
     }
 
     /***
-     * 递归获取出/入参嵌套对象是否添加指定注解
+     * 递归获取出/入参嵌套对象是否添加指定注解。
+     * 第一个参数和第二个参数解释:这里为什么要区分字段fieldParam对象和字段类型对象fieldTypeParam, 因为当前字段fieldParam为集合时,
+     * 需要获取集合的泛型类型而不是字段类型。
      */
-    private void loopFieldClassInfo(Field fieldParam, Class<?> fieldTypeParam, List<String> classNameList,
-                                    List<String> classFieldNameList, Class<?> parentTypeParam, List<String> refClassNames) {
+    private static void loopFieldClassInfo(Field fieldParam, Class<?> fieldTypeParam, List<String> classNameList,
+                                           List<String> classFieldNameList, Class<?> parentTypeParam,
+                                           List<String> refClassNames, List<Class<?>> refClass) {
         Class<?> type;
         if (fieldTypeParam != null) {
             type = fieldTypeParam;
@@ -378,19 +439,21 @@ public class UrlResResolveController {
         }
         String simpleName = type.getSimpleName();
         refClassNames.add(simpleName);
+        refClass.add(type);
         Field[] fields = type.getDeclaredFields();
         boolean flag = true;
         for (Field field : fields) {
             // 同一个实体对象, 这里只需要判断一次
             if (flag && checkClassNotAnnotation(field)) {
-                // 判断当前类是否添加了脱敏注解
+                // 判断当前类是否添加了指定注解
                 FieldClass annotation1 = type.getAnnotation(FieldClass.class);
                 if (annotation1 == null ) {
                     classNameList.add(StringUtils.join(refClassNames, "#"));
                 }
-                // 判断当前类的引用是否
+                // 判断当前类是成员变量属性时是否加了指定注解
                 FieldAttribute annotation2 = fieldParam.getAnnotation(FieldAttribute.class);
                 if (annotation2 == null) {
+                    // 这里拼接类时需要减一的原因是：判断的是当前字段的类对象是否缺少了指定注解
                     List<String> parentTypeNames = refClassNames.stream().limit(refClassNames.size() - 1).collect(Collectors.toList());
                     String parentTypeNameStrs = StringUtils.join(parentTypeNames, "#");
                     classFieldNameList.add(parentTypeNameStrs + "##" + fieldParam.getName());
@@ -403,25 +466,18 @@ public class UrlResResolveController {
                 flag = false;
             }
             // 如果不是基本数据类型则递归遍历
-            if (isListType(field.getType())) {
-                // 如果是List集合则需要获取集合的泛型真实类型后判断是否遗漏了脱敏注解
-                Class<?> aClass = getParamListType(field);
-                if (aClass == null || type.equals(aClass) || isReturnBaseType(aClass)) {
-                    continue;
-                }
-                loopFieldClassInfo(field, aClass, classNameList, classFieldNameList, type, refClassNames);
-            } else if (!type.equals(field.getType()) && !isReturnBaseType(field.getType())) {
-                // 如果是自定义的实体对象判断是否遗漏了脱敏注解
-                loopFieldClassInfo(field, null, classNameList, classFieldNameList, type, refClassNames);
-            }
+            handleCustomObj(field, classNameList, classFieldNameList, type, refClassNames, refClass);
         }
         refClassNames.remove(simpleName);
+        // 防止里层检查了此对象类型后外层不再检查了，所以这里执行完方法的时候需要移除掉此类型，
+        // 现在注释掉的原因是：因为前面逻辑做了存在类型的不再嵌套检查字段属性，只检查当前字段属性的判断
+//        refClass.remove(type);
     }
 
     /**
      * 判断字段属性是否有指定注解
      */
-    private boolean checkClassNotAnnotation(Field field) {
+    private static boolean checkClassNotAnnotation(Field field) {
         // 判断是否为基础类型
         if (isCustomType(field.getType())) {
             // 判断是否加了指定注解
@@ -457,7 +513,7 @@ public class UrlResResolveController {
     }
 
     /**
-     * 获取接口入参有指定的字段属性
+     * 获取接口所有入参是否包含指定的字段属性名称
      */
     private String getInParamCustomFields(HandlerMethod handlerMethod) {
         Parameter[] parameters = handlerMethod.getMethod().getParameters();
@@ -476,8 +532,8 @@ public class UrlResResolveController {
             if (isReturnBaseType(type)) {
                 return;
             }
-            // 循环获取属性不为基础包装的对象类型字段是否包含字段字段
-            loopObjectField(parameter.getType(), fieldNameList, new ArrayList<>());
+            // 循环获取属性不为基础包装对象类型的成员变量是否包含指定属性名称
+            loopObjectField(parameter.getType(), fieldNameList);
         });
         if (CollectionUtils.isEmpty(fieldNameList)) {
             return null;
@@ -485,12 +541,18 @@ public class UrlResResolveController {
         return String.join(COMMA, fieldNameList);
     }
 
+    private static void loopObjectField(Class<?> type, List<String> fieldNameList) {
+        loopObjectField(type, fieldNameList, new ArrayList<>(), new ArrayList<>());
+    }
+
     /**
-     * 递归出/入参嵌套属性对象有指定的字段属性
+     * 递归出/入参嵌套属性对象有指定的字段属性名称
      */
-    private void loopObjectField(Class<?> type, List<String> fieldNameList, List<String> refClassName) {
+    private static void loopObjectField(Class<?> type, List<String> fieldNameList, List<String> refClassName,
+                                        List<Class<?>> refClass) {
         String simpleName = type.getSimpleName();
         refClassName.add(simpleName);
+        refClass.add(type);
         Field[] fields = type.getDeclaredFields();
         for (Field field : fields) {
             Class<?> fieldType = field.getType();
@@ -500,19 +562,19 @@ public class UrlResResolveController {
                 }
             } else if (isListType(fieldType)) {
                 Class<?> aClass = getParamListType(field);
-                if (aClass == null || type.equals(aClass) || isReturnBaseType(aClass)) {
+                if (aClass == null || refClass.contains(aClass) || isReturnBaseType(aClass)) {
                     continue;
                 }
-                loopObjectField(aClass, fieldNameList, refClassName);
-            } else if (!type.equals(field.getType()) && !isReturnBaseType(fieldType)) {
-                loopObjectField(fieldType, fieldNameList, refClassName);
+                loopObjectField(aClass, fieldNameList, refClassName, refClass);
+            } else if (!refClass.contains(fieldType) && !isReturnBaseType(fieldType)) {
+                loopObjectField(fieldType, fieldNameList, refClassName, refClass);
             }
         }
         refClassName.remove(simpleName);
     }
 
     /**
-     * 获取接口出参有指定的字段属性
+     * 获取接口所有出参是否包含指定字段属性名称
      */
     private String getOutParamCustomFields(HandlerMethod handlerMethod) {
         Type genericReturnType = handlerMethod.getMethod().getGenericReturnType();
@@ -524,8 +586,8 @@ public class UrlResResolveController {
                 // 不是实体对象无法判断
                 return null;
             }
-            // 循环获取属性不为基础包装的对象类型字段是否包含字段字段
-            loopObjectField(finalActualClazz, fieldNameList, new ArrayList<>());
+            // 循环获取属性不为基础包装对象类型字段是否包含指定属性名称
+            loopObjectField(finalActualClazz, fieldNameList);
             if (CollectionUtils.isEmpty(fieldNameList)) {
                 return null;
             }
@@ -652,7 +714,7 @@ public class UrlResResolveController {
     /**
      * 判断字段属性名是否包含自定的字符
      */
-    private boolean containsCustomCharFields(String fieldName, List<String> customCharFieldList) {
+    private static boolean containsCustomCharFields(String fieldName, List<String> customCharFieldList) {
         if (StrUtil.isBlank(fieldName)) {
             return false;
         }
@@ -665,76 +727,86 @@ public class UrlResResolveController {
         return false;
     }
 
-    @Getter
-    @Setter
-    @ToString
-    private static class RequestMappingDTO {
-
-        @ExcelProperty(value = "Controller名称", index = 0)
-        @ColumnWidth(24)
-        @ApiModelProperty("Controller名称")
-        private String controller;
-
-        @ExcelProperty(value = "urlResName", index = 1)
-        @ColumnWidth(29)
-        @ApiModelProperty("接口名称")
-        private String urlResName;
-
-        @ExcelProperty(value = "url映射", index = 2)
-        @ColumnWidth(39)
-        @ApiModelProperty("url映射")
-        private String urlMapping;
-
-        @ExcelProperty(value = "入参包含指定字符的字段不带注解", index = 3)
-        @ColumnWidth(35)
-        @ApiModelProperty("入参包含指定字符的字段不带注解")
-        private String inParamIncludeFieldsNotAnnotation;
-
-        @ExcelProperty(value = "出参包含指定字符的字段不带注解", index = 4)
-        @ColumnWidth(42)
-        @ApiModelProperty("出参包含指定字符的字段不带注解")
-        private String outParamIncludeFieldsNotAnnotation;
-
-        @ExcelProperty(value = "入参类或自定义对象属性上遗漏注解", index = 5)
-        @ColumnWidth(33)
-        @ApiModelProperty("入参类或自定义对象属性上遗漏注解")
-        private String inParamMissingAnnotation;
-
-        @ExcelProperty(value = "出参类或自定义对象属性上遗漏注解", index = 6)
-        @ColumnWidth(33)
-        @ApiModelProperty("出参类或自定义对象属性上遗漏注解")
-        private String outParamMissingAnnotation;
-
-        @ExcelProperty(value = "入参包含指定字段", index = 7)
-        @ColumnWidth(8)
-        @ApiModelProperty("入参包含指定字段")
-        private String inParamCustomFields;
-
-        @ExcelProperty(value = "出参包含指定字段", index = 8)
-        @ColumnWidth(8)
-        @ApiModelProperty("出参包含指定字段")
-        private String outParamCustomFields;
-
-        @ExcelProperty(value = "入参字段信息", index = 9)
-        @ColumnWidth(17)
-        @ApiModelProperty("入参字段信息")
-        private String inParamFields;
-
-        @ExcelProperty(value = "出参字段信息", index = 10)
-        @ColumnWidth(18)
-        @ApiModelProperty("出参字段信息")
-        private String outParamFields;
-    }
 }
 
+@Getter
+@Setter
+@ToString
+class RequestMappingDTO {
+
+    @ExcelProperty(value = "Controller名称", index = 0)
+    @ColumnWidth(24)
+    @ApiModelProperty("Controller名称")
+    private String controller;
+
+    @ExcelProperty(value = "urlResName", index = 1)
+    @ColumnWidth(29)
+    @ApiModelProperty("接口名称")
+    private String urlResName;
+
+    @ExcelProperty(value = "url映射", index = 2)
+    @ColumnWidth(39)
+    @ApiModelProperty("url映射")
+    private String urlMapping;
+
+    @ExcelProperty(value = "入参包含指定字符的字段不带注解", index = 3)
+    @ColumnWidth(35)
+    @ApiModelProperty("入参包含指定字符的字段不带注解")
+    private String inParamIncludeFieldsNotAnnotation;
+
+    @ExcelProperty(value = "出参包含指定字符的字段不带注解", index = 4)
+    @ColumnWidth(42)
+    @ApiModelProperty("出参包含指定字符的字段不带注解")
+    private String outParamIncludeFieldsNotAnnotation;
+
+    @ExcelProperty(value = "入参类或自定义对象属性上遗漏注解", index = 5)
+    @ColumnWidth(33)
+    @ApiModelProperty("入参类或自定义对象属性上遗漏注解")
+    private String inParamMissingAnnotation;
+
+    @ExcelProperty(value = "出参类或自定义对象属性上遗漏注解", index = 6)
+    @ColumnWidth(33)
+    @ApiModelProperty("出参类或自定义对象属性上遗漏注解")
+    private String outParamMissingAnnotation;
+
+    @ExcelProperty(value = "入参包含指定字段", index = 7)
+    @ColumnWidth(8)
+    @ApiModelProperty("入参包含指定字段")
+    private String inParamCustomFields;
+
+    @ExcelProperty(value = "出参包含指定字段", index = 8)
+    @ColumnWidth(8)
+    @ApiModelProperty("出参包含指定字段")
+    private String outParamCustomFields;
+
+    @ExcelProperty(value = "入参字段信息", index = 9)
+    @ColumnWidth(17)
+    @ApiModelProperty("入参字段信息")
+    private String inParamFields;
+
+    @ExcelProperty(value = "出参字段信息", index = 10)
+    @ColumnWidth(18)
+    @ApiModelProperty("出参字段信息")
+    private String outParamFields;
+}
+
+/**
+ * 此枚举作用在基础类型的包装类型字段上
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 @interface FieldEnum {}
 
+/**
+ * 此枚举作用在自定义对象类型的字段上
+ */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
 @interface FieldAttribute {}
 
+/**
+ * 此枚举作用在自定义对象类型的类上
+ */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
+@Target({ElementType.TYPE})
 @interface FieldClass {}

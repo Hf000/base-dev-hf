@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       >
+
+    <!-- 激活已经注册到Spring中Bean的注解,此方式不适用于@Component, @Controller, @Service, @Repository -->
+    <context:annotation-config/>
+    <!-- 开启组件扫描, 通过此方式可以不用对Bean进行显示注册,只需要在对应的Bean上加对应的注解即可,
+    例如@Component, @Controller, @Service, @Repository, 使用此方式则无需再使用<context:annotation-config/> -->
+    <!--<context:component-scan base-package="org.hf.application.javabase.spring.event"/>-->
 
     <!--配置文件中配置-->
     <bean id="applicationEventListener" class="org.hf.application.javabase.spring.event.ApplicationEventListener"/>
     <bean id="messageEventListener" class="org.hf.application.javabase.spring.event.MessageEventListener"/>
+    <bean id="annotationMessageEventListener" class="org.hf.application.javabase.spring.event.AnnotationMessageEventListener"/>
 
 </beans>

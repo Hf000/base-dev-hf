@@ -9,7 +9,7 @@
 ## 6. 整合redis   
     1> 配置文件application.yml文件中新增了redis相关的自定义配置开关,是为了控制没启动redis时的依赖注入报错
     2> redis使用避坑
-        1. 将一个集合元素为object类型的数据放到Set集合, 使用members()方法无法获取出所有的值, 原因:进行元素比较时equals方法都相等, 所以需要重写一下equals方法;
+        1.将一个集合元素为object类型的数据放到Set集合, 使用members()方法无法获取出所有的值, 原因:如果当前对象进行了继承, 可能redis获取所有元素后进行比较时导致equals方法都相等, 所以需要重写一下equals和hashCode方法;
         2.使用redis的set集合的add方法时, 放多个元素需要将集合转换成数组, 否则会当成一个元素放入;
 ## 7. (已删除)整合elastic-job 
     1> 注意guava和curator-client的版本兼容问题, 这里guava的版本号是18.0, curator-client的版本号是2.10.0
@@ -99,10 +99,11 @@
 ## 28. 循环依赖
     一. 可能出现的问题
         1> spring是通过三级缓存解决了循环依赖的, 但是springboot自2.6.0及以上版本默认禁止循环依赖, 如果开启需配置spring.main.allow-circular-references=true
-        2> 开启循环依赖也可能会导致所持有的依赖对像的引用不同而报错, 因为循环依赖过程中先实例化的对象如果使用了@Async注解或由BeanPostProcessor后置处理器返回代理对象时
-        会报错:BeanCurrentlyInCreationException, 原因是因为当循环依赖中先实例化的对象实例化而属性赋值之前会先将ObjectFactory添加至三级缓存中, 从而使得循环依赖中后
-        实例化的对象在实例化时可以从三级缓存中拿到先实例化对象的引用完成实例化, 而先实例化的对象完成赋值后进行初始化时如果存在@Async注解, 此时会进行其对应的后置处理器
-        AsyncAnnotationBeanPostProcessor的处理, 在postProcessAfterInitialization方法中将返回代理对象，此代理对象与B中持有的A对象引用不同从而报错
+        2> 开启循环依赖也可能会导致所持有的依赖对像的引用不同而报错, 因为循环依赖过程中先实例化的对象如果使用了@Async注解(本质也是通过BPP后置处理器实现)或由
+        BeanPostProcessor后置处理器返回代理对象时会报错:BeanCurrentlyInCreationException, 原因是因为当循环依赖中先实例化的对象在进行实例化后,属性赋值之前会先将
+        ObjectFactory添加至三级缓存中, 从而使得循环依赖中后实例化的对象在实例化时可以从三级缓存中拿到先实例化对象的引用完成属性赋值, 而先实例化的对象完成赋值后进行初
+        始化时如果存在@Async注解, 此时会进行其对应的后置处理器AsyncAnnotationBeanPostProcessor的处理, 在postProcessAfterInitialization方法中将返回代理对象，
+        此代理对象与B中持有的A对象引用不同从而报错
     二. 解决方法
         1> 尽可能从设计层面避免循环依赖, 这里可以采用接口隔离的方式
         2> 使用@Lazy注解进行延迟加载
@@ -129,6 +130,38 @@
 ## 32. 业务逻辑执行耗时统计
     1> 工具类: org.hf.boot.springboot.utils.PerfTrackerUtil
     2> 使用实例: org.hf.boot.springboot.utils.PerfTrackerUtil.main
+## 33. Spring中的设计模式
+    1> 工厂模式: Spring IOC(Bean通过工厂进行创建)
+    2> 单例模式: Spring Bean(Bean以默认方式创建后的实例)
+    3> 适配器模式: Spring MVC(处理请求时, 先查找对应的处理器链, 然后通过适配器进行处理器链的执行)
+    4> 装饰者模式: Spring Bean(实例化Bean后, 会将其包装成BeanWrapper, 用来统一Bean的属性操作功能, 也就是提供一套标准的查询和设置属性的方法)
+    5> 代理模式: Spring AOP(通过Jdk动态代理生成Bean的代理对象)
+    6> 策略模式: Spring容器启动时, 加载Resource资源文件, 根据url, fileSystem, classPath, InputStream进行不同策略的加载
+    7> 观察者模式: Spring Event(当Spring容器刷新完成时会触发ContextRefreshedEvent事件,此时Spring容器的Bean已经初始化完成)
+    8> 模板方法模式: 场景一:Spring初始化容器时执行模板方法org.springframework.context.support.AbstractApplicationContext.refresh; 
+                   场景二:数据源的连接操作, 根据不同的模板JdbcTemplate, HibernateTemplate进行数据库的连接
+    9> 责任链模式: Spring AOP(Spring默认按照顺序定义了AOP的切面拦截执行链, 在Bean创建时初始化操作时, 通过BPP后置处理器按规则进行切面匹配, 匹配到对应拦截方法后进行前后置增强)
+## 34. Spring中实现Bean注册到Spring容器的几种方式
+    1> 通过 @Configuration + @ComponentScan(指定类路径) 开启组件扫描
+    2> 通过@Configuration + @Bean 自定义Bean的创建
+    3> 通过@Configuration + @Import({class}) 自定义指定Bean的加载
+    4> 通过@Configuration + @Import(其他Configuration) 自定义指定配置类的加载,@EnableWebMvc通过此方式实现注册SpringWebMVC
+        所需要的各种特殊类型的bean到Spring容器中，以便在DispatcherServlet初始化及处理请求的过程中生效！
+    5> 通过@Configuration + @Import(ImportSelector) 自定义指定类路径的Bean的加载,@EnableAutoConfiguration通过此方式实现
+        扫描所有与依赖JAR中指定位置的META-INF/spring.factories文件中的配置,加载各种自动配置类.这些自动配置类会根据当前项目的依
+        赖和配置,自动配置相应的Bean注册到BeanDefinition。
+    6> 通过@Configuration + @ImportResources({classPath:applicationProperties.xml}) 加载Spring的XML文件配置
+## 35. Spring常用加载入口
+    1> 通过加载指定XML文件:org.springframework.context.support.ClassPathXmlApplicationContext.ClassPathXmlApplicationContext(java.lang.String)
+    2> 通过加载指定包路径:org.springframework.context.annotation.AnnotationConfigApplicationContext
+    3> Spring MVC通过配置Spring上下文监听器ContextLoaderListener执行initWebApplicationContext()方法调用
+        configureAndRefreshWebApplicationContext()方法进行Spring容器初始化流程
+    4> Spring Boot通过应用程序入口进行run()方法调用(调用链路应用入口run() -> org.springframework.boot.SpringApplication.run() -> 
+        org.springframework.boot.SpringApplication.refreshContext() -> org.springframework.boot.SpringApplication.refresh()),
+        如果当前是WebApplicationType.SERVLET类型,则通过org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.refresh()
+        方法进行Spring容器初始化流程
+    5> Mybatis加载到Spring的入口,通过org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration自动加载,
+        创建SqlSessionFactory进行SqlSession对象获取,创建SqlSessionTemplate进行Mapper相关方法调用
 
 
 

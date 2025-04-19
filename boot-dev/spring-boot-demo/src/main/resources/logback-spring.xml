@@ -12,8 +12,9 @@
     <property name="app.shortName" value="springboot-demo"/>
     <property name="console_log_pattern"
               value="%d{HH:mm:ss.SSS} %clr(%5p) %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} [%4L]%clr(:){faint} %m%n%wEx"/>
+    <!-- traceId变量是从MDC中取的请求唯一标识,需要在系统中用拦截器将请求唯一标识put到MDC中,也可以使用SkyWalking、zipkin等开源组件进行集成 -->
     <property name="file_log_pattern"
-              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${app.shortName},%X{X-B3-TraceId:-}] %5p [%15t] %-40.40logger{39} [%4L]: %m%n%wEx"/>
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [${app.shortName},%X{traceId:-}] %5p [%15t] %-40.40logger{39} [%4L]: %m%n%wEx"/>
     <property name="log.max.history" value="540"/>
     <property name="log.max.file.size" value="300MB"/>
 
