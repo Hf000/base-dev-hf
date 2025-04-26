@@ -1,10 +1,13 @@
 package org.hf.boot.springboot.service.impl;
 
 import org.hf.boot.springboot.error.BusinessException;
+import org.hf.boot.springboot.pojo.dto.UserInfoReq;
 import org.hf.boot.springboot.service.CustomTransactionService;
+import org.hf.boot.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.jdbc.datasource.ConnectionHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +15,8 @@ import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import javax.sql.DataSource;
 
 /**
  * <p> 事务处理示例 </p >
@@ -23,9 +28,15 @@ public class CustomTransactionServiceImpl implements CustomTransactionService {
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void transactionMethod() {
+    public void transactionSubmitAfterLogic() {
         // 操作数据库业务逻辑
         // 事务提交后的前后置处理参考: https://www.cnblogs.com/ciel717/p/16190723.html
         // 处理事务提交后立刻执行的业务逻辑方式一
@@ -96,5 +107,29 @@ public class CustomTransactionServiceImpl implements CustomTransactionService {
             super(source);
             // 自定义业务逻辑处理
         }
+    }
+
+    @SuppressWarnings("all")
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void asyncTransactionLoseEfficacy() throws Exception {
+        // 通过事务管理器对象获取当前线程的数据库连接对象的持有对象, 此对象存储在当前线程的TreadLocal中
+        ConnectionHolder connectionHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
+        UserInfoReq userInfo = new UserInfoReq();
+        userInfo.setUserName("主线程");
+        userInfo.setPassword("123d");
+        userService.addUserInfo(userInfo);
+        Thread thread = new Thread(() -> {
+            // 绑定主线程的connection到子线程中
+            TransactionSynchronizationManager.bindResource(dataSource, connectionHolder);
+            UserInfoReq userInfo2 = new UserInfoReq();
+            userInfo2.setUserName("子线程");
+            userInfo2.setPassword("123d");
+            userService.addUserInfo(userInfo2);
+        });
+        // 开启新的子线程
+        thread.start();
+        // 等待线程执行结束
+        thread.join();
     }
 }

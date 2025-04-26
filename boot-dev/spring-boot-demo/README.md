@@ -38,6 +38,7 @@
     5 通过实现AsyncConfigurer接口, 实现springboot默认线程池的替换和异步线程执行异常捕获
         1> 重写方法实现线程池替换: org.hf.boot.springboot.config.AsyncExecutorConfig.getAsyncExecutor
         2> 重写方法实现线程池异步任务异常捕获: org.hf.boot.springboot.config.AsyncExecutorConfig.getAsyncUncaughtExceptionHandler
+    6 自定义可调度执行任务线程池示例: org.hf.boot.springboot.service.impl.UserServiceImpl.addUserInfo
 ## 14. spring整合redis缓存配置: org.hf.boot.springboot.config.CustomRedisCacheConfig
 ## 15. 全局异常统一处理
     1> 实现类: org.hf.boot.springboot.error.handler.GlobalExceptionHandler 
@@ -123,7 +124,8 @@
     1> redis缓存实现: org.hf.boot.springboot.custom.lock.redisson.RedisRequestLockAspect
     2> redisson分布式锁实现: org.hf.boot.springboot.custom.lock.redisson.RedissonRequestLockAspect
 ## 30. spring中事务前后置处理 **(待验证)**
-    1> org.hf.boot.springboot.service.CustomTransactionService
+    1> 事务提交后的逻辑处理: org.hf.boot.springboot.service.CustomTransactionService.transactionSubmitAfterLogic
+    2> 异步线程事务失效解决方案: org.hf.boot.springboot.service.CustomTransactionService.asyncTransactionLoseEfficacy
 ## 31. 接口签名验证及出入参加解密:
     1> 签名验证: org.hf.boot.springboot.security.sign
     2> 出入参加解密: org.hf.boot.springboot.security.encryption
@@ -162,6 +164,8 @@
         方法进行Spring容器初始化流程
     5> Mybatis加载到Spring的入口,通过org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration自动加载,
         创建SqlSessionFactory进行SqlSession对象获取,创建SqlSessionTemplate进行Mapper相关方法调用
+## 36. Springboot定时任务实现
+    1> @Scheduled注解实现: org.hf.boot.springboot.job.ScheduleTaskDemo
 
 
 
