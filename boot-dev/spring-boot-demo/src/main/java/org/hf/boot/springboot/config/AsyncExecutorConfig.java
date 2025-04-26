@@ -8,12 +8,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
@@ -107,4 +109,17 @@ public class AsyncExecutorConfig implements AsyncConfigurer {
         throwable.printStackTrace(printWriter);
         return result.toString();
     }
+
+    /**
+     * 可调度执行任务的自定义线程池
+     */
+    @Bean("customScheduledExecutor")
+    public ScheduledThreadPoolExecutor customScheduledExecutor() {
+        ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2,
+                new CustomizableThreadFactory("customScheduledExecutor-"));
+        // 线程池对拒绝任务的处理策略:丢弃最新的
+        executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
+        return executor;
+    }
+
 }

@@ -12,6 +12,7 @@ import org.hf.boot.springboot.retry.CustomRetryException;
 import org.hf.boot.springboot.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -34,6 +36,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserInfoMapper userInfoMapper;
+
+    @Autowired
+    @Qualifier("customScheduledExecutor")
+    private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
 
     @Override
     @Cacheable(cacheNames = "ONE_MIN_CACHE")
@@ -88,6 +94,8 @@ public class UserServiceImpl implements UserService {
         UserInfo userInfo = new UserInfo();
         BeanUtils.copyProperties(req, userInfo);
         userInfoMapper.insertSelective(userInfo);
+        // 延迟指定事件执行指定逻辑, 这里延迟5秒
+        scheduledThreadPoolExecutor.schedule(() -> System.out.println("延迟执行的逻辑"), 5, TimeUnit.SECONDS);
     }
 
     @Override

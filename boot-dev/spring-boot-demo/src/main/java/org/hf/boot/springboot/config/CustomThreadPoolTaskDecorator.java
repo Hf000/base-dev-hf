@@ -16,8 +16,10 @@ public class CustomThreadPoolTaskDecorator implements TaskDecorator {
         UserInfoDTO userInfoDto = UserContext.getUser();
         return () -> {
             try {
-                userInfoDto.setSystemCode("default");
-                UserContext.addUser(userInfoDto);
+                if (userInfoDto != null) {
+                    userInfoDto.setSystemCode("default");
+                    UserContext.addUser(userInfoDto);
+                }
                 runnable.run();
             } finally {
                 UserContext.removeUser();
