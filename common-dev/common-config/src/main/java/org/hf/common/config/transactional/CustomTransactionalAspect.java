@@ -27,13 +27,13 @@ import java.util.Arrays;
 public class CustomTransactionalAspect {
 
     /**
-     * 事务管理器
+     * 事务管理器:由DataSourceTransactionManager实现,用于JDBC和MyBatis等基于数据源的事务管理
      */
     @Autowired
     private PlatformTransactionManager transactionManager;
 
     /**
-     * 事务属性
+     * 事务属性:由DefaultTransactionDefinition实现
      */
     @Autowired
     private TransactionDefinition transactionDefinition;
