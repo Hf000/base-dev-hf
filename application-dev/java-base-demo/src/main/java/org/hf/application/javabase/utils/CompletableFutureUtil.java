@@ -18,6 +18,7 @@ public class CompletableFutureUtil {
     public static void blockWaitingUntilFinished(List<CompletableFuture<Void>> futures) {
         try {
             // 等待所有线程执行完成, 这里其实不用强制捕获异常, 这里是为了防止业务异常
+            // 注意如果使用此方式, 需要手动捕获业务代码的异常,否则会导致线程一直阻塞
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
         }  catch (Exception e) {
             throw new RuntimeException(e);
