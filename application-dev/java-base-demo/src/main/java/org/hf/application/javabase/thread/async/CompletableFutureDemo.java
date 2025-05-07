@@ -17,18 +17,21 @@ public class CompletableFutureDemo {
 
     public static void main(String[] args) {
         List<CompletableFuture<Void>> taskList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 500; i++) {
             int finalI = i;
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> test(finalI), executorService);
             taskList.add(future);
         }
-        // 注意如果使用此方式, 需要手动捕获业务代码的异常,否则会导致线程一直阻塞
+        // 注意如果使用此方式, 需要注意线程池的队列长度问题, 如果提交的任务数最后超过了队列能承载的总大小, 会导致此方法获取结果一直阻塞等待
         CompletableFutureUtil.blockWaitingUntilFinished(taskList);
         System.out.println("执行完成");
         ThreadPoolUtil.closeJdkThreadPool(executorService);
     }
 
     public static void test(int i) {
+        try {
+            Thread.sleep(1000);
+        } catch (Exception ignored) {}
         if (i == 3) {
             try {
                 throw new RuntimeException("测试报错");
