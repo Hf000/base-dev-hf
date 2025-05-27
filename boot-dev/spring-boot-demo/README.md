@@ -166,6 +166,9 @@
         创建SqlSessionFactory进行SqlSession对象获取,创建SqlSessionTemplate进行Mapper相关方法调用
 ## 36. Springboot定时任务实现
     1> @Scheduled注解实现: org.hf.boot.springboot.job.ScheduleTaskDemo
+## 37. 通过Mybatis框架实现动态的statement配置, 并实现动态sql的查询
+    1> 相关实现包路径: org.hf.boot.springboot.dynamic.statement
+    2> 应用示例: org.hf.boot.springboot.controller.DynamicStatementDataApiController#postJson
 
 
 

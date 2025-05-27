@@ -26,7 +26,7 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 动态statement管理器
+ * 动态statement管理器, 进行动态statement配置加载和初始化
  */
 @Slf4j
 public class DynamicStatementDataApiManager {
