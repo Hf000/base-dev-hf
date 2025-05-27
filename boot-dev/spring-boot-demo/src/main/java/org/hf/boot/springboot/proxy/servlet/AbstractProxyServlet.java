@@ -53,6 +53,7 @@ public abstract class AbstractProxyServlet extends HttpServlet {
     protected static final String ATTR_TARGET_HOST = AbstractProxyServlet.class.getSimpleName() + ".targetHost";
 
     public AbstractProxyServlet(){
+        // 获取配置信息里面配置的代理转发路径相关配置项
         ProxyServletProperties proxyServletProperties = SpringContextUtil.getBean(ProxyServletProperties.class);
         this.servletProperties = proxyServletProperties;
         pathLocationMap = new HashMap<>();
@@ -66,7 +67,7 @@ public abstract class AbstractProxyServlet extends HttpServlet {
                         String locationMapKey = serverProperty.getUrlPattern() + locationProperty.getPath();
                         if(!pathLocationMap.containsKey(locationMapKey)){
                             pathLocationMap.put(locationMapKey, locationProperty);
-                            serverLocationMap.put(locationMapKey,serverProperty);
+                            serverLocationMap.put(locationMapKey, serverProperty);
                         }
                     }
                 }
@@ -79,13 +80,16 @@ public abstract class AbstractProxyServlet extends HttpServlet {
         super.init();
     }
 
+    /**
+     * 将请求路径代理到目标请求路径
+     */
     @Override
     protected void service(HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws ServletException, IOException {
         String path = servletRequest.getServletPath();
         servletRequest.getAttribute(PROXY_SERVER_NAME);
         log.info("DefaultProxyServlet.service 访问servlet path：{}", servletRequest.getServletPath());
         ProxyServletProperties.ProxyServletLocationProperties locationProperties = pathLocationMap.get(path);
-        //这里其实也可以不用判断，因为springMVC中的requestMapping已判断
+        // 这里其实也可以不用判断，因为springMVC中的requestMapping已判断
         if (Objects.isNull(locationProperties)) {
             throw new BusinessException("请求地址不存在");
         }

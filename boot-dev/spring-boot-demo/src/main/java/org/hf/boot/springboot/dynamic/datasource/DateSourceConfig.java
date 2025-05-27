@@ -86,7 +86,7 @@ public class DateSourceConfig {
         // 配置mpper对应的实体类包路径
 //        sqlSessionFactoryBean.setTypeAliasesPackage("org.hf.boot.springboot.pojo.entity");
         return sqlSessionFactoryBean.getObject();
-    }
+    }*/
 
     /**
      * 配置SqlSession模板对象

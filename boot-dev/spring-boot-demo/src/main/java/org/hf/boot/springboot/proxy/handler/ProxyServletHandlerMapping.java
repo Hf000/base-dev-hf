@@ -57,6 +57,9 @@ public class ProxyServletHandlerMapping extends AbstractUrlHandlerMapping {
         handlerInterceptorList.add(handlerInterceptor);
     }
 
+    /**
+     * 将application-proxy-conf.yml配置文件中的请求路径绑定到自定义的控制器,并注册到SpringMVC的映射处理器中
+     */
     private void registerHandlers() {
         List<ProxyServletProperties.ProxyServletServerProperties> servers = proxyServletProperties.getServer();
         if (CollectionUtils.isNotEmpty(servers)) {

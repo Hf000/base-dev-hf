@@ -2,6 +2,7 @@ package org.hf.boot.springboot.pojo.entity;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -35,5 +36,6 @@ public class BaseEntity implements Serializable {
     /**
      * 删除状态:0-正常,1-删除
      */
+    @Column(name = "delete_state")
     private Byte deleteState;
 }
