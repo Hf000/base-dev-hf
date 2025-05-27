@@ -52,6 +52,7 @@ public class DateSourceConfig {
     public DynamicDataSource createDynamicDataSource() {
         Map<Object, Object> dataSourceMap = new HashMap<>();
         DataSource defaultDataSource = masterDataSource();
+        // org.hf.boot.springboot.dynamic.datasource.DynamicDataSource进行初始化时会将"master"数据源设置成默认数据源
         dataSourceMap.put("master", defaultDataSource);
         dataSourceMap.put("slave", slaveDataSource());
         return new DynamicDataSource(defaultDataSource, dataSourceMap);
