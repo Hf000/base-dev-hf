@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hf.boot.springboot.dao.DynamicStatementConfigMapper">
+    <resultMap id="BaseResultMap" type="org.hf.boot.springboot.pojo.entity.DynamicStatementConfig">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="api_no" jdbcType="VARCHAR" property="apiNo" />
+        <result column="api_name" jdbcType="VARCHAR" property="apiName" />
+        <result column="api_desc" jdbcType="VARCHAR" property="apiDesc" />
+        <result column="mapping_path" jdbcType="VARCHAR" property="mappingPath" />
+        <result column="mapping_method" jdbcType="VARCHAR" property="mappingMethod" />
+        <result column="mapping_produces" jdbcType="VARCHAR" property="mappingProduces" />
+        <result column="statement_id" jdbcType="VARCHAR" property="statementId" />
+        <result column="parameters" jdbcType="LONGVARCHAR" property="parameters" />
+        <result column="columns" jdbcType="LONGVARCHAR" property="columns" />
+        <result column="select_type" jdbcType="VARCHAR" property="selectType" />
+        <result column="sql_script" jdbcType="LONGVARCHAR" property="sqlScript" />
+        <result column="data_source_key" jdbcType="VARCHAR" property="dataSourceKey" />
+        <result column="delete_state" jdbcType="TINYINT" property="deleteState" />
+        <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+        <result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+        <result column="updated_by" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, api_no, api_name, api_desc, mapping_path, mapping_method, mapping_produces, statement_id,
+    parameters, columns, select_type, sql_script, data_source_key, delete_state, created_by, created_date,
+    updated_by, updated_date
+  </sql>
+</mapper>
