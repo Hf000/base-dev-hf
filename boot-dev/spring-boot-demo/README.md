@@ -169,6 +169,8 @@
 ## 37. 通过Mybatis框架实现动态的statement配置, 并实现动态sql的查询
     1> 相关实现包路径: org.hf.boot.springboot.dynamic.statement
     2> 应用示例: org.hf.boot.springboot.controller.DynamicStatementDataApiController#postJson
+## 38. 流式响应请求示例
+    1> 请求示例包路径: org.hf.boot.springboot.controller.StreamingResponseController
 
 
 

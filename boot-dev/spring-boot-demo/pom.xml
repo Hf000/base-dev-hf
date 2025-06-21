@@ -30,6 +30,8 @@
         <redisson.version>3.18.0</redisson.version>
         <pagehelper.version>1.4.3</pagehelper.version>
         <thumbnailator.version>0.4.8</thumbnailator.version>
+        <retrofit.version>2.9.0</retrofit.version>
+        <rxjava2.version>2.2.21</rxjava2.version>
     </properties>
 
     <dependencies>
@@ -235,6 +237,12 @@
             <groupId>org.redisson</groupId>
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>${redisson.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>rxjava</artifactId>
+                    <groupId>io.reactivex.rxjava3</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- pagehelper分页插件 -->
         <dependency>
@@ -253,6 +261,22 @@
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
             <version>${thumbnailator.version}</version>
+        </dependency>
+        <!-- Rxjava 依赖 -->
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>retrofit</artifactId>
+            <version>${retrofit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>${rxjava2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>adapter-rxjava2</artifactId>
+            <version>${retrofit.version}</version>
         </dependency>
     </dependencies>
 
