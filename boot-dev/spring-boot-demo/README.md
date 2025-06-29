@@ -171,6 +171,8 @@
     2> 应用示例: org.hf.boot.springboot.controller.DynamicStatementDataApiController#postJson
 ## 38. 流式响应请求示例
     1> 请求示例包路径: org.hf.boot.springboot.controller.StreamingResponseController
+## 39. 自定义redis指定命令禁用实现
+    1> redis命令禁用切面: org.hf.boot.springboot.aop.RedisOperationAspect
 
 
 

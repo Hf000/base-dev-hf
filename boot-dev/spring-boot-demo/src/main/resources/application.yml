@@ -86,3 +86,5 @@ redis:      # 自定义redis相关配置开关
     enable: false
   lock:     # 自定义redis分布式锁配置开关
     enable: false
+  command:   # redis指定命令禁用开关
+    forbidden: false

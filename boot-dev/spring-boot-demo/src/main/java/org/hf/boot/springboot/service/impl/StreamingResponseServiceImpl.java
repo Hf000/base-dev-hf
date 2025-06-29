@@ -69,7 +69,7 @@ public class StreamingResponseServiceImpl implements StreamingResponseService {
                             log.error("请求失败, url={}", url , e);
                             observableEmitter.onError(e);
                         }
-                        // 获取网络请求响应
+                        // 获取网络请求响应, 需要注意此方法的Response对象的引用包是否正确
                         @Override
                         public void onResponse(@NotNull Call call, @NotNull Response response) {
                             if (!response.isSuccessful() || response.body() == null) {
@@ -176,6 +176,7 @@ public class StreamingResponseServiceImpl implements StreamingResponseService {
 //            }
 //        });
         StringBuilder contentBd = new StringBuilder();
+        // 需要注意此方法的Response对象的引用包是否正确,目前引用的包下的Response对象没有实现Closeable接口,所以不确定是否能在try()中正确的关闭资源
         try (Response response = OkHttpUtil.getOkHttpClient().newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 log.error("采用拼接方式处理流式请求返回错误响应: code={}, message={}, url={}", response.code(), response.message(), url);
