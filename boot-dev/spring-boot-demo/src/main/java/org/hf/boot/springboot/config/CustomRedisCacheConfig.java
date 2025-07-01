@@ -11,6 +11,7 @@ import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.redis.cache.BatchStrategies;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
@@ -30,10 +31,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p> 缓存配置,基于redis缓存 </p>
- * 使用方法, 在对应的方法上加上此注解@Cacheable(cacheNames = "ONE_MIN_CACHE"),cacheNames这表示这一块的缓存都用同样的缓存配置,具体是哪个缓存通过key区分
- * 注意: 被@Cacheable修饰的方法需要被AOP代理, 否则会失效
- * @author HUFEI
+ * <p> 缓存配置,基于redis缓存 </p >
+ * 1.原理: Spring Cache的缓存实现是通过AOP进行拦截生成代理对象对目标方法进行增强, 在redis中的存储是以命名空间的方式进行逻辑隔离的
+ * 2.使用方法: 在对应的方法上加上此注解@Cacheable(cacheNames = "ONE_MIN_CACHE"),cacheNames表示这一块的缓存都用同样的缓存
+ *  配置,具体是哪个缓存通过key区分
+ * 3.注意: 被@Cacheable修饰的方法需要被AOP代理, 否则会失效
+ * 4.缓存删除避坑: 如果在进行缓存key的设置时,调用了disableKeyPrefix()方法进行了缓存key的前缀禁用,此时在redis中生成的命名空间和key
+ *  是不会拼接cacheNames的值的; 如果通过@CacheEvict执行缓存清除且不指定key且allEntries=true的情况下, 会先通过keys命令匹配对应键,
+ *  如果cacheNames配置错误或为空则会导致匹配到所有的缓存key, 类似于执行"keys *" 指令, 此外如果在进行Spring Cache集成Redis配置时,
+ *  进行key的配置设置key的前缀禁用时, 也就是调用了disableKeyPrefix(), 也会导致匹配所有缓存key, 所以就会清除redis下的所有缓存
+ *
+ * @author HF
  * @date 2023-05-12
  **/
 @Slf4j
@@ -53,7 +61,10 @@ public class CustomRedisCacheConfig extends CachingConfigurerSupport {
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisCacheManager redisCacheManager = RedisCacheManager
-                .builder(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory))
+                // 这样配置扫描是通过keys命令进行缓存key扫描
+//                .builder(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory))
+                // 这样配置扫描是通过scan命令进行缓存key扫描
+                .builder(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory, BatchStrategies.scan(1000)))
                 // 默认缓存配置,600s过期
                 .cacheDefaults(getRedisCacheConfigurationWithTtl(600))
                 // 针对不同的cacheNames指定不同的缓存配置
@@ -78,7 +89,15 @@ public class CustomRedisCacheConfig extends CachingConfigurerSupport {
                 /*设置key序列化采用String的序列化方式*/
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 /*设置value序列化采用Jackson序列化*/
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                /** 注意: 如果在进行缓存key的设置时,调用了disableKeyPrefix()方法进行了缓存key的前缀禁用,此时在redis中生成的命名空间和key
+                 *  是不会拼接cacheNames的值的; 如果通过@CacheEvict执行缓存清除且不指定key且allEntries=true的情况下, 会先通过keys命令
+                 *  匹配对应键, 如果cacheNames配置错误或为空则会导致匹配到所有的缓存key, 类似于执行"keys *" 指令, 此外如果在进行
+                 *  Spring Cache集成Redis配置时, 进行key的配置设置key的前缀禁用时, 也就是调用了disableKeyPrefix(), 也会导致匹配所有
+                 *  缓存key, 所以就会清除redis下的所有缓存
+                 **/
+//                .disableKeyPrefix()
+                ;
     }
 
     /**
@@ -95,6 +114,13 @@ public class CustomRedisCacheConfig extends CachingConfigurerSupport {
         customizedRedisCacheConfigurationMap.put("FIFTEEN_MIN_CACHE", getRedisCacheConfigurationWithTtl(900));
         customizedRedisCacheConfigurationMap.put("TWENTY_MIN_CACHE", getRedisCacheConfigurationWithTtl(1200));
         customizedRedisCacheConfigurationMap.put("HALF_HOUR_CACHE", getRedisCacheConfigurationWithTtl(1800));
+        /** 注意: 如果在进行缓存key的设置时,调用了disableKeyPrefix()方法进行了缓存key的前缀禁用,此时在redis中生成的命名空间和key
+         *  是不会拼接cacheNames的值的; 如果通过@CacheEvict执行缓存清除且不指定key且allEntries=true的情况下, 会先通过keys命令
+         *  匹配对应键, 如果cacheNames配置错误或为空则会导致匹配到所有的缓存key, 类似于执行"keys *" 指令, 此外如果在进行
+         *  Spring Cache集成Redis配置时, 进行key的配置设置key的前缀禁用时, 也就是调用了disableKeyPrefix(), 也会导致匹配所有
+         *  缓存key, 所以就会清除redis下的所有缓存
+         **/
+//        customizedRedisCacheConfigurationMap.put("HALF_HOUR_CACHE", getRedisCacheConfigurationWithTtl(1800).disableKeyPrefix());
         return customizedRedisCacheConfigurationMap;
     }
 
