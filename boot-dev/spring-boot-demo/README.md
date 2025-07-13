@@ -173,6 +173,8 @@
     1> 请求示例包路径: org.hf.boot.springboot.controller.StreamingResponseController
 ## 39. 自定义redis指定命令禁用实现
     1> redis命令禁用切面: org.hf.boot.springboot.aop.RedisOperationAspect
+## 40. 自定义redis缓存新增和删除注解实现
+    1> 包路径: org.hf.boot.springboot.cache
 
 
 
