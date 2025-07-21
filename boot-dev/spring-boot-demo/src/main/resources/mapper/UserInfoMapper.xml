@@ -21,4 +21,15 @@
         id, user_name, password, name, age, sex, birthday, delete_state, created_by, created_date,
         updated_by, updated_date
     </sql>
+
+    <select id="streamExportTest" fetchSize="1000" resultSetType="FORWARD_ONLY" parameterType="org.hf.boot.springboot.pojo.dto.UserReq"
+            resultType="org.hf.boot.springboot.pojo.entity.UserInfo">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM user_info
+        WHERE delete_state = 0
+        <if test="userName != null and userName != ''">
+            user_name = #{req.userName}
+        </if>
+    </select>
 </mapper>

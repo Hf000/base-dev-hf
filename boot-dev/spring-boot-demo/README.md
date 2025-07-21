@@ -175,6 +175,9 @@
     1> redis命令禁用切面: org.hf.boot.springboot.aop.RedisOperationAspect
 ## 40. 自定义redis缓存新增和删除注解实现
     1> 包路径: org.hf.boot.springboot.cache
+## 41. 数据导出相关应用(流式导出和分页导出)
+    1> 实例: org.hf.boot.springboot.controller.DataExportController
+    2> 实现相关类的包路径: org.hf.boot.springboot.export
 
 
 
