@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Aspect
 @Slf4j
 @Component
-public class JarvisAddCacheAspect {
+public class CustomAddCacheAspect {
 
     @Autowired
     private RedisUtilComponent redisUtilComponent;
@@ -32,12 +32,12 @@ public class JarvisAddCacheAspect {
     }
 
     @Around("pointcut()")
-    public Object jarvisCacheScene(ProceedingJoinPoint joinPoint) {
+    public Object customCacheScene(ProceedingJoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        CustomAddCache jarvisAddCache = signature.getMethod().getDeclaredAnnotation(CustomAddCache.class);
+        CustomAddCache customAddCache = signature.getMethod().getDeclaredAnnotation(CustomAddCache.class);
         // 缓存场景key
-        String cacheSceneKey = jarvisAddCache.cacheSceneKey();
-        int expireTime = jarvisAddCache.expireTime();
+        String cacheSceneKey = customAddCache.cacheSceneKey();
+        int expireTime = customAddCache.expireTime();
         // 获取当前切面的类名称
         String beanName = signature.getDeclaringType().getSimpleName();
         // 获取切面方法名称

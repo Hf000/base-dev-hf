@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Aspect
 @Slf4j
 @Component
-public class JarvisDelCacheAspect {
+public class CustomDelCacheAspect {
 
     @Autowired
     private RedisUtilComponent redisUtilComponent;
@@ -25,11 +25,11 @@ public class JarvisDelCacheAspect {
     }
 
     @After("pointcut()")
-    public void jarvisCacheScene(JoinPoint joinPoint) {
+    public void customCacheScene(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        CustomDelCache jarvisDelCache = signature.getMethod().getDeclaredAnnotation(CustomDelCache.class);
+        CustomDelCache customDelCache = signature.getMethod().getDeclaredAnnotation(CustomDelCache.class);
         // 缓存场景key
-        String cacheSceneKey = jarvisDelCache.cacheSceneKey();
+        String cacheSceneKey = customDelCache.cacheSceneKey();
         redisUtilComponent.remove(cacheSceneKey);
     }
 
