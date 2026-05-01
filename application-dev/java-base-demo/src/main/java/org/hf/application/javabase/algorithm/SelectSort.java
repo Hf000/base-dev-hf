@@ -9,6 +9,7 @@ import java.util.Arrays;
  * @date 2022/4/23 16:46
  */
 public class SelectSort {
+
     public static void main(String[] args) {
         int[] arr = {0, 12, 5, 8, 3, 2, 6};
         System.out.println("原始数组：" + Arrays.toString(arr));

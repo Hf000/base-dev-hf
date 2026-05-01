@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService;
 
 /**
  * <p>  </p>
+ * CompletableFuture在jdk9之后新增了orTimeout()方法,支持通过此方法设置超时时间CompletableFuture在jdk9之后新增了orTimeout()方法,支持通过此方法设置超时时间
  */
 public class CompletableFutureDemo {
 

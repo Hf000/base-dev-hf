@@ -52,7 +52,7 @@ public class CustomTransactionServiceImpl implements CustomTransactionService {
      */
     public void transactionAfterCommit() {
         // 判断当前是否在spring事务中, [另外一种方式:org.hf.boot.springboot.utils.SpringTransactionUtil]
-        if (TransactionSynchronizationManager.isActualTransactionActive()) {
+        if (!TransactionSynchronizationManager.isActualTransactionActive()) {
             throw new BusinessException("必须在事务中执行此方法");
         }
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {

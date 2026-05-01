@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * CompletableFuture异步线程框架工具类
+ * CompletableFuture在jdk9之后新增了orTimeout()方法,支持通过此方法设置超时时间
  */
 @Slf4j
 public class CompletableFutureUtil {
